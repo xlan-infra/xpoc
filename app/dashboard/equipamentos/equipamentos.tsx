@@ -35,7 +35,7 @@ async function Equipamentos() {
                 <TableCell>{item.mac}</TableCell>
                 <TableCell>{item.hardware_version}</TableCell>
                 <TableCell>{item.status}</TableCell>
-                <TableCell>
+                <TableCell className="gap-2 flex">
                   <EditarEquipamentoModal
                     itemId={item.id}
                     itemModelo={item.model}

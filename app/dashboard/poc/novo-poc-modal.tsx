@@ -11,7 +11,6 @@ import { z } from "zod";
 import Utils from "../utils";
 
 const FormSchema = z.object({
-  id: z.number(),
   model: z.string().nonempty("Model é obrigatório"),
   serialNumber: z.string().nonempty("Serial Number é obrigatório"),
   mac: z
@@ -23,48 +22,38 @@ const FormSchema = z.object({
   status: z.string().nonempty("Status é obrigatório"),
 });
 
-function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, itemVersaoHardware, itemTipoEquipamento, itemStatus }) {
-  const { handleUpdate, isOpen, setIsOpen } = Utils();
+function NovoPocModal() {
+  const { handleSubmit, isOpen, setIsOpen } = Utils();
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      id: itemId,
-      model: itemModelo,
-      serialNumber: itemNumSerial,
-      mac: itemMac,
-      hardwareVersion: itemVersaoHardware,
-      type: itemTipoEquipamento,
-      status: itemStatus,
+      model: "",
+      serialNumber: "",
+      mac: "",
+      hardwareVersion: "",
+      type: "",
+      status: "",
     },
   });
 
   const onClosed = () => {
     setIsOpen(!isOpen);
-    form.reset({
-      id: itemId,
-      model: itemModelo,
-      serialNumber: itemNumSerial,
-      mac: itemMac,
-      hardwareVersion: itemVersaoHardware,
-      type: itemTipoEquipamento,
-      status: itemStatus,
-    });
+    form.reset();
     form.clearErrors();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-blue-600 p-0">
-          editar
-        </Button>
+        <Button>Nova Poc</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="mb-4">Editar Equipamento</DialogTitle>
+          <DialogTitle className="mb-4">Novo Equipamento</DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-2">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
+              {/* Campos do Formulário */}
               <FormField
                 control={form.control}
                 name="model"
@@ -78,7 +67,6 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="serialNumber"
@@ -92,7 +80,6 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="mac"
@@ -106,7 +93,6 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="hardwareVersion"
@@ -120,7 +106,6 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="type"
@@ -143,7 +128,6 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="status"
@@ -159,6 +143,7 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                       <SelectContent>
                         <SelectItem value="Locado">Locado</SelectItem>
                         <SelectItem value="Em Estoque">Em Estoque</SelectItem>
+                        <SelectItem value="RMA">RMA</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -166,7 +151,7 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                 )}
               />
 
-              <DialogFooter className="flex gap-2">
+              <DialogFooter className="flex gap-2 ">
                 <DialogClose asChild>
                   <Button className="w-1/2" type="button" variant="secondary">
                     Cancelar
@@ -184,4 +169,4 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
   );
 }
 
-export default EditarEquipamentoModal;
+export default NovoPocModal;
