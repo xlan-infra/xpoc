@@ -21,6 +21,7 @@ const FormSchema = z.object({
   hardwareVersion: z.string().nonempty("Hardware Version é obrigatório"),
   type: z.string().nonempty("Type é obrigatório"),
   status: z.string().nonempty("Status é obrigatório"),
+  notas: z.string().optional(),
   poc_id: z.any().optional(),
 });
 
@@ -34,6 +35,7 @@ function EditarEquipamentoModal({
   itemStatus,
   ItemPocId,
   itemPocMap,
+  itemNotas,
 }) {
   const { handleUpdate, isOpen, setIsOpen } = Utils();
 
@@ -48,6 +50,7 @@ function EditarEquipamentoModal({
       type: itemTipoEquipamento,
       status: itemStatus,
       poc_id: ItemPocId,
+      notas: itemNotas,
     },
   });
 
@@ -205,8 +208,23 @@ function EditarEquipamentoModal({
                       <SelectContent>
                         <SelectItem value="Locado">Locado</SelectItem>
                         <SelectItem value="Em Estoque">Em Estoque</SelectItem>
+                        <SelectItem value="RMA">RMA</SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="notas"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Notas</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Notas adicionais" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

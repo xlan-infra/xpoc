@@ -38,7 +38,7 @@ export async function updatePoc(data) {
   const { id, empresa, responsavel, local, telefone, email, notas, status } = data;
 
   const supabase = createClient();
-  await supabase
+  const { error } = await supabase
     .from("poc")
     .update({
       empresa,
@@ -51,14 +51,22 @@ export async function updatePoc(data) {
     })
     .eq("id", id);
 
-  revalidatePath("/dashboard");
+  if (error) {
+    console.error("Erro ao atualizar POC:", error);
+  } else {
+    revalidatePath("/dashboard");
+  }
 }
 
 export async function deletePoc(formData) {
   const excluir = formData.get("excluir");
 
   const supabase = createClient();
-  await supabase.from("poc").delete().eq("id", excluir);
+  const { error } = await supabase.from("poc").delete().eq("id", excluir);
 
-  revalidatePath("/dashboard");
+  if (error) {
+    console.error("Erro ao deletar POC:", error);
+  } else {
+    revalidatePath("/dashboard");
+  }
 }

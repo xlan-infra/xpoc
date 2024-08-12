@@ -11,16 +11,17 @@ import { z } from "zod";
 import Utils from "./utils";
 
 const FormSchema = z.object({
+  id: z.number(),
   empresa: z.string().nonempty("Empresa é obrigatória"),
   responsavel: z.string().nonempty("Responsável é obrigatório"),
   local: z.string().nonempty("Local é obrigatório"),
   telefone: z.string().nonempty("Telefone é obrigatório"),
   email: z.string().nonempty("Email é obrigatório").email("Email inválido"),
-  notas: z.string().optional(),
   status: z.string().nonempty("Status é obrigatório"),
+  notas: z.string().optional(),
 });
 
-function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemTelefone, itemEmail, itemStatus }) {
+function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemTelefone, itemEmail, itemStatus, itemNotas }) {
   const { handleUpdate, isOpen, setIsOpen } = Utils();
 
   const form = useForm({
@@ -33,12 +34,22 @@ function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemT
       telefone: itemTelefone,
       email: itemEmail,
       status: itemStatus,
+      notas: itemNotas,
     },
   });
 
   const onClosed = () => {
     setIsOpen(!isOpen);
-    form.reset();
+    form.reset({
+      id: itemId,
+      empresa: itemEmpresa,
+      responsavel: itemResponsavel,
+      local: itemLocal,
+      telefone: itemTelefone,
+      email: itemEmail,
+      status: itemStatus,
+      notas: itemNotas,
+    });
     form.clearErrors();
   };
 
@@ -141,9 +152,8 @@ function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemT
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Em Progresso">Em Progresso</SelectItem>
+                        <SelectItem value="Em Andamento">Em Andamento</SelectItem>
                         <SelectItem value="Concluída">Concluída</SelectItem>
-                        <SelectItem value="Cancelada">Cancelada</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

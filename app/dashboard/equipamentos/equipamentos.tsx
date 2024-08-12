@@ -47,6 +47,7 @@ async function Equipamentos() {
                     itemVersaoHardware={item.hardware_version}
                     itemTipoEquipamento={item.type}
                     itemStatus={item.status}
+                    itemNotas={item.notas}
                     ItemPocId={item.poc_id?.id}
                     itemPocMap={poc}
                   />

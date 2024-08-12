@@ -1,8 +1,9 @@
 import { getPoc } from "@/app/actions/actions_poc";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import EditarPocModal from "./editar-poc-modal";
-import ExcluirEquipamentoModal from "./excluir-poc-modal";
+import ExcluirPocModal from "./excluir-poc-modal";
 import NovoPocModal from "./novo-poc-modal";
+import VerEquipamentosPocModal from "./ver-equipamentos-poc-modal";
 
 async function Poc() {
   const pocMap = await getPoc();
@@ -12,44 +13,6 @@ async function Poc() {
       <NovoPocModal />
 
       <div className="mt-4 grid grid-cols-3 gap-2">
-        {/* <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Empresa</TableHead>
-              <TableHead>Responsável</TableHead>
-              <TableHead>Local</TableHead>
-              <TableHead>Telefone</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {pocMap?.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell className="font-bold">{item.empresa}</TableCell>
-                <TableCell>{item.responsavel}</TableCell>
-                <TableCell>{item.local}</TableCell>
-                <TableCell>{item.telefone}</TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell className="gap-2 flex">
-                  <EditarPocModal
-                    itemId={item.id}
-                    itemEmpresa={item.empresa}
-                    itemResponsavel={item.responsavel}
-                    itemLocal={item.local}
-                    itemTelefone={item.telefone}
-                    itemEmail={item.email}
-                    itemStatus={item.status}
-                  />
-
-                  <ExcluirEquipamentoModal itemId={item.id} />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table> */}
         {pocMap?.map((item) => (
           <Card className="w-full max-w-md">
             <CardHeader>
@@ -57,19 +20,6 @@ async function Poc() {
                 <div className="space-y-1">
                   <CardTitle>{item.empresa}</CardTitle>
                   <CardDescription>{item.status}</CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  <EditarPocModal
-                    itemId={item.id}
-                    itemEmpresa={item.empresa}
-                    itemResponsavel={item.responsavel}
-                    itemLocal={item.local}
-                    itemTelefone={item.telefone}
-                    itemEmail={item.email}
-                    itemStatus={item.status}
-                  />
-
-                  <ExcluirEquipamentoModal itemId={item.id} />
                 </div>
               </div>
             </CardHeader>
@@ -93,6 +43,22 @@ async function Poc() {
                 </div>
               </div>
             </CardContent>
+            <div className="flex items-center gap-2 px-6">
+              <VerEquipamentosPocModal itemId={item.id} />
+
+              <EditarPocModal
+                itemId={item.id}
+                itemEmpresa={item.empresa}
+                itemResponsavel={item.responsavel}
+                itemLocal={item.local}
+                itemTelefone={item.telefone}
+                itemEmail={item.email}
+                itemStatus={item.status}
+                itemNotas={item.notas}
+              />
+
+              <ExcluirPocModal itemId={item.id} />
+            </div>
           </Card>
         ))}
       </div>

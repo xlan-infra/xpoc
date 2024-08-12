@@ -7,19 +7,19 @@ export async function getEquipamentos() {
   const supabase = createClient();
   const { data } = await supabase
     .from("equipamentos")
-    .select("id, model, serial_number, mac, hardware_version, type, status, poc_id (id, empresa, responsavel)")
+    .select("id, model, serial_number, mac, hardware_version, type, status, notas, poc_id (id, empresa, responsavel)")
     .order("created_at", { ascending: true });
 
   return data;
 }
 
 export async function addEquipamentos(data) {
-  const { model, serialNumber, mac, hardwareVersion, type, status, poc_id } = data;
+  const { model, serialNumber, mac, hardwareVersion, type, status, notas, poc_id } = data;
 
   const supabase = createClient();
   const { error } = await supabase
     .from("equipamentos")
-    .insert({ model, serial_number: serialNumber, mac, hardware_version: hardwareVersion, type, status, poc_id });
+    .insert({ model, serial_number: serialNumber, mac, hardware_version: hardwareVersion, type, status, notas, poc_id });
 
   if (error) {
     console.error("Erro ao inserir equipamento:", error);
@@ -37,13 +37,24 @@ export async function deleteEquipamentos(formData: FormData) {
 }
 
 export async function updateEquipamentos(data) {
-  const { id, model, serialNumber, mac, hardwareVersion, type, status, poc_id } = data;
+  const { id, model, serialNumber, mac, hardwareVersion, type, status, notas, poc_id } = data;
 
   const supabase = createClient();
   await supabase
     .from("equipamentos")
-    .update({ id, model, serial_number: serialNumber, mac, hardware_version: hardwareVersion, type, status, poc_id })
+    .update({ id, model, serial_number: serialNumber, mac, hardware_version: hardwareVersion, type, status, notas, poc_id })
     .eq("id", id);
 
   revalidatePath("/dashboard");
+}
+
+export async function getEquipamentosByPoc(id) {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("equipamentos")
+    .select("id, model, serial_number, mac, hardware_version, type, status, notas, poc_id (id, empresa, responsavel)")
+    .eq("poc_id", id)
+    .order("created_at", { ascending: true });
+
+  return data;
 }

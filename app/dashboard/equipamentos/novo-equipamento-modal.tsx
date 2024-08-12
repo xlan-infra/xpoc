@@ -21,6 +21,7 @@ const FormSchema = z.object({
   type: z.string().nonempty("Type é obrigatório"),
   status: z.string().nonempty("Status é obrigatório"),
   poc_id: z.any().optional(),
+  notas: z.string().optional(),
 });
 
 function NovoModal({ pocMap }) {
@@ -36,6 +37,7 @@ function NovoModal({ pocMap }) {
       type: "",
       status: "",
       poc_id: "",
+      notas: "",
     },
   });
 
@@ -135,51 +137,66 @@ function NovoModal({ pocMap }) {
                   </FormItem>
                 )}
               />
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="poc_id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Poc</FormLabel>
+                      <Select onValueChange={(value) => field.onChange(value === "none" ? null : value)} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a POC" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="none">Nenhum</SelectItem>
+                          {pocMap?.map((item) => (
+                            <SelectItem key={item.id} value={item.id.toString()}>
+                              {item.empresa} - {item.responsavel}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Locado">Locado</SelectItem>
+                          <SelectItem value="Em Estoque">Em Estoque</SelectItem>
+                          <SelectItem value="RMA">RMA</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
-                name="poc_id"
+                name="notas"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Poc</FormLabel>
-                    <Select onValueChange={(value) => field.onChange(value === "none" ? null : value)} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o tipo" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="none">Nenhum</SelectItem>
-                        {pocMap?.map((item) => (
-                          <SelectItem key={item.id} value={item.id.toString()}>
-                            {item.empresa} - {item.responsavel}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Locado">Locado</SelectItem>
-                        <SelectItem value="Em Estoque">Em Estoque</SelectItem>
-                        <SelectItem value="RMA">RMA</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <FormLabel>Notas</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Notas adicionais" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

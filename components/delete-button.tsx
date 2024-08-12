@@ -25,7 +25,7 @@ export default function DeleteButton({ handledelete, isOpen, setIsOpen }) {
           <DialogTitle>Tem certeza que deseja excluir ?</DialogTitle>
           <DialogDescription>
             <p>
-              Isso não pode ser desfeito. Isso excluirá <strong>permanentemente</strong> seu lançamento e removerá seus dados de nossos servidores.
+              Isso não pode ser desfeito. Isso excluirá seus dados <strong>permanentemente</strong>.
             </p>
           </DialogDescription>
         </DialogHeader>
