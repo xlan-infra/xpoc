@@ -4,10 +4,10 @@ import Poc from "./poc/poc";
 
 export default function page() {
   return (
-    <Tabs defaultValue="poc" className="mt-2">
+    <Tabs defaultValue="equipamentos" className="mt-2">
       <TabsList className="grid grid-cols-2 w-80">
-        <TabsTrigger value="poc">Pocs</TabsTrigger>
         <TabsTrigger value="equipamentos">Equipamentos</TabsTrigger>
+        <TabsTrigger value="poc">Pocs</TabsTrigger>
       </TabsList>
 
       <TabsContent value="poc">

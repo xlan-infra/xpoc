@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { addEquipamentos, deleteEquipamentos, updateEquipamentos } from "../actions/actions_equipamentos";
+import { addEquipamentos, deleteEquipamentos, updateEquipamentos } from "../../actions/actions_equipamentos";
 
 export default function Utils() {
   const [isOpen, setIsOpen] = useState(false);

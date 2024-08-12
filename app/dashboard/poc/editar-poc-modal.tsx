@@ -8,48 +8,37 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Utils from "../utils";
+import Utils from "./utils";
 
 const FormSchema = z.object({
-  id: z.number(),
-  model: z.string().nonempty("Model é obrigatório"),
-  serialNumber: z.string().nonempty("Serial Number é obrigatório"),
-  mac: z
-    .string()
-    .nonempty("MAC é obrigatório")
-    .regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/, "MAC inválido"),
-  hardwareVersion: z.string().nonempty("Hardware Version é obrigatório"),
-  type: z.string().nonempty("Type é obrigatório"),
+  empresa: z.string().nonempty("Empresa é obrigatória"),
+  responsavel: z.string().nonempty("Responsável é obrigatório"),
+  local: z.string().nonempty("Local é obrigatório"),
+  telefone: z.string().nonempty("Telefone é obrigatório"),
+  email: z.string().nonempty("Email é obrigatório").email("Email inválido"),
+  notas: z.string().optional(),
   status: z.string().nonempty("Status é obrigatório"),
 });
 
-function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, itemVersaoHardware, itemTipoEquipamento, itemStatus }) {
+function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemTelefone, itemEmail, itemStatus }) {
   const { handleUpdate, isOpen, setIsOpen } = Utils();
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       id: itemId,
-      model: itemModelo,
-      serialNumber: itemNumSerial,
-      mac: itemMac,
-      hardwareVersion: itemVersaoHardware,
-      type: itemTipoEquipamento,
+      empresa: itemEmpresa,
+      responsavel: itemResponsavel,
+      local: itemLocal,
+      telefone: itemTelefone,
+      email: itemEmail,
       status: itemStatus,
     },
   });
 
   const onClosed = () => {
     setIsOpen(!isOpen);
-    form.reset({
-      id: itemId,
-      model: itemModelo,
-      serialNumber: itemNumSerial,
-      mac: itemMac,
-      hardwareVersion: itemVersaoHardware,
-      type: itemTipoEquipamento,
-      status: itemStatus,
-    });
+    form.reset();
     form.clearErrors();
   };
 
@@ -62,87 +51,82 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="mb-4">Editar Equipamento</DialogTitle>
+          <DialogTitle className="mb-4">Editar POC</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-2">
-              <FormField
-                control={form.control}
-                name="model"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Modelo</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Modelo do Equipamento" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Campos do Formulário */}
 
-              <FormField
-                control={form.control}
-                name="serialNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>N° de Serial</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Número de Serial" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="mac"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>MAC</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Endereço MAC" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="hardwareVersion"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Versão do Hardware</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Versão do Hardware" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de Equipamento</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="empresa"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Empresa</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o tipo" />
-                        </SelectTrigger>
+                        <Input placeholder="Nome da Empresa" {...field} />
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Switch">Switch</SelectItem>
-                        <SelectItem value="Router">Router</SelectItem>
-                        <SelectItem value="Access Point">Access Point</SelectItem>
-                      </SelectContent>
-                    </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="responsavel"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Responsável</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nome do Responsável" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="local"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Local</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Local da POC" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="telefone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Telefone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Telefone de Contato" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Email de Contato" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
@@ -157,8 +141,9 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Locado">Locado</SelectItem>
-                        <SelectItem value="Em Estoque">Em Estoque</SelectItem>
+                        <SelectItem value="Em Progresso">Em Progresso</SelectItem>
+                        <SelectItem value="Concluída">Concluída</SelectItem>
+                        <SelectItem value="Cancelada">Cancelada</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -166,7 +151,21 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                 )}
               />
 
-              <DialogFooter className="flex gap-2">
+              <FormField
+                control={form.control}
+                name="notas"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Notas</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Notas adicionais" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <DialogFooter className="flex gap-2 ">
                 <DialogClose asChild>
                   <Button className="w-1/2" type="button" variant="secondary">
                     Cancelar
@@ -184,4 +183,4 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
   );
 }
 
-export default EditarEquipamentoModal;
+export default EditarPocModal;

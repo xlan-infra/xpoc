@@ -8,17 +8,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Utils from "../utils";
+import Utils from "./utils";
 
 const FormSchema = z.object({
-  model: z.string().nonempty("Model é obrigatório"),
-  serialNumber: z.string().nonempty("Serial Number é obrigatório"),
-  mac: z
-    .string()
-    .nonempty("MAC é obrigatório")
-    .regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/, "MAC inválido"),
-  hardwareVersion: z.string().nonempty("Hardware Version é obrigatório"),
-  type: z.string().nonempty("Type é obrigatório"),
+  empresa: z.string().nonempty("Empresa é obrigatória"),
+  responsavel: z.string().nonempty("Responsável é obrigatório"),
+  local: z.string().nonempty("Local é obrigatório"),
+  telefone: z.string().nonempty("Telefone é obrigatório"),
+  email: z.string().nonempty("Email é obrigatório").email("Email inválido"),
+  notas: z.string().optional(),
   status: z.string().nonempty("Status é obrigatório"),
 });
 
@@ -28,11 +26,12 @@ function NovoPocModal() {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      model: "",
-      serialNumber: "",
-      mac: "",
-      hardwareVersion: "",
-      type: "",
+      empresa: "",
+      responsavel: "",
+      local: "",
+      telefone: "",
+      email: "",
+      notas: "",
       status: "",
     },
   });
@@ -46,88 +45,87 @@ function NovoPocModal() {
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button>Nova Poc</Button>
+        <Button>Nova POC</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="mb-4">Novo Equipamento</DialogTitle>
+          <DialogTitle className="mb-4">Nova POC</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
               {/* Campos do Formulário */}
-              <FormField
-                control={form.control}
-                name="model"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Modelo</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Modelo do Equipamento" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="serialNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>N° de Serial</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Número de Serial" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="mac"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>MAC</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Endereço MAC" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="hardwareVersion"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Versão do Hardware</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Versão do Hardware" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de Equipamento</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="empresa"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Empresa</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o tipo" />
-                        </SelectTrigger>
+                        <Input placeholder="Nome da Empresa" {...field} />
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Switch">Switch</SelectItem>
-                        <SelectItem value="Router">Router</SelectItem>
-                        <SelectItem value="Access Point">Access Point</SelectItem>
-                      </SelectContent>
-                    </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="responsavel"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Responsável</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nome do Responsável" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="local"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Local</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Local da POC" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="telefone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Telefone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Telefone de Contato" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Email de Contato" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
                 name="status"
@@ -141,11 +139,25 @@ function NovoPocModal() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Locado">Locado</SelectItem>
-                        <SelectItem value="Em Estoque">Em Estoque</SelectItem>
-                        <SelectItem value="RMA">RMA</SelectItem>
+                        <SelectItem value="Em Progresso">Em Progresso</SelectItem>
+                        <SelectItem value="Concluída">Concluída</SelectItem>
+                        <SelectItem value="Cancelada">Cancelada</SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="notas"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Notas</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Notas adicionais" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

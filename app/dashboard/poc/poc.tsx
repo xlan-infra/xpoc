@@ -1,48 +1,46 @@
-import { getEquipamentos } from "@/app/actions/actions_equipamentos";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import EditarEquipamentoModal from "./editar-poc-modal";
+import { getPoc } from "@/app/actions/actions_poc";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import EditarPocModal from "./editar-poc-modal";
 import ExcluirEquipamentoModal from "./excluir-poc-modal";
 import NovoPocModal from "./novo-poc-modal";
 
 async function Poc() {
-  const equipamentos = await getEquipamentos();
+  const pocMap = await getPoc();
 
   return (
     <main className="mt-6">
       <NovoPocModal />
 
-      <div className="mt-4">
-        <Table>
+      <div className="mt-4 grid grid-cols-3 gap-2">
+        {/* <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Model</TableHead>
-              <TableHead>Type</TableHead>
-
-              <TableHead>Serial Number</TableHead>
-              <TableHead>Mac</TableHead>
-              <TableHead>Hardware Version</TableHead>
+              <TableHead>Empresa</TableHead>
+              <TableHead>Responsável</TableHead>
+              <TableHead>Local</TableHead>
+              <TableHead>Telefone</TableHead>
+              <TableHead>Email</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {equipamentos.map((item) => (
+            {pocMap?.map((item) => (
               <TableRow key={item.id}>
-                <TableCell className="font-bold">{item.model}</TableCell>
-                <TableCell>{item.type}</TableCell>
-
-                <TableCell>{item.serial_number}</TableCell>
-                <TableCell>{item.mac}</TableCell>
-                <TableCell>{item.hardware_version}</TableCell>
+                <TableCell className="font-bold">{item.empresa}</TableCell>
+                <TableCell>{item.responsavel}</TableCell>
+                <TableCell>{item.local}</TableCell>
+                <TableCell>{item.telefone}</TableCell>
+                <TableCell>{item.email}</TableCell>
                 <TableCell>{item.status}</TableCell>
                 <TableCell className="gap-2 flex">
-                  <EditarEquipamentoModal
+                  <EditarPocModal
                     itemId={item.id}
-                    itemModelo={item.model}
-                    itemNumSerial={item.serial_number}
-                    itemMac={item.mac}
-                    itemVersaoHardware={item.hardware_version}
-                    itemTipoEquipamento={item.type}
+                    itemEmpresa={item.empresa}
+                    itemResponsavel={item.responsavel}
+                    itemLocal={item.local}
+                    itemTelefone={item.telefone}
+                    itemEmail={item.email}
                     itemStatus={item.status}
                   />
 
@@ -51,7 +49,52 @@ async function Poc() {
               </TableRow>
             ))}
           </TableBody>
-        </Table>
+        </Table> */}
+        {pocMap?.map((item) => (
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <CardTitle>{item.empresa}</CardTitle>
+                  <CardDescription>{item.status}</CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  <EditarPocModal
+                    itemId={item.id}
+                    itemEmpresa={item.empresa}
+                    itemResponsavel={item.responsavel}
+                    itemLocal={item.local}
+                    itemTelefone={item.telefone}
+                    itemEmail={item.email}
+                    itemStatus={item.status}
+                  />
+
+                  <ExcluirEquipamentoModal itemId={item.id} />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4">
+                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                  <div className="text-muted-foreground">Responsável:</div>
+                  <div>{item.responsavel}</div>
+                </div>
+                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                  <div className="text-muted-foreground">Local:</div>
+                  <div>{item.local}</div>
+                </div>
+                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                  <div className="text-muted-foreground">Telefone:</div>
+                  <div>{item.telefone}</div>
+                </div>
+                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                  <div className="text-muted-foreground">Email:</div>
+                  <div>{item.email}</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </main>
   );

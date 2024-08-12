@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Utils from "../utils";
+import Utils from "./utils";
 
 const FormSchema = z.object({
   id: z.number(),
@@ -21,9 +21,20 @@ const FormSchema = z.object({
   hardwareVersion: z.string().nonempty("Hardware Version é obrigatório"),
   type: z.string().nonempty("Type é obrigatório"),
   status: z.string().nonempty("Status é obrigatório"),
+  poc_id: z.any().optional(),
 });
 
-function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, itemVersaoHardware, itemTipoEquipamento, itemStatus }) {
+function EditarEquipamentoModal({
+  itemId,
+  itemModelo,
+  itemNumSerial,
+  itemMac,
+  itemVersaoHardware,
+  itemTipoEquipamento,
+  itemStatus,
+  ItemPocId,
+  itemPocMap,
+}) {
   const { handleUpdate, isOpen, setIsOpen } = Utils();
 
   const form = useForm({
@@ -36,6 +47,7 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
       hardwareVersion: itemVersaoHardware,
       type: itemTipoEquipamento,
       status: itemStatus,
+      poc_id: ItemPocId,
     },
   });
 
@@ -49,6 +61,7 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
       hardwareVersion: itemVersaoHardware,
       type: itemTipoEquipamento,
       status: itemStatus,
+      poc_id: ItemPocId,
     });
     form.clearErrors();
   };
@@ -78,34 +91,35 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                   </FormItem>
                 )}
               />
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="serialNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>N° de Serial</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Número de Serial" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="serialNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>N° de Serial</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Número de Serial" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="mac"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>MAC</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Endereço MAC" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="mac"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>MAC</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Endereço MAC" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
@@ -134,9 +148,41 @@ function EditarEquipamentoModal({ itemId, itemModelo, itemNumSerial, itemMac, it
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Switch">Switch</SelectItem>
-                        <SelectItem value="Router">Router</SelectItem>
+                        <SelectItem value="Switch L2">Switch L2</SelectItem>
+                        <SelectItem value="Switch L2+">Switch L2+</SelectItem>
+                        <SelectItem value="Switch L3">Switch L3</SelectItem>
+                        <SelectItem value="Roteador">Roteador</SelectItem>
                         <SelectItem value="Access Point">Access Point</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="poc_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Poc</FormLabel>
+                    {/* {field.value ? field.value.toString() : field.value}> */}
+                    <Select
+                      onValueChange={(value) => field.onChange(value === "none" ? null : value)}
+                      defaultValue={field.value ? field.value.toString() : field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o tipo" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="none">Nenhum</SelectItem>
+                        {itemPocMap?.map((item) => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.empresa} - {item.responsavel}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
