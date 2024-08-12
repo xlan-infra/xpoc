@@ -202,7 +202,7 @@ function NovoModal({ pocMap }) {
                 )}
               />
 
-              <DialogFooter className="flex gap-2 ">
+              <DialogFooter className="flex gap-2">
                 <DialogClose asChild>
                   <Button className="w-1/2" type="button" variant="secondary">
                     Cancelar

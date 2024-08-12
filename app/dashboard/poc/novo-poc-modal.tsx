@@ -15,7 +15,7 @@ const FormSchema = z.object({
   responsavel: z.string().nonempty("Responsável é obrigatório"),
   local: z.string().nonempty("Local é obrigatório"),
   telefone: z.string().nonempty("Telefone é obrigatório"),
-  email: z.string().nonempty("Email é obrigatório").email("Email inválido"),
+  email: z.string().email("Email inválido"),
   notas: z.string().optional(),
   status: z.string().nonempty("Status é obrigatório"),
 });
@@ -140,7 +140,7 @@ function NovoPocModal() {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="Em Andamento">Em Andamento</SelectItem>
-                        <SelectItem value="Concluída">Concluída</SelectItem>
+                        <SelectItem value="Finalizada">Finalizada</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

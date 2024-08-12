@@ -16,7 +16,7 @@ export default function DeleteButton({ handledelete, isOpen, setIsOpen }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-red-500 p-0">
+        <Button variant={"link"} className="text-black p-0">
           excluir
         </Button>
       </DialogTrigger>

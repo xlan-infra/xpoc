@@ -72,7 +72,7 @@ function EditarEquipamentoModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-blue-600 p-0">
+        <Button variant={"link"} className="text-black p-0">
           editar
         </Button>
       </DialogTrigger>
@@ -169,14 +169,13 @@ function EditarEquipamentoModal({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Poc</FormLabel>
-                    {/* {field.value ? field.value.toString() : field.value}> */}
                     <Select
                       onValueChange={(value) => field.onChange(value === "none" ? null : value)}
                       defaultValue={field.value ? field.value.toString() : field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selecione o tipo" />
+                          <SelectValue placeholder="Selecione a POC" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>

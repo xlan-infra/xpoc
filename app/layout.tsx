@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-background text-foreground">
         <main className="min-h-screen max-w-screen-lg mx-auto flex flex-col items-center">
           {children}
-          <Toaster position="top-right" richColors duration={2500} />
+          <Toaster position="top-right" duration={2500} />
         </main>
       </body>
     </html>

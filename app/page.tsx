@@ -1,4 +1,4 @@
-import NextLogo from "@/components/NextLogo";
+import Logo from "@/components/logo";
 import { SubmitButton } from "@/components/submit-button";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
@@ -50,8 +50,8 @@ export default function Login({ searchParams }: { searchParams: { message: strin
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
       <form className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-        <div className="w-full flex justify-center">
-          <NextLogo />
+        <div className="w-full flex justify-center mb-6">
+          <Logo />
         </div>
         <label className="text-md" htmlFor="email">
           Email
@@ -65,10 +65,6 @@ export default function Login({ searchParams }: { searchParams: { message: strin
         <SubmitButton formAction={signIn} className="mb-2 bg-violet-500 hover:bg-violet-700" pendingText="Signing In...">
           Sign In
         </SubmitButton>
-
-        {/* <SubmitButton formAction={signUp} className="mb-2" pendingText="Signing Up...">
-          Sign Up
-        </SubmitButton> */}
 
         {searchParams?.message && <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">{searchParams.message}</p>}
       </form>

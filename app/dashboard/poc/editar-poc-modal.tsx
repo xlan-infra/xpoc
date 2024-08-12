@@ -56,7 +56,7 @@ function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemT
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-blue-600 p-0">
+        <Button variant={"link"} className="text-black p-0">
           editar
         </Button>
       </DialogTrigger>
@@ -153,7 +153,7 @@ function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemT
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="Em Andamento">Em Andamento</SelectItem>
-                        <SelectItem value="Concluída">Concluída</SelectItem>
+                        <SelectItem value="Finalizada">Finalizada</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
