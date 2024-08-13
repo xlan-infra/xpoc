@@ -8,7 +8,7 @@ export async function getPoc() {
   const { data } = await supabase
     .from("poc")
     .select(`id, empresa, responsavel, local, telefone, email, notas, dt_inicio, dt_fim, status `)
-    .order("created_at", { ascending: true });
+    .order("status", { ascending: true });
 
   return data;
 }
@@ -85,4 +85,15 @@ export async function getPocCount() {
   }
 
   return count;
+}
+
+export async function getPocByStatus() {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("poc")
+    .select(`id, empresa, responsavel, local, telefone, email, notas, dt_inicio, dt_fim, status `)
+    .eq("status", "Em Andamento")
+    .order("status", { ascending: true });
+
+  return data;
 }

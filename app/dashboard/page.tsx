@@ -1,13 +1,13 @@
 import DashboardCards from "@/components/dashboard-cards";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getEquipamentos } from "../actions/actions_equipamentos";
-import { getPoc } from "../actions/actions_poc";
+import { getPocByStatus } from "../actions/actions_poc";
 import { DataTable } from "./equipamentos/equipamentos";
 import Poc from "./poc/poc";
 
 export default async function page() {
   const equipamentos = await getEquipamentos();
-  const poc = await getPoc();
+  const poc = await getPocByStatus();
 
   return (
     <main className="p-2">

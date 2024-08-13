@@ -58,6 +58,7 @@ function EditarPocModal({
 
   const onClosed = () => {
     setIsOpen(!isOpen);
+    setStatus(itemStatus);
     form.reset({
       id: itemId,
       dt_fim: itemDataFim,

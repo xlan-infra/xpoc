@@ -9,17 +9,17 @@ import VerEquipamentosPocModal from "./ver-equipamentos-poc-modal";
 async function Poc() {
   const pocMap = await getPoc();
 
-  function formatarData(dataString) {
-    const data = new Date(dataString);
-
-    return data
-      .toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
-      .replace("de ", " ")
-      .replace(" de ", " de ");
+  function DateFormat(dateString) {
+    const [year, month, day] = dateString.split("-");
+    const date = new Date(year, month - 1, day);
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
+      .format(date)
+      .replace(".", "")
+      .replace(" de", "");
   }
 
   return (
@@ -36,7 +36,7 @@ async function Poc() {
                   <span className="flex items-center gap-2">
                     <Ping color={item.status === "Em Andamento" ? "bg-green-500" : "bg-neutral-400"} />
                     <CardDescription>
-                      {item.status} {item.status === "Finalizada" && `em ${formatarData(item.dt_fim)}`}
+                      {item.status} {item.status === "Finalizada" && `em ${DateFormat(item.dt_fim)}`}
                     </CardDescription>
                   </span>
                 </div>
@@ -45,7 +45,7 @@ async function Poc() {
             <CardContent>
               <div className="grid grid-cols-2 gap-y-1">
                 <div className="text-muted-foreground">Data de Início</div>
-                <div>{formatarData(item.dt_inicio)}</div>
+                <div>{DateFormat(item.dt_inicio)}</div>
                 <div className="text-muted-foreground">Responsável</div>
                 <div>{item.responsavel}</div>
                 <div className="text-muted-foreground">Local</div>
