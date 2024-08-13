@@ -21,6 +21,7 @@ const FormSchema = z.object({
   hardwareVersion: z.string().nonempty("Hardware Version é obrigatório"),
   type: z.string().nonempty("Type é obrigatório"),
   status: z.string().nonempty("Status é obrigatório"),
+  pagina: z.string().optional(),
   notas: z.string().optional(),
   poc_id: z.any().optional(),
 });
@@ -33,6 +34,7 @@ function EditarEquipamentoModal({
   itemVersaoHardware,
   itemTipoEquipamento,
   itemStatus,
+  itemPagina,
   ItemPocId,
   itemPocMap,
   itemNotas,
@@ -49,6 +51,7 @@ function EditarEquipamentoModal({
       hardwareVersion: itemVersaoHardware,
       type: itemTipoEquipamento,
       status: itemStatus,
+      pagina: itemPagina,
       poc_id: ItemPocId,
       notas: itemNotas,
     },
@@ -64,6 +67,7 @@ function EditarEquipamentoModal({
       hardwareVersion: itemVersaoHardware,
       type: itemTipoEquipamento,
       status: itemStatus,
+      pagina: itemPagina,
       poc_id: ItemPocId,
     });
     form.clearErrors();
@@ -123,93 +127,110 @@ function EditarEquipamentoModal({
                   )}
                 />
               </div>
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="hardwareVersion"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Versão do Hardware</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Versão do Hardware" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tipo de Equipamento</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o tipo" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Switch L2">Switch L2</SelectItem>
+                          <SelectItem value="Switch L2+">Switch L2+</SelectItem>
+                          <SelectItem value="Switch L3">Switch L3</SelectItem>
+                          <SelectItem value="Roteador">Roteador</SelectItem>
+                          <SelectItem value="Access Point">Access Point</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="poc_id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Poc</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(value === "none" ? null : value)}
+                        defaultValue={field.value ? field.value.toString() : field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a POC" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="none">Nenhum</SelectItem>
+                          {itemPocMap?.map((item) => (
+                            <SelectItem key={item.id} value={item.id.toString()}>
+                              {item.empresa} - {item.responsavel}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Locado">Locado</SelectItem>
+                          <SelectItem value="Em Estoque">Em Estoque</SelectItem>
+                          <SelectItem value="RMA">RMA</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
-                name="hardwareVersion"
+                name="pagina"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Versão do Hardware</FormLabel>
+                    <FormLabel>Página do Equipamento</FormLabel>
                     <FormControl>
-                      <Input placeholder="Versão do Hardware" {...field} />
+                      <Input placeholder="URL" {...field} />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de Equipamento</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o tipo" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Switch L2">Switch L2</SelectItem>
-                        <SelectItem value="Switch L2+">Switch L2+</SelectItem>
-                        <SelectItem value="Switch L3">Switch L3</SelectItem>
-                        <SelectItem value="Roteador">Roteador</SelectItem>
-                        <SelectItem value="Access Point">Access Point</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="poc_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Poc</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(value === "none" ? null : value)}
-                      defaultValue={field.value ? field.value.toString() : field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione a POC" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="none">Nenhum</SelectItem>
-                        {itemPocMap?.map((item) => (
-                          <SelectItem key={item.id} value={item.id.toString()}>
-                            {item.empresa} - {item.responsavel}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Locado">Locado</SelectItem>
-                        <SelectItem value="Em Estoque">Em Estoque</SelectItem>
-                        <SelectItem value="RMA">RMA</SelectItem>
-                      </SelectContent>
-                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -11,6 +11,7 @@ import { z } from "zod";
 import Utils from "./utils";
 
 const FormSchema = z.object({
+  dt_inicio: z.string(),
   empresa: z.string().nonempty("Empresa é obrigatória"),
   responsavel: z.string().nonempty("Responsável é obrigatório"),
   local: z.string().nonempty("Local é obrigatório"),
@@ -26,6 +27,7 @@ function NovoPocModal() {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      dt_inicio: "",
       empresa: "",
       responsavel: "",
       local: "",
@@ -53,6 +55,20 @@ function NovoPocModal() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
               {/* Campos do Formulário */}
+
+              <FormField
+                control={form.control}
+                name="dt_inicio"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data de Início</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <div className="grid grid-cols-2 gap-2 w-full">
                 <FormField

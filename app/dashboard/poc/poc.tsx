@@ -9,6 +9,19 @@ import VerEquipamentosPocModal from "./ver-equipamentos-poc-modal";
 async function Poc() {
   const pocMap = await getPoc();
 
+  function formatarData(dataString) {
+    const data = new Date(dataString);
+
+    return data
+      .toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+      .replace("de ", " ")
+      .replace(" de ", " de ");
+  }
+
   return (
     <main className="mt-6 p-2">
       <NovoPocModal />
@@ -20,13 +33,19 @@ async function Poc() {
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <CardTitle className={item.status === "Finalizada" && "text-muted-foreground"}>{item.empresa}</CardTitle>
-                  <CardDescription>{item.status}</CardDescription>
-                  <Ping color={item.status === "Em andamento" ? "bg-green-500" : item.status === "Finalizada" ? "bg-red-500" : ""} />
+                  <span className="flex items-center gap-2">
+                    <Ping color={item.status === "Em Andamento" ? "bg-green-500" : "bg-neutral-400"} />
+                    <CardDescription>
+                      {item.status} {item.status === "Finalizada" && `em ${formatarData(item.dt_fim)}`}
+                    </CardDescription>
+                  </span>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-y-2">
+              <div className="grid grid-cols-2 gap-y-1">
+                <div className="text-muted-foreground">Data de Início</div>
+                <div>{formatarData(item.dt_inicio)}</div>
                 <div className="text-muted-foreground">Responsável</div>
                 <div>{item.responsavel}</div>
                 <div className="text-muted-foreground">Local</div>
@@ -34,13 +53,16 @@ async function Poc() {
                 <div className="text-muted-foreground">Telefone</div>
                 <div>{item.telefone}</div>
                 <div className="text-muted-foreground">Email</div>
-                <div>{item.email}</div>
+                <div>{item.email ? item.email : "-"}</div>
               </div>
             </CardContent>
 
             <div className="flex items-center gap-2 px-6 pb-4">
               <VerEquipamentosPocModal itemId={item.id} />
+
               <EditarPocModal
+                itemDataInicio={item.dt_inicio}
+                itemDataFim={item.dt_fim}
                 itemId={item.id}
                 itemEmpresa={item.empresa}
                 itemResponsavel={item.responsavel}
@@ -50,6 +72,7 @@ async function Poc() {
                 itemStatus={item.status}
                 itemNotas={item.notas}
               />
+
               <ExcluirPocModal itemId={item.id} />
             </div>
           </Card>

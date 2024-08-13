@@ -6,28 +6,46 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Utils from "./utils";
 
 const FormSchema = z.object({
   id: z.number(),
+  dt_inicio: z.string().optional(),
+  dt_fim: z.string().optional(),
   empresa: z.string().nonempty("Empresa é obrigatória"),
   responsavel: z.string().nonempty("Responsável é obrigatório"),
   local: z.string().nonempty("Local é obrigatório"),
   telefone: z.string().nonempty("Telefone é obrigatório"),
-  email: z.string().nonempty("Email é obrigatório").email("Email inválido"),
+  email: z.string(),
   status: z.string().nonempty("Status é obrigatório"),
   notas: z.string().optional(),
 });
 
-function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemTelefone, itemEmail, itemStatus, itemNotas }) {
+function EditarPocModal({
+  itemId,
+  itemDataInicio,
+  itemDataFim,
+  itemEmpresa,
+  itemResponsavel,
+  itemLocal,
+  itemTelefone,
+  itemEmail,
+  itemStatus,
+  itemNotas,
+}) {
   const { handleUpdate, isOpen, setIsOpen } = Utils();
+
+  const [status, setStatus] = useState(itemStatus);
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       id: itemId,
+      dt_inicio: itemDataInicio,
+      dt_fim: itemDataFim,
       empresa: itemEmpresa,
       responsavel: itemResponsavel,
       local: itemLocal,
@@ -42,6 +60,8 @@ function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemT
     setIsOpen(!isOpen);
     form.reset({
       id: itemId,
+      dt_fim: itemDataFim,
+      dt_inicio: itemDataInicio,
       empresa: itemEmpresa,
       responsavel: itemResponsavel,
       local: itemLocal,
@@ -66,6 +86,20 @@ function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemT
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-2">
               {/* Campos do Formulário */}
+
+              <FormField
+                control={form.control}
+                name="dt_inicio"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data de Início</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <div className="grid grid-cols-2 gap-2 w-full">
                 <FormField
@@ -145,7 +179,13 @@ function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemT
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        setStatus(value); // Atualiza o estado local do status
+                      }}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione o status" />
@@ -160,6 +200,22 @@ function EditarPocModal({ itemId, itemEmpresa, itemResponsavel, itemLocal, itemT
                   </FormItem>
                 )}
               />
+
+              {status === "Finalizada" && (
+                <FormField
+                  control={form.control}
+                  name="dt_fim"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Data de Conclusão</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}

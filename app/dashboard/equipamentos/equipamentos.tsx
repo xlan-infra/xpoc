@@ -1,83 +1,201 @@
-import { getEquipamentos } from "@/app/actions/actions_equipamentos";
-import { getPoc } from "@/app/actions/actions_poc";
+"use client";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { ArrowUpDown, ArrowUpRightFromSquareIcon } from "lucide-react";
+import Link from "next/link";
+import * as React from "react";
 import EditarEquipamentoModal from "./editar-equipamento-modal";
 import ExcluirEquipamentoModal from "./excluir-equipamento-modal";
 import NovoModal from "./novo-equipamento-modal";
 
-async function Equipamentos() {
-  const equipamentos = await getEquipamentos();
-  const poc = await getPoc();
+export function DataTable({ data, pocMap }) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+
+  const columns: ColumnDef[] = [
+    {
+      accessorKey: "model",
+      header: "Modelo",
+      cell: ({ row }) => {
+        const equipamento = row.original;
+        return (
+          <Link rel="noopener noreferrer" target="_blank" className="font-bold" href={equipamento.pagina}>
+            <span className="flex items-center gap-1">
+              {row.getValue("model")} {equipamento.pagina != "" && <ArrowUpRightFromSquareIcon className="h-3 w-3 text-muted-foreground" />}
+            </span>
+          </Link>
+        );
+      },
+    },
+
+    {
+      accessorKey: "type",
+      header: ({ column }) => {
+        return (
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Tipo
+            <ArrowUpDown className="ml-2 h-3 w-3" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <span>{row.getValue("type")}</span>,
+    },
+
+    {
+      accessorKey: "serial_number",
+      header: "SN",
+    },
+    {
+      accessorKey: "mac",
+      header: "Mac",
+    },
+    {
+      accessorKey: "hardware_version",
+      header: "Versão Hw",
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <Badge
+          className={
+            row.getValue("status") === "Em Estoque"
+              ? "border-green-500 text-green-500 hover:border-green-600 hover:text-green-600 bg-transparent hover:bg-transparent"
+              : row.getValue("status") === "Locado"
+              ? "border-red-500 text-red-500 hover:border-red-600 hover:text-red-600 bg-transparent hover:bg-transparent"
+              : row.getValue("status") === "RMA"
+              ? "border-orange-500 text-orange-500 hover:border-orange-600 hover:text-orange-600 bg-transparent hover:bg-transparent"
+              : ""
+          }
+        >
+          {row.getValue("status")}
+        </Badge>
+      ),
+    },
+    {
+      accessorFn: (row) => row.poc_id?.empresa,
+      id: "poc_id_empresa",
+      header: "Poc",
+      cell: ({ row }) => <Badge variant="outline">{row.getValue("poc_id_empresa") ? row.getValue("poc_id_empresa") : "Nenhum"}</Badge>,
+    },
+
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const equipamento = row.original;
+        return (
+          <div className="gap-2 flex">
+            <EditarEquipamentoModal
+              itemId={equipamento.id}
+              itemModelo={equipamento.model}
+              itemNumSerial={equipamento.serial_number}
+              itemMac={equipamento.mac}
+              itemVersaoHardware={equipamento.hardware_version}
+              itemTipoEquipamento={equipamento.type}
+              itemStatus={equipamento.status}
+              itemPagina={equipamento.pagina}
+              itemNotas={equipamento.notas}
+              ItemPocId={equipamento.poc_id?.id}
+              itemPocMap={pocMap}
+            />
+            <ExcluirEquipamentoModal itemId={equipamento.id} />
+          </div>
+        );
+      },
+    },
+  ];
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
 
   return (
-    <main className="mt-6 p-2">
-      <NovoModal pocMap={poc} />
+    <div className="w-full p-2">
+      <div className="flex justify-between items-center py-6">
+        <NovoModal pocMap={pocMap} />
 
-      <div className="mt-4">
+        <Input
+          placeholder="Filtrar por Modelo..."
+          value={(table.getColumn("model")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => table.getColumn("model")?.setFilterValue(event.target.value)}
+          className="max-w-xs"
+        />
+      </div>
+      <div>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Modelo</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead>SN</TableHead>
-              <TableHead>Mac</TableHead>
-              <TableHead>Versão Hw</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Poc</TableHead>
-              <TableHead>Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {equipamentos.map((item) => (
-              <TableRow key={item.id} className="whitespace-nowrap">
-                <TableCell className="font-bold">{item.model}</TableCell>
-                <TableCell>{item.type}</TableCell>
-                <TableCell>{item.serial_number}</TableCell>
-                <TableCell>{item.mac}</TableCell>
-                <TableCell>{item.hardware_version}</TableCell>
-                <TableCell>
-                  <Badge
-                    className={
-                      item.status === "Em Estoque"
-                        ? "border-green-500 text-green-500 hover:border-green-600 hover:text-green-600 bg-transparent hover:bg-transparent"
-                        : item.status === "Locado"
-                        ? "border-red-500 text-red-500 hover:border-red-600 hover:text-red-600 bg-transparent hover:bg-transparent "
-                        : item.status === "RMA"
-                        ? "border-orange-500 text-orange-500 hover:border-orange-600 hover:text-orange-600 bg-transparent hover:bg-transparent"
-                        : ""
-                    }
-                  >
-                    {item.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge variant={"outline"}>{item.poc_id?.empresa ? item.poc_id?.empresa : "Nenhum"}</Badge>
-                </TableCell>
-
-                <TableCell className="gap-2 flex">
-                  <EditarEquipamentoModal
-                    itemId={item.id}
-                    itemModelo={item.model}
-                    itemNumSerial={item.serial_number}
-                    itemMac={item.mac}
-                    itemVersaoHardware={item.hardware_version}
-                    itemTipoEquipamento={item.type}
-                    itemStatus={item.status}
-                    itemNotas={item.notas}
-                    ItemPocId={item.poc_id?.id}
-                    itemPocMap={poc}
-                  />
-
-                  <ExcluirEquipamentoModal itemId={item.id} />
-                </TableCell>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow className="whitespace-nowrap" key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  Nenhum resultado encontrado.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
-    </main>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="space-x-2">
+          <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+            Anterior
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+            Próxima
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
-
-export default Equipamentos;

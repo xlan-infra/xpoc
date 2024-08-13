@@ -20,6 +20,7 @@ const FormSchema = z.object({
   hardwareVersion: z.string().nonempty("Hardware Version é obrigatório"),
   type: z.string().nonempty("Type é obrigatório"),
   status: z.string().nonempty("Status é obrigatório"),
+  pagina: z.string().optional(),
   poc_id: z.any().optional(),
   notas: z.string().optional(),
 });
@@ -100,43 +101,46 @@ function NovoModal({ pocMap }) {
                 />
               </div>
 
-              <FormField
-                control={form.control}
-                name="hardwareVersion"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Versão do Hardware</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Versão do Hardware" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo de Equipamento</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="hardwareVersion"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Versão do Hardware</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione o tipo" />
-                        </SelectTrigger>
+                        <Input placeholder="Versão do Hardware" {...field} />
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Switch L2">Switch L2</SelectItem>
-                        <SelectItem value="Switch L2+">Switch L2+</SelectItem>
-                        <SelectItem value="Switch L3">Switch L3</SelectItem>
-                        <SelectItem value="Roteador">Roteador</SelectItem>
-                        <SelectItem value="Access Point">Access Point</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tipo de Equipamento</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o tipo" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Switch L2">Switch L2</SelectItem>
+                          <SelectItem value="Switch L2+">Switch L2+</SelectItem>
+                          <SelectItem value="Switch L3">Switch L3</SelectItem>
+                          <SelectItem value="Roteador">Roteador</SelectItem>
+                          <SelectItem value="Access Point">Access Point</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-2 w-full">
                 <FormField
                   control={form.control}
@@ -187,6 +191,20 @@ function NovoModal({ pocMap }) {
                   )}
                 />
               </div>
+
+              <FormField
+                control={form.control}
+                name="pagina"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Página do Equipamento</FormLabel>
+                    <FormControl>
+                      <Input placeholder="URL" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

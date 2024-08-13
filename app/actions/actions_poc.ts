@@ -7,14 +7,14 @@ export async function getPoc() {
   const supabase = createClient();
   const { data } = await supabase
     .from("poc")
-    .select(`id, empresa, responsavel, local, telefone, email, notas, status `)
+    .select(`id, empresa, responsavel, local, telefone, email, notas, dt_inicio, dt_fim, status `)
     .order("created_at", { ascending: true });
 
   return data;
 }
 
 export async function addPoc(data) {
-  const { empresa, responsavel, local, telefone, email, notas, status } = data;
+  const { empresa, responsavel, local, telefone, email, notas, dt_inicio, dt_fim, status } = data;
 
   const supabase = createClient();
   const { error } = await supabase.from("poc").insert({
@@ -24,6 +24,8 @@ export async function addPoc(data) {
     telefone,
     email,
     notas,
+    dt_inicio,
+    dt_fim,
     status,
   });
 
@@ -35,7 +37,7 @@ export async function addPoc(data) {
 }
 
 export async function updatePoc(data) {
-  const { id, empresa, responsavel, local, telefone, email, notas, status } = data;
+  const { id, empresa, responsavel, local, telefone, email, notas, dt_inicio, dt_fim, status } = data;
 
   const supabase = createClient();
   const { error } = await supabase
@@ -47,6 +49,8 @@ export async function updatePoc(data) {
       telefone,
       email,
       notas,
+      dt_inicio,
+      dt_fim,
       status,
     })
     .eq("id", id);
@@ -69,4 +73,16 @@ export async function deletePoc(formData) {
   } else {
     revalidatePath("/dashboard");
   }
+}
+
+export async function getPocCount() {
+  const supabase = createClient();
+  const { count, error } = await supabase.from("poc").select("*", { count: "exact" });
+
+  if (error) {
+    console.error("Erro ao buscar POCs:", error);
+    return null;
+  }
+
+  return count;
 }
