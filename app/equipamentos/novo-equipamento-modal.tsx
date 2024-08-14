@@ -11,7 +11,6 @@ import { z } from "zod";
 import Utils from "./utils";
 
 const FormSchema = z.object({
-  id: z.number(),
   model: z.string().nonempty("Model é obrigatório"),
   serialNumber: z.string().nonempty("Serial Number é obrigatório"),
   mac: z
@@ -19,72 +18,47 @@ const FormSchema = z.object({
     .nonempty("MAC é obrigatório")
     .regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/, "MAC inválido"),
   hardwareVersion: z.string().nonempty("Hardware Version é obrigatório"),
-  type: z.string().nonempty("Type é obrigatório"),
+  type: z.string().nonempty("Tipo é obrigatório"),
   status: z.string().nonempty("Status é obrigatório"),
   pagina: z.string().optional(),
-  notas: z.string().optional(),
   poc_id: z.any().optional(),
+  notas: z.string().optional(),
 });
 
-function EditarEquipamentoModal({
-  itemId,
-  itemModelo,
-  itemNumSerial,
-  itemMac,
-  itemVersaoHardware,
-  itemTipoEquipamento,
-  itemStatus,
-  itemPagina,
-  ItemPocId,
-  itemPocMap,
-  itemNotas,
-}) {
-  const { handleUpdate, isOpen, setIsOpen } = Utils();
+function NovoModal({ pocMap }) {
+  const { handleSubmit, isOpen, setIsOpen } = Utils();
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      id: itemId,
-      model: itemModelo,
-      serialNumber: itemNumSerial,
-      mac: itemMac,
-      hardwareVersion: itemVersaoHardware,
-      type: itemTipoEquipamento,
-      status: itemStatus,
-      pagina: itemPagina,
-      poc_id: ItemPocId,
-      notas: itemNotas,
+      model: "",
+      serialNumber: "",
+      mac: "",
+      hardwareVersion: "",
+      type: "",
+      status: "",
+      poc_id: "",
+      notas: "",
     },
   });
 
   const onClosed = () => {
     setIsOpen(!isOpen);
-    form.reset({
-      id: itemId,
-      model: itemModelo,
-      serialNumber: itemNumSerial,
-      mac: itemMac,
-      hardwareVersion: itemVersaoHardware,
-      type: itemTipoEquipamento,
-      status: itemStatus,
-      pagina: itemPagina,
-      poc_id: ItemPocId,
-    });
+    form.reset();
     form.clearErrors();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-black p-0">
-          editar
-        </Button>
+        <Button>Novo Equipamento</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="mb-4">Editar Equipamento</DialogTitle>
+          <DialogTitle className="mb-4">Novo Equipamento</DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-2">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
+              {/* Campos do Formulário */}
               <FormField
                 control={form.control}
                 name="model"
@@ -112,7 +86,6 @@ function EditarEquipamentoModal({
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="mac"
@@ -127,6 +100,7 @@ function EditarEquipamentoModal({
                   )}
                 />
               </div>
+
               <div className="grid grid-cols-2 gap-2 w-full">
                 <FormField
                   control={form.control}
@@ -141,7 +115,6 @@ function EditarEquipamentoModal({
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="type"
@@ -174,11 +147,8 @@ function EditarEquipamentoModal({
                   name="poc_id"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Poc</FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(value === "none" ? null : value)}
-                        defaultValue={field.value ? field.value.toString() : field.value}
-                      >
+                      <FormLabel>POC</FormLabel>
+                      <Select onValueChange={(value) => field.onChange(value === "none" ? null : value)} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione a POC" />
@@ -186,7 +156,7 @@ function EditarEquipamentoModal({
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="none">Nenhum</SelectItem>
-                          {itemPocMap?.map((item) => (
+                          {pocMap?.map((item) => (
                             <SelectItem key={item.id} value={item.id.toString()}>
                               {item.empresa} - {item.responsavel}
                             </SelectItem>
@@ -268,4 +238,4 @@ function EditarEquipamentoModal({
   );
 }
 
-export default EditarEquipamentoModal;
+export default NovoModal;

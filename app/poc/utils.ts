@@ -1,6 +1,8 @@
+"use client";
+
 import { useState } from "react";
 import { toast } from "sonner";
-import { addPoc, deletePoc, updatePoc } from "../../actions/actions_poc";
+import { addPoc, deletePoc, updatePoc } from "../actions/actions_poc";
 
 export default function Utils() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,5 +28,18 @@ export default function Utils() {
     setIsOpen(false);
   };
 
-  return { isOpen, setIsOpen, handleSubmit, handleUpdate, handleDelete };
+  function DateFormat(dateString) {
+    const [year, month, day] = dateString.split("-");
+    const date = new Date(year, month - 1, day);
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
+      .format(date)
+      .replace(".", "")
+      .replace(" de", "");
+  }
+
+  return { isOpen, setIsOpen, handleSubmit, handleUpdate, handleDelete, DateFormat };
 }

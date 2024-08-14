@@ -6,11 +6,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PenLine } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Utils from "./utils";
 
 const FormSchema = z.object({
+  id: z.number(),
   model: z.string().nonempty("Model é obrigatório"),
   serialNumber: z.string().nonempty("Serial Number é obrigatório"),
   mac: z
@@ -18,47 +20,72 @@ const FormSchema = z.object({
     .nonempty("MAC é obrigatório")
     .regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/, "MAC inválido"),
   hardwareVersion: z.string().nonempty("Hardware Version é obrigatório"),
-  type: z.string().nonempty("Type é obrigatório"),
+  type: z.string().nonempty("Tipo é obrigatório"),
   status: z.string().nonempty("Status é obrigatório"),
   pagina: z.string().optional(),
-  poc_id: z.any().optional(),
   notas: z.string().optional(),
+  poc_id: z.any().optional(),
 });
 
-function NovoModal({ pocMap }) {
-  const { handleSubmit, isOpen, setIsOpen } = Utils();
+function EditarEquipamentoModal({
+  itemId,
+  itemModelo,
+  itemNumSerial,
+  itemMac,
+  itemVersaoHardware,
+  itemTipoEquipamento,
+  itemStatus,
+  itemPagina,
+  ItemPocId,
+  itemPocMap,
+  itemNotas,
+}) {
+  const { handleUpdate, isOpen, setIsOpen } = Utils();
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      model: "",
-      serialNumber: "",
-      mac: "",
-      hardwareVersion: "",
-      type: "",
-      status: "",
-      poc_id: "",
-      notas: "",
+      id: itemId,
+      model: itemModelo,
+      serialNumber: itemNumSerial,
+      mac: itemMac,
+      hardwareVersion: itemVersaoHardware,
+      type: itemTipoEquipamento,
+      status: itemStatus,
+      pagina: itemPagina,
+      poc_id: ItemPocId,
+      notas: itemNotas,
     },
   });
 
   const onClosed = () => {
     setIsOpen(!isOpen);
-    form.reset();
+    form.reset({
+      id: itemId,
+      model: itemModelo,
+      serialNumber: itemNumSerial,
+      mac: itemMac,
+      hardwareVersion: itemVersaoHardware,
+      type: itemTipoEquipamento,
+      status: itemStatus,
+      pagina: itemPagina,
+      poc_id: ItemPocId,
+    });
     form.clearErrors();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button>Novo Equipamento</Button>
+        <Button variant={"link"} className="text-black hover:text-blue-800 p-0">
+          <PenLine size={14} className="mr-1" /> editar
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="mb-4">Novo Equipamento</DialogTitle>
+          <DialogTitle className="mb-4">Editar Equipamento</DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
-              {/* Campos do Formulário */}
+            <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-2">
               <FormField
                 control={form.control}
                 name="model"
@@ -86,6 +113,7 @@ function NovoModal({ pocMap }) {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="mac"
@@ -100,7 +128,6 @@ function NovoModal({ pocMap }) {
                   )}
                 />
               </div>
-
               <div className="grid grid-cols-2 gap-2 w-full">
                 <FormField
                   control={form.control}
@@ -115,6 +142,7 @@ function NovoModal({ pocMap }) {
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="type"
@@ -147,8 +175,11 @@ function NovoModal({ pocMap }) {
                   name="poc_id"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Poc</FormLabel>
-                      <Select onValueChange={(value) => field.onChange(value === "none" ? null : value)} defaultValue={field.value}>
+                      <FormLabel>POC</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(value === "none" ? null : value)}
+                        defaultValue={field.value ? field.value.toString() : field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione a POC" />
@@ -156,7 +187,7 @@ function NovoModal({ pocMap }) {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="none">Nenhum</SelectItem>
-                          {pocMap?.map((item) => (
+                          {itemPocMap?.map((item) => (
                             <SelectItem key={item.id} value={item.id.toString()}>
                               {item.empresa} - {item.responsavel}
                             </SelectItem>
@@ -238,4 +269,4 @@ function NovoModal({ pocMap }) {
   );
 }
 
-export default NovoModal;
+export default EditarEquipamentoModal;

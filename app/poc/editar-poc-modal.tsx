@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PenLine } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,7 +15,7 @@ import Utils from "./utils";
 const FormSchema = z.object({
   id: z.number(),
   dt_inicio: z.string().optional(),
-  dt_fim: z.string().optional(),
+  dt_fim: z.string().nullable(),
   empresa: z.string().nonempty("Empresa é obrigatória"),
   responsavel: z.string().nonempty("Responsável é obrigatório"),
   local: z.string().nonempty("Local é obrigatório"),
@@ -77,8 +78,8 @@ function EditarPocModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-black p-0">
-          editar
+        <Button variant={"link"} className="text-black hover:text-blue-800 p-0">
+          <PenLine size={14} className="mr-1" /> editar
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -202,21 +203,19 @@ function EditarPocModal({
                 )}
               />
 
-              {status === "Finalizada" && (
-                <FormField
-                  control={form.control}
-                  name="dt_fim"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Data de Conclusão</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
+              <FormField
+                control={form.control}
+                name="dt_fim"
+                render={({ field }) => (
+                  <FormItem hidden={status != "Finalizada"}>
+                    <FormLabel>Data de Conclusão</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

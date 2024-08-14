@@ -93,11 +93,16 @@ export function DataTable({ data, pocMap }) {
       accessorFn: (row) => row.poc_id?.empresa,
       id: "poc_id_empresa",
       header: "Poc",
-      cell: ({ row }) => <Badge variant="outline">{row.getValue("poc_id_empresa") ? row.getValue("poc_id_empresa") : "Nenhum"}</Badge>,
+      cell: ({ row }) => (
+        <Badge variant={"outline"}>
+          {row.getValue("poc_id_empresa") ? row.getValue("poc_id_empresa") : <p className="text-neutral-300">Nenhum</p>}
+        </Badge>
+      ),
     },
 
     {
       id: "actions",
+      header: "Ações",
       enableHiding: false,
       cell: ({ row }) => {
         const equipamento = row.original;
@@ -116,7 +121,8 @@ export function DataTable({ data, pocMap }) {
               ItemPocId={equipamento.poc_id?.id}
               itemPocMap={pocMap}
             />
-            <ExcluirEquipamentoModal itemId={equipamento.id} />
+
+            <ExcluirEquipamentoModal equipamentoPocId={equipamento.poc_id?.id} itemId={equipamento.id} />
           </div>
         );
       },
@@ -143,7 +149,7 @@ export function DataTable({ data, pocMap }) {
   });
 
   return (
-    <div className="w-full p-2">
+    <div className="w-full">
       <div className="flex justify-between items-center py-6">
         <NovoModal pocMap={pocMap} />
 

@@ -32,7 +32,7 @@ export async function addPoc(data) {
   if (error) {
     console.error("Erro ao inserir POC:", error);
   } else {
-    revalidatePath("/dashboard");
+    revalidatePath("/poc");
   }
 }
 
@@ -58,7 +58,7 @@ export async function updatePoc(data) {
   if (error) {
     console.error("Erro ao atualizar POC:", error);
   } else {
-    revalidatePath("/dashboard");
+    revalidatePath("/poc");
   }
 }
 
@@ -71,7 +71,7 @@ export async function deletePoc(formData) {
   if (error) {
     console.error("Erro ao deletar POC:", error);
   } else {
-    revalidatePath("/dashboard");
+    revalidatePath("/poc");
   }
 }
 
@@ -94,6 +94,16 @@ export async function getPocByStatus() {
     .select(`id, empresa, responsavel, local, telefone, email, notas, dt_inicio, dt_fim, status `)
     .eq("status", "Em Andamento")
     .order("status", { ascending: true });
+
+  return data;
+}
+
+export async function getPocById(id) {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("poc")
+    .select(`id, empresa, responsavel, local, telefone, email, notas, dt_inicio, dt_fim, status`)
+    .eq("id", id);
 
   return data;
 }

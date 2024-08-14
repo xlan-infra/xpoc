@@ -1,5 +1,6 @@
 "use client";
 
+import Utils from "@/app/poc/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,13 +12,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Trash } from "lucide-react";
 
-export default function DeleteButton({ handledelete, isOpen, setIsOpen }) {
+export default function DeleteButton({ itemId, itemStatus }) {
+  const { handleDelete, isOpen, setIsOpen } = Utils();
+
+  const deleteItem = handleDelete(itemId);
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-black p-0">
-          excluir
+        <Button variant={"link"} className="text-black hover:text-red-700 p-0" disabled={itemStatus}>
+          <Trash size={14} className="mr-1" /> remover
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -35,7 +41,7 @@ export default function DeleteButton({ handledelete, isOpen, setIsOpen }) {
               Cancelar
             </Button>
           </DialogClose>
-          <form className="w-1/2" onSubmit={handledelete}>
+          <form className="w-1/2" onSubmit={deleteItem}>
             <Button variant="destructive" className="w-full" type="submit">
               Sim, quero excluir
             </Button>

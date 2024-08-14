@@ -24,7 +24,7 @@ export async function addEquipamentos(data) {
   if (error) {
     console.error("Erro ao inserir equipamento:", error);
   } else {
-    revalidatePath("/dashboard");
+    revalidatePath("/equipamentos");
   }
 }
 
@@ -33,7 +33,7 @@ export async function deleteEquipamentos(formData: FormData) {
 
   const supabase = createClient();
   await supabase.from("equipamentos").delete().eq("id", excluir);
-  revalidatePath("/dashboard");
+  revalidatePath("/equipamentos");
 }
 
 export async function updateEquipamentos(data) {
@@ -45,7 +45,7 @@ export async function updateEquipamentos(data) {
     .update({ id, model, serial_number: serialNumber, mac, hardware_version: hardwareVersion, type, status, pagina, notas, poc_id })
     .eq("id", id);
 
-  revalidatePath("/dashboard");
+  revalidatePath("/equipamentos");
 }
 
 export async function getEquipamentosByPoc(id) {
@@ -71,6 +71,7 @@ export async function getEquipamentosCadastrados() {
 
   return data;
 }
+
 export async function getEquipamentosStatus() {
   const supabase = createClient();
 
