@@ -78,7 +78,7 @@ export function DataTable({ data, pocMap }) {
           className={
             row.getValue("status") === "Em Estoque"
               ? "border-green-500 text-green-500 hover:border-green-600 hover:text-green-600 bg-transparent hover:bg-transparent"
-              : row.getValue("status") === "Locado"
+              : row.getValue("status") === "Em Uso"
               ? "border-red-500 text-red-500 hover:border-red-600 hover:text-red-600 bg-transparent hover:bg-transparent"
               : row.getValue("status") === "RMA"
               ? "border-orange-500 text-orange-500 hover:border-orange-600 hover:text-orange-600 bg-transparent hover:bg-transparent"

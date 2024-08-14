@@ -211,7 +211,7 @@ function EditarEquipamentoModal({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Locado">Locado</SelectItem>
+                          <SelectItem value="Em Uso">Em Uso</SelectItem>
                           <SelectItem value="Em Estoque">Em Estoque</SelectItem>
                           <SelectItem value="RMA">RMA</SelectItem>
                         </SelectContent>
