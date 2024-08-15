@@ -70,6 +70,7 @@ function EditarEquipamentoModal({
       status: itemStatus,
       pagina: itemPagina,
       poc_id: ItemPocId,
+      notas: itemNotas,
     });
     form.clearErrors();
   };

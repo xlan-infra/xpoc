@@ -51,7 +51,7 @@ export function DataTable({ data, pocMap }) {
         return (
           <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Tipo
-            <ArrowUpDown className="ml-2 h-3 w-3" />
+            <ArrowUpDown className="ml-2 h-3 w-3 text-primary" />
           </Button>
         );
       },
@@ -70,9 +70,17 @@ export function DataTable({ data, pocMap }) {
       accessorKey: "hardware_version",
       header: "Versão Hw",
     },
+
     {
       accessorKey: "status",
-      header: "Status",
+      header: ({ column }) => {
+        return (
+          <Button className="p-0" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Status
+            <ArrowUpDown className="ml-2 h-3 w-3 text-primary " />
+          </Button>
+        );
+      },
       cell: ({ row }) => (
         <Badge
           className={
@@ -152,13 +160,21 @@ export function DataTable({ data, pocMap }) {
     <div className="w-full">
       <div className="flex justify-between items-center py-6">
         <NovoModal pocMap={pocMap} />
+        <div className="flex gap-2">
+          <Input
+            placeholder="Filtrar por Modelo..."
+            value={(table.getColumn("model")?.getFilterValue() as string) ?? ""}
+            onChange={(event) => table.getColumn("model")?.setFilterValue(event.target.value)}
+            className="max-w-xs"
+          />
 
-        <Input
-          placeholder="Filtrar por Modelo..."
-          value={(table.getColumn("model")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("model")?.setFilterValue(event.target.value)}
-          className="max-w-xs"
-        />
+          <Input
+            placeholder="Filtrar por Status..."
+            value={(table.getColumn("status")?.getFilterValue() as string) ?? ""}
+            onChange={(event) => table.getColumn("status")?.setFilterValue(event.target.value)}
+            className="max-w-xs"
+          />
+        </div>
       </div>
       <div>
         <Table>

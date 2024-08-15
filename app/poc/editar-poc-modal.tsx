@@ -20,7 +20,7 @@ const FormSchema = z.object({
   responsavel: z.string().nonempty("Responsável é obrigatório"),
   local: z.string().nonempty("Local é obrigatório"),
   telefone: z.string().nonempty("Telefone é obrigatório"),
-  email: z.string(),
+  email: z.string().optional(),
   status: z.string().nonempty("Status é obrigatório"),
   notas: z.string().optional(),
 });
@@ -184,7 +184,7 @@ function EditarPocModal({
                     <Select
                       onValueChange={(value) => {
                         field.onChange(value);
-                        setStatus(value); // Atualiza o estado local do status
+                        setStatus(value);
                       }}
                       defaultValue={field.value}
                     >

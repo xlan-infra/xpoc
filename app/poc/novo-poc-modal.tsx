@@ -16,7 +16,7 @@ const FormSchema = z.object({
   responsavel: z.string().nonempty("Responsável é obrigatório"),
   local: z.string().nonempty("Local é obrigatório"),
   telefone: z.string().nonempty("Telefone é obrigatório"),
-  email: z.string().email("Email inválido"),
+  email: z.string().optional(),
   notas: z.string().optional(),
   status: z.string().nonempty("Status é obrigatório"),
 });

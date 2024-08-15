@@ -1,7 +1,7 @@
 import Ping from "@/components/ping";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus } from "lucide-react";
+import { NotepadText } from "lucide-react";
 import Link from "next/link";
 import { getPoc } from "../actions/actions_poc";
 import ExcluirPocModal from "./excluir-poc-modal";
@@ -47,7 +47,7 @@ async function DataCard() {
             <div className="flex items-center gap-2 justify-between border-t-2 border-neutral-200">
               <Link href={`/poc/${item.id}/${item.empresa.toLowerCase()}`}>
                 <Button variant={"link"} className="text-black p-0">
-                  <Plus size={14} className="mr-1" /> detalhes
+                  <NotepadText size={14} className="mr-1" /> detalhes
                 </Button>
               </Link>
 

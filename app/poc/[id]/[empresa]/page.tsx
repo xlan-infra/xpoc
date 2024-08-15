@@ -111,9 +111,9 @@ async function page({ params }) {
             <TableRow>
               <TableHead>Modelo</TableHead>
               <TableHead>Tipo</TableHead>
+              <TableHead>Versão de Hw</TableHead>
               <TableHead>SN</TableHead>
               <TableHead>Mac</TableHead>
-              <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -121,9 +121,9 @@ async function page({ params }) {
               <TableRow key={item.id} className="whitespace-nowrap">
                 <TableCell>{item.model}</TableCell>
                 <TableCell>{item.type}</TableCell>
+                <TableCell>{item.hardware_version}</TableCell>
                 <TableCell>{item.serial_number}</TableCell>
                 <TableCell>{item.mac}</TableCell>
-                <TableCell>{item.status}</TableCell>
               </TableRow>
             ))}
           </TableBody>
