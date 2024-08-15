@@ -65,6 +65,10 @@ export function DataTable({ data, pocMap }) {
     {
       accessorKey: "mac",
       header: "Mac",
+      cell: ({ row }) => {
+        const equipamento = row.original;
+        return <span className="flex items-center gap-1">{equipamento.mac != "" ? row.getValue("mac") : "n/a"}</span>;
+      },
     },
     {
       accessorKey: "hardware_version",
@@ -100,10 +104,10 @@ export function DataTable({ data, pocMap }) {
     {
       accessorFn: (row) => row.poc_id?.empresa,
       id: "poc_id_empresa",
-      header: "Poc",
+      header: "POC",
       cell: ({ row }) => (
         <Badge variant={"outline"}>
-          {row.getValue("poc_id_empresa") ? row.getValue("poc_id_empresa") : <p className="text-neutral-300">Nenhum</p>}
+          {row.getValue("poc_id_empresa") ? row.getValue("poc_id_empresa") : <span className="text-neutral-300">-</span>}
         </Badge>
       ),
     },

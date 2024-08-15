@@ -13,10 +13,7 @@ import Utils from "./utils";
 const FormSchema = z.object({
   model: z.string().nonempty("Model é obrigatório"),
   serialNumber: z.string().nonempty("Serial Number é obrigatório"),
-  mac: z
-    .string()
-    .nonempty("MAC é obrigatório")
-    .regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/, "MAC inválido"),
+  mac: z.string().optional(),
   hardwareVersion: z.string().nonempty("Hardware Version é obrigatório"),
   type: z.string().nonempty("Tipo é obrigatório"),
   status: z.string().nonempty("Status é obrigatório"),
