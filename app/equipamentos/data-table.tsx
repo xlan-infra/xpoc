@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import {
   ColumnDef,
   ColumnFiltersState,
+  PaginationState,
   SortingState,
   VisibilityState,
   flexRender,
@@ -28,6 +29,10 @@ export function DataTable({ data, pocMap }) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 20,
+  });
 
   const columns: ColumnDef[] = [
     {
@@ -152,11 +157,13 @@ export function DataTable({ data, pocMap }) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination,
     },
   });
 
@@ -213,6 +220,14 @@ export function DataTable({ data, pocMap }) {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
+        {/* {table.getRowModel().rows?.length === 0 ? null : (
+            <span>
+              Exibindo {table.getRowModel().rows.length} de {table.getRowModel().totalRows} registros
+            </span>
+             <span className="text-muted-foreground text-sm">
+             {table.getState().pagination.pageIndex + 1} de {table.getPageCount().toLocaleString()}
+           </span>
+          )} */}
         <div className="space-x-2">
           <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
             Anterior
