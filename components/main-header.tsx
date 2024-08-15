@@ -4,7 +4,7 @@ import Logo from "./logo";
 
 function Header() {
   return (
-    <header className="flex items-center justify-between h-20 md:px-2 bg-background ">
+    <header className="flex items-center justify-between h-20 px-2 md:px-2 bg-background print:hidden">
       <div className="flex items-center gap-4">
         <Link href="/" className="flex items-center">
           <Logo />

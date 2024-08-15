@@ -41,11 +41,11 @@ async function page({ params }) {
       </div>
 
       {pocId?.map((item) => (
-        <Card key={item.id}>
+        <Card className="print:mt-6" key={item.id}>
           <CardHeader className="pb-4">
             <CardTitle className={`text-4xl ${item.status === "Finalizada" && "text-muted-foreground"}`}>{item.empresa}</CardTitle>
           </CardHeader>
-          <CardContent className="pb-2 grid grid-cols-2 gap-x-10">
+          <CardContent className="pb-2 grid grid-cols-1 md:grid-cols-2 gap-x-10">
             <div className="flex items-center justify-between space-x-1 border-b border-neutral-100">
               <p className="text-lg text-muted-foreground font-medium">Status</p>
               <div className="text-lg flex items-center gap-1">

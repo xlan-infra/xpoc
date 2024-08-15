@@ -49,7 +49,7 @@ export function DataTable({ data, pocMap }) {
       accessorKey: "type",
       header: ({ column }) => {
         return (
-          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          <Button className="p-0" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
             Tipo
             <ArrowUpDown className="ml-2 h-3 w-3 text-primary" />
           </Button>
