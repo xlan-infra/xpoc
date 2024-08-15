@@ -155,7 +155,7 @@ function NovoModal({ pocMap }) {
                           <SelectItem value="none">Nenhum</SelectItem>
                           {pocMap?.map((item) => (
                             <SelectItem key={item.id} value={item.id.toString()}>
-                              {item.empresa} - {item.responsavel}
+                              {item.empresa}
                             </SelectItem>
                           ))}
                         </SelectContent>

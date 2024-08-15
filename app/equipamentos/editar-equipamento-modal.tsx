@@ -187,7 +187,7 @@ function EditarEquipamentoModal({
                           <SelectItem value="none">Nenhum</SelectItem>
                           {itemPocMap?.map((item) => (
                             <SelectItem key={item.id} value={item.id.toString()}>
-                              {item.empresa} - {item.responsavel}
+                              {item.empresa}
                             </SelectItem>
                           ))}
                         </SelectContent>
