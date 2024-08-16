@@ -127,6 +127,7 @@ function NovoModal({ pocMap }) {
                         <SelectContent>
                           <SelectItem value="Access Point">Access Point</SelectItem>
                           <SelectItem value="Controladora">Controladora</SelectItem>
+                          <SelectItem value="Injetor PoE">Injetor PoE</SelectItem>
                           <SelectItem value="Roteador">Roteador</SelectItem>
                           <SelectItem value="Switch L2">Switch L2</SelectItem>
                           <SelectItem value="Switch L2+">Switch L2+</SelectItem>
