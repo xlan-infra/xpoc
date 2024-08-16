@@ -17,7 +17,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ArrowUpRightFromSquareIcon } from "lucide-react";
+import { ArrowUpDown, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 import EditarEquipamentoModal from "./editar-equipamento-modal";
@@ -31,7 +31,7 @@ export function DataTable({ data, pocMap }) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 30,
   });
 
   const columns: ColumnDef[] = [
@@ -41,9 +41,9 @@ export function DataTable({ data, pocMap }) {
       cell: ({ row }) => {
         const equipamento = row.original;
         return (
-          <Link rel="noopener noreferrer" target="_blank" className="font-bold" href={equipamento.pagina ?? ""}>
-            <span className="flex items-center gap-1">
-              {row.getValue("model")} {equipamento.pagina && <ArrowUpRightFromSquareIcon className="h-3 w-3 text-muted-foreground" />}
+          <Link rel="noopener noreferrer" target="_blank" href={equipamento.pagina ?? ""}>
+            <span className="flex items-center gap-1 font-semibold hover:underline">
+              {row.getValue("model")} {equipamento.pagina && <ArrowUpRight className="h-3 w-3 text-neutral-400" />}
             </span>
           </Link>
         );
