@@ -6,12 +6,17 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Utils from "./utils";
 
+// Função para converter string para Date, se a string não estiver vazia
+const parseDateString = (str) => (str ? new Date(str) : undefined);
+
 const FormSchema = z.object({
-  dt_inicio: z.string(),
+  dt_inicio: z.string().refine((date) => !isNaN(new Date(date).getTime()), "Data de Início inválida"),
+  dt_fim: z.preprocess(parseDateString, z.date().optional()),
   empresa: z.string().nonempty("Empresa é obrigatória"),
   responsavel: z.string().nonempty("Responsável é obrigatório"),
   local: z.string().nonempty("Local é obrigatório"),
@@ -24,10 +29,13 @@ const FormSchema = z.object({
 function NovoPocModal() {
   const { handleSubmit, isOpen, setIsOpen } = Utils();
 
+  const [status, setStatus] = useState("");
+
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       dt_inicio: "",
+      dt_fim: "",
       empresa: "",
       responsavel: "",
       local: "",
@@ -148,7 +156,13 @@ function NovoPocModal() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        setStatus(value);
+                      }}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione o status" />
@@ -163,6 +177,22 @@ function NovoPocModal() {
                   </FormItem>
                 )}
               />
+
+              {status === "Finalizada" && (
+                <FormField
+                  control={form.control}
+                  name="dt_fim"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Data de Conclusão</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}

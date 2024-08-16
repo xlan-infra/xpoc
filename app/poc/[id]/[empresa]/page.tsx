@@ -33,6 +33,14 @@ async function page({ params }) {
       .replace(" de", "");
   }
 
+  function calculateDaysSinceStart(dt_inicio) {
+    const startDate = new Date(dt_inicio);
+    const currentDate = new Date();
+    const timeDifference = currentDate - startDate;
+    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    return daysDifference;
+  }
+
   return (
     <>
       <div className="mb-4 print:hidden">
@@ -55,6 +63,9 @@ async function page({ params }) {
               <div className="text-lg flex items-center gap-1">
                 <Ping color={item.status === "Em Andamento" ? "bg-green-500" : "bg-neutral-400"} />
                 {item.status}
+                {item.status === "Em Andamento" && (
+                  <span className="text-neutral-400 italic text-xs">por {calculateDaysSinceStart(item.dt_inicio)} dia(s)</span>
+                )}
                 {item.status === "Finalizada" && ` em ${DateFormat(item.dt_fim)}`}
               </div>
             </div>
