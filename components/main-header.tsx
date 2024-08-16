@@ -9,10 +9,10 @@ function Header() {
         <Link href="/" className="flex items-center">
           <Logo />
         </Link>
-        <Link href="/equipamentos" className="text-sm font-medium text-muted-foreground hover:text-primary">
+        <Link href="/equipamentos" className=" font-medium text-muted-foreground hover:text-primary">
           Equipamentos
         </Link>
-        <Link href="/poc" className="text-sm font-medium text-muted-foreground hover:text-primary">
+        <Link href="/poc" className=" font-medium text-muted-foreground hover:text-primary">
           POCs
         </Link>
       </div>

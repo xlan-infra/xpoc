@@ -59,6 +59,17 @@ export async function getEquipamentosByPoc(id) {
   return data;
 }
 
+export async function getEquipamentosByPocHistory(id) {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("equipamentos_history")
+    .select("id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, responsavel)")
+    .eq("poc_id", id)
+    .order("created_at", { ascending: true });
+
+  return data;
+}
+
 export async function getEquipamentosCadastrados() {
   const supabase = createClient();
 

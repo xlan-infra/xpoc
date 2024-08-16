@@ -1,4 +1,4 @@
-import { getEquipamentosByPoc } from "@/app/actions/actions_equipamentos";
+import { getEquipamentosByPoc, getEquipamentosByPocHistory } from "@/app/actions/actions_equipamentos";
 import { getPocById } from "@/app/actions/actions_poc";
 import Ping from "@/components/ping";
 import PrintButton from "@/components/print-button";
@@ -15,6 +15,10 @@ async function page({ params }) {
 
   const pocId = await getPocById(id);
   const equipamentosByPocMap = await getEquipamentosByPoc(id);
+  const equipamentosByPocHistoryMap = await getEquipamentosByPocHistory(id);
+
+  const isFinalizada = pocId?.some((item) => item.status === "Finalizada");
+  const equipamentosMap = isFinalizada ? equipamentosByPocHistoryMap : equipamentosByPocMap;
 
   function DateFormat(dateString) {
     const [year, month, day] = dateString.split("-");
@@ -33,7 +37,7 @@ async function page({ params }) {
     <>
       <div className="mb-4 print:hidden">
         <Link href="/poc">
-          <Button variant="link">
+          <Button className="p-0" variant="link">
             <ArrowLeft size={14} className="mr-1" />
             Voltar
           </Button>
@@ -41,7 +45,7 @@ async function page({ params }) {
       </div>
 
       {pocId?.map((item) => (
-        <Card className="print:mt-6" key={item.id}>
+        <Card className="print:mt-6 bg-gradient-to-bl from-violet-50/50 from-5%" key={item.id}>
           <CardHeader className="pb-4">
             <CardTitle className={`text-4xl ${item.status === "Finalizada" && "text-muted-foreground"}`}>{item.empresa}</CardTitle>
           </CardHeader>
@@ -105,8 +109,15 @@ async function page({ params }) {
           </CardFooter>
         </Card>
       ))}
-      {equipamentosByPocMap?.length > 0 ? (
-        <Table className="mt-6">
+
+      <div className="mt-4">
+        <h1 className="text-black text-lg">
+          {isFinalizada ? "Histórico de Equipamentos Utilizados pelo Cliente:" : " Equipamentos Em Uso no Cliente:"}
+        </h1>
+      </div>
+
+      {equipamentosMap?.length > 0 ? (
+        <Table className={`my-4 ${isFinalizada && "text-muted-foreground"}`}>
           <TableHeader>
             <TableRow>
               <TableHead>Modelo</TableHead>
@@ -117,13 +128,18 @@ async function page({ params }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {equipamentosByPocMap.map((item) => (
+            {equipamentosMap.map((item) => (
               <TableRow key={item.id} className="whitespace-nowrap">
-                <TableCell>{item.model}</TableCell>
+                <TableCell className="py-2">
+                  <span className="flex items-center gap-1">
+                    <Ping color={isFinalizada ? "bg-neutral-400" : "bg-green-500"} />
+                    {item.model}
+                  </span>
+                </TableCell>
                 <TableCell>{item.type}</TableCell>
                 <TableCell>{item.hardware_version}</TableCell>
                 <TableCell>{item.serial_number}</TableCell>
-                <TableCell>{item.mac}</TableCell>
+                <TableCell>{item.mac ? item.mac : "n/a"}</TableCell>
               </TableRow>
             ))}
           </TableBody>

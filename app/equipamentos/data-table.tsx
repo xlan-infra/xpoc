@@ -41,9 +41,9 @@ export function DataTable({ data, pocMap }) {
       cell: ({ row }) => {
         const equipamento = row.original;
         return (
-          <Link rel="noopener noreferrer" target="_blank" className="font-bold" href={equipamento.pagina}>
+          <Link rel="noopener noreferrer" target="_blank" className="font-bold" href={equipamento.pagina ?? ""}>
             <span className="flex items-center gap-1">
-              {row.getValue("model")} {equipamento.pagina != "" && <ArrowUpRightFromSquareIcon className="h-3 w-3 text-muted-foreground" />}
+              {row.getValue("model")} {equipamento.pagina && <ArrowUpRightFromSquareIcon className="h-3 w-3 text-muted-foreground" />}
             </span>
           </Link>
         );
@@ -106,15 +106,29 @@ export function DataTable({ data, pocMap }) {
         </Badge>
       ),
     },
+
     {
-      accessorFn: (row) => row.poc_id?.empresa,
+      accessorFn: (row) => ({
+        id: row.poc_id?.id,
+        empresa: row.poc_id?.empresa ?? "",
+      }),
       id: "poc_id_empresa",
       header: "POC",
-      cell: ({ row }) => (
-        <Badge variant={"outline"}>
-          {row.getValue("poc_id_empresa") ? row.getValue("poc_id_empresa") : <span className="text-neutral-300">-</span>}
-        </Badge>
-      ),
+      cell: ({ row }) => {
+        const poc = row.original.poc_id;
+
+        const normalizeText = (text) =>
+          text
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+
+        return (
+          <Link href={`/poc/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`} className="font-bold">
+            <Badge variant={"outline"}>{poc?.id ? poc?.empresa : <span className="text-neutral-300">-</span>}</Badge>
+          </Link>
+        );
+      },
     },
 
     {

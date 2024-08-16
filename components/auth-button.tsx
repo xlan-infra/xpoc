@@ -20,7 +20,7 @@ export default async function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-4">
-      <span className="text-muted-foreground max-sm:hidden">{user.email}</span>
+      <span className="text-sm text-muted-foreground max-sm:hidden">{user.email}</span>
       <form action={signOut}>
         <Button variant={"ghost"}>Sair</Button>
       </form>
