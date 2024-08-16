@@ -58,6 +58,32 @@ function NovoModal({ pocMap }) {
               {/* Campos do Formulário */}
               <FormField
                 control={form.control}
+                name="hardwareVersion"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Versão do Hardware</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Versão do Hardware" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="mac"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>MAC</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Endereço MAC" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="model"
                 render={({ field }) => (
                   <FormItem>
@@ -69,140 +95,6 @@ function NovoModal({ pocMap }) {
                   </FormItem>
                 )}
               />
-              <div className="grid grid-cols-2 gap-2 w-full">
-                <FormField
-                  control={form.control}
-                  name="serialNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>N° de Serial</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Número de Serial" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="mac"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>MAC</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Endereço MAC" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 w-full">
-                <FormField
-                  control={form.control}
-                  name="hardwareVersion"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Versão do Hardware</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Versão do Hardware" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tipo de Equipamento</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione o tipo" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Switch L2">Switch L2</SelectItem>
-                          <SelectItem value="Switch L2+">Switch L2+</SelectItem>
-                          <SelectItem value="Switch L3">Switch L3</SelectItem>
-                          <SelectItem value="Roteador">Roteador</SelectItem>
-                          <SelectItem value="Access Point">Access Point</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 w-full">
-                <FormField
-                  control={form.control}
-                  name="poc_id"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>POC</FormLabel>
-                      <Select onValueChange={(value) => field.onChange(value === "none" ? null : value)} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione a POC" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="none">Nenhum</SelectItem>
-                          {pocMap?.map((item) => (
-                            <SelectItem key={item.id} value={item.id.toString()}>
-                              {item.empresa}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione o status" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Em Uso">Em Uso</SelectItem>
-                          <SelectItem value="Em Estoque">Em Estoque</SelectItem>
-                          <SelectItem value="RMA">RMA</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="pagina"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Página do Equipamento</FormLabel>
-                    <FormControl>
-                      <Input placeholder="URL" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               <FormField
                 control={form.control}
                 name="notas"
@@ -216,7 +108,104 @@ function NovoModal({ pocMap }) {
                   </FormItem>
                 )}
               />
-
+              <FormField
+                control={form.control}
+                name="pagina"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Página do Equipamento</FormLabel>
+                    <FormControl>
+                      <Input placeholder="URL" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="poc_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>POC</FormLabel>
+                    <Select onValueChange={(value) => field.onChange(value === "none" ? null : value)} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione a POC" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="none">Nenhum</SelectItem>
+                        {pocMap?.map((item) => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.empresa}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="serialNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>N° de Serial</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Número de Serial" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Em Estoque">Em Estoque</SelectItem>
+                        <SelectItem value="Em Uso">Em Uso</SelectItem>
+                        <SelectItem value="RMA">RMA</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tipo de Equipamento</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o tipo" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Access Point">Access Point</SelectItem>
+                        <SelectItem value="Controladora">Controladora</SelectItem>
+                        <SelectItem value="Roteador">Roteador</SelectItem>
+                        <SelectItem value="Switch L2">Switch L2</SelectItem>
+                        <SelectItem value="Switch L2+">Switch L2+</SelectItem>
+                        <SelectItem value="Switch L3">Switch L3</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <DialogFooter className="flex gap-2">
                 <DialogClose asChild>
                   <Button className="w-1/2" type="button" variant="secondary">

@@ -154,11 +154,12 @@ function EditarEquipamentoModal({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
+                          <SelectItem value="Access Point">Access Point</SelectItem>
+                          <SelectItem value="Controladora">Controladora</SelectItem>
+                          <SelectItem value="Roteador">Roteador</SelectItem>
                           <SelectItem value="Switch L2">Switch L2</SelectItem>
                           <SelectItem value="Switch L2+">Switch L2+</SelectItem>
                           <SelectItem value="Switch L3">Switch L3</SelectItem>
-                          <SelectItem value="Roteador">Roteador</SelectItem>
-                          <SelectItem value="Access Point">Access Point</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
