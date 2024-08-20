@@ -22,7 +22,7 @@ const FormSchema = z.object({
   notas: z.string().optional(),
 });
 
-function NovoModal({ pocMap }) {
+function NovoModal({ pocMap, urlMap }) {
   const { handleSubmit, isOpen, setIsOpen } = Utils();
 
   const form = useForm({
@@ -199,9 +199,16 @@ function NovoModal({ pocMap }) {
                   <FormItem>
                     <FormLabel>Página do Equipamento</FormLabel>
                     <FormControl>
-                      <Input placeholder="URL" {...field} />
+                      <Input placeholder="URL" list="url-list" {...field} li />
                     </FormControl>
                     <FormMessage />
+                    <datalist id="url-list">
+                      {urlMap?.map((item) => (
+                        <option key={item.pagina} value={item.pagina}>
+                          {item.model}
+                        </option>
+                      ))}
+                    </datalist>
                   </FormItem>
                 )}
               />

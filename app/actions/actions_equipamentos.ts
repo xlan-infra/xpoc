@@ -95,3 +95,11 @@ export async function getEquipamentosStatus() {
 
   return data;
 }
+
+export async function getUrlEquipamentos() {
+  const supabase = createClient();
+
+  const { data } = await supabase.from("unique_equipamentos").select("pagina, model");
+
+  return data;
+}

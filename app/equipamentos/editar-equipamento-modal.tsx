@@ -36,6 +36,7 @@ function EditarEquipamentoModal({
   ItemPocId,
   itemPocMap,
   itemNotas,
+  urlMap,
 }) {
   const { handleUpdate, isOpen, setIsOpen } = Utils();
 
@@ -231,9 +232,16 @@ function EditarEquipamentoModal({
                   <FormItem>
                     <FormLabel>Página do Equipamento</FormLabel>
                     <FormControl>
-                      <Input placeholder="URL" {...field} />
+                      <Input placeholder="URL" list="url-list" {...field} li />
                     </FormControl>
                     <FormMessage />
+                    <datalist id="url-list">
+                      {urlMap?.map((item) => (
+                        <option key={item.pagina} value={item.pagina}>
+                          {item.model}
+                        </option>
+                      ))}
+                    </datalist>
                   </FormItem>
                 )}
               />

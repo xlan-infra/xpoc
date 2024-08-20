@@ -24,7 +24,7 @@ import EditarEquipamentoModal from "./editar-equipamento-modal";
 import ExcluirEquipamentoModal from "./excluir-equipamento-modal";
 import NovoModal from "./novo-equipamento-modal";
 
-export function DataTable({ data, pocMap }) {
+export function DataTable({ data, pocMap, urlMap }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -78,6 +78,7 @@ export function DataTable({ data, pocMap }) {
     {
       accessorKey: "hardware_version",
       header: "Versão Hw",
+      cell: ({ row }) => <span className="uppercase">{row.getValue("hardware_version")}</span>,
     },
 
     {
@@ -91,19 +92,19 @@ export function DataTable({ data, pocMap }) {
         );
       },
       cell: ({ row }) => (
-        <Badge
+        <div
           className={
             row.getValue("status") === "Em Estoque"
-              ? "border-green-500 text-green-500 hover:border-green-600 hover:text-green-600 bg-transparent hover:bg-transparent"
+              ? " text-emerald-500 hover:text-emerald-600"
               : row.getValue("status") === "Em Uso"
-              ? "border-red-500 text-red-500 hover:border-red-600 hover:text-red-600 bg-transparent hover:bg-transparent"
+              ? "text-red-500 hover:text-red-600"
               : row.getValue("status") === "RMA"
-              ? "border-orange-500 text-orange-500 hover:border-orange-600 hover:text-orange-600 bg-transparent hover:bg-transparent"
+              ? "text-blue-500 hover:text-blue-600"
               : ""
           }
         >
           {row.getValue("status")}
-        </Badge>
+        </div>
       ),
     },
 
@@ -151,6 +152,7 @@ export function DataTable({ data, pocMap }) {
               itemNotas={equipamento.notas}
               ItemPocId={equipamento.poc_id?.id}
               itemPocMap={pocMap}
+              urlMap={urlMap}
             />
 
             <ExcluirEquipamentoModal equipamentoPocId={equipamento.poc_id?.id} itemId={equipamento.id} />
@@ -184,7 +186,8 @@ export function DataTable({ data, pocMap }) {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center py-6">
-        <NovoModal pocMap={pocMap} />
+        <NovoModal pocMap={pocMap} urlMap={urlMap} />
+
         <div className="flex gap-2">
           <Input
             placeholder="Filtrar por Modelo..."
