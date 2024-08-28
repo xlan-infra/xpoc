@@ -160,9 +160,7 @@ function EditarEquipamentoModal({
                           <SelectItem value="GBIC">GBIC</SelectItem>
                           <SelectItem value="Injetor PoE">Injetor PoE</SelectItem>
                           <SelectItem value="Roteador">Roteador</SelectItem>
-                          <SelectItem value="Switch L2">Switch L2</SelectItem>
-                          <SelectItem value="Switch L2+">Switch L2+</SelectItem>
-                          <SelectItem value="Switch L3">Switch L3</SelectItem>
+                          <SelectItem value="Switch">Switch</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -216,6 +214,8 @@ function EditarEquipamentoModal({
                         <SelectContent>
                           <SelectItem value="Em Uso">Em Uso</SelectItem>
                           <SelectItem value="Em Estoque">Em Estoque</SelectItem>
+                          <SelectItem value="Locado">Locado</SelectItem>
+                          <SelectItem value="Vendido">Vendido</SelectItem>
                           <SelectItem value="RMA">RMA</SelectItem>
                         </SelectContent>
                       </Select>

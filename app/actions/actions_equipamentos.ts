@@ -7,8 +7,8 @@ export async function getEquipamentos() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("equipamentos")
-    .select("id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, responsavel)")
-    .order("created_at", { ascending: true });
+    .select("id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa)")
+    .order("status", { ascending: true });
 
   return data;
 }
@@ -24,7 +24,7 @@ export async function addEquipamentos(data) {
   if (error) {
     console.error("Erro ao inserir equipamento:", error);
   } else {
-    revalidatePath("/equipamentos");
+    revalidatePath("/home");
   }
 }
 
@@ -33,7 +33,7 @@ export async function deleteEquipamentos(formData: FormData) {
 
   const supabase = createClient();
   await supabase.from("equipamentos").delete().eq("id", excluir);
-  revalidatePath("/equipamentos");
+  revalidatePath("/home");
 }
 
 export async function updateEquipamentos(data) {
@@ -45,7 +45,7 @@ export async function updateEquipamentos(data) {
     .update({ id, model, serial_number: serialNumber, mac, hardware_version: hardwareVersion, type, status, pagina, notas, poc_id })
     .eq("id", id);
 
-  revalidatePath("/equipamentos");
+  revalidatePath("/home");
 }
 
 export async function getEquipamentosByPoc(id) {

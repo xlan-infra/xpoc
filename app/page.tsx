@@ -20,7 +20,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
       return redirect("/?message=Email ou Senha incorreto");
     }
 
-    return redirect("/equipamentos");
+    return redirect("/home");
   };
 
   return (

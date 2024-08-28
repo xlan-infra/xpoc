@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import {
   ColumnDef,
   ColumnFiltersState,
+  FilterFn,
   PaginationState,
   SortingState,
   VisibilityState,
@@ -26,6 +27,7 @@ import NovoModal from "./novo-equipamento-modal";
 
 export function DataTable({ data, pocMap, urlMap }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = React.useState("");
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -33,6 +35,20 @@ export function DataTable({ data, pocMap, urlMap }) {
     pageIndex: 0,
     pageSize: 30,
   });
+
+  const customGlobalFilter: FilterFn = (row, columnId, filterValue) => {
+    const searchValue = filterValue.toLowerCase();
+
+    return (
+      row.original.model?.toLowerCase().includes(searchValue) ||
+      row.original.type?.toLowerCase().includes(searchValue) ||
+      row.original.serial_number?.toLowerCase().includes(searchValue) ||
+      row.original.mac?.toLowerCase().includes(searchValue) ||
+      row.original.hardware_version?.toLowerCase().includes(searchValue) ||
+      row.original.status?.toLowerCase().includes(searchValue) ||
+      row.original.notas?.toLowerCase().includes(searchValue)
+    );
+  };
 
   const columns: ColumnDef[] = [
     {
@@ -93,15 +109,17 @@ export function DataTable({ data, pocMap, urlMap }) {
       },
       cell: ({ row }) => (
         <div
-          className={
-            row.getValue("status") === "Em Estoque"
-              ? " text-emerald-500 hover:text-emerald-600"
-              : row.getValue("status") === "Em Uso"
-              ? "text-red-500 hover:text-red-600"
-              : row.getValue("status") === "RMA"
-              ? "text-blue-500 hover:text-blue-600"
-              : ""
-          }
+          className={(() => {
+            const statusClasses = {
+              "Em Estoque": "text-emerald-500 hover:text-emerald-600",
+              "Em Uso": "text-red-500 hover:text-red-600",
+              RMA: "text-blue-500 hover:text-blue-600",
+              Vendido: "text-zinc-500 hover:text-zinc-600",
+              Locado: "text-yellow-500 hover:text-yellow-600",
+            };
+
+            return statusClasses[row.getValue("status")] || "text-neutral-300";
+          })()}
         >
           {row.getValue("status")}
         </div>
@@ -122,12 +140,15 @@ export function DataTable({ data, pocMap, urlMap }) {
           text
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase();
+            .toLowerCase()
+            .replace(/\s+/g, "");
 
         return (
-          <Link href={`/poc/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`} className="font-bold">
-            <Badge variant={"outline"}>{poc?.id ? poc?.empresa : <span className="text-neutral-300">-</span>}</Badge>
-          </Link>
+          <Badge variant="outline" className="px-2 text-xs">
+            <Link href={`/poc/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}>
+              {poc?.id ? poc?.empresa : <span className="text-neutral-300">Nenhum</span>}
+            </Link>
+          </Badge>
         );
       },
     },
@@ -174,12 +195,15 @@ export function DataTable({ data, pocMap, urlMap }) {
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: customGlobalFilter,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
       pagination,
+      globalFilter,
     },
   });
 
@@ -189,19 +213,7 @@ export function DataTable({ data, pocMap, urlMap }) {
         <NovoModal pocMap={pocMap} urlMap={urlMap} />
 
         <div className="flex gap-2">
-          <Input
-            placeholder="Filtrar por Modelo..."
-            value={(table.getColumn("model")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn("model")?.setFilterValue(event.target.value)}
-            className="max-w-xs"
-          />
-
-          <Input
-            placeholder="Filtrar por Status..."
-            value={(table.getColumn("status")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn("status")?.setFilterValue(event.target.value)}
-            className="max-w-xs"
-          />
+          <Input placeholder="Pesquisar" value={globalFilter} onChange={(event) => setGlobalFilter(event.target.value)} className="max-w-60" />
         </div>
       </div>
       <div>

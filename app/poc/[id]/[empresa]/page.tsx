@@ -148,7 +148,7 @@ async function page({ params }) {
                   </span>
                 </TableCell>
                 <TableCell>{item.type}</TableCell>
-                <TableCell>{item.hardware_version}</TableCell>
+                <TableCell className="uppercase">{item.hardware_version}</TableCell>
                 <TableCell>{item.serial_number}</TableCell>
                 <TableCell>{item.mac ? item.mac : "n/a"}</TableCell>
               </TableRow>

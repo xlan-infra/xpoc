@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const updateSession = async (request: NextRequest) => {
-  const protectedRoutes = ["/equipamentos", "/poc"];
+  const protectedRoutes = ["/home", "/poc"];
 
   try {
     const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
@@ -21,9 +21,9 @@ export const updateSession = async (request: NextRequest) => {
       data: { session },
     } = await supabase.auth.getSession();
 
-    // Se a rota atual for "/" e o usuário estiver logado, redireciona para "/equipamentos"
+    // Se a rota atual for "/" e o usuário estiver logado, redireciona para "/home"
     if (request.nextUrl.pathname === "/" && session) {
-      return NextResponse.redirect(new URL("/equipamentos", request.url));
+      return NextResponse.redirect(new URL("/home", request.url));
     }
 
     // Verifica se a rota atual está protegida

@@ -6,7 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, CheckCheck } from "lucide-react";
+import { CheckCircle2, Handshake } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -78,16 +78,16 @@ function FinalizarPocModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button variant="link" className="text-black p-0" disabled={itemStatus === "Finalizada"}>
+        <Button variant="link" className="p-0" disabled={itemStatus === "Finalizada"}>
           {itemStatus === "Finalizada" ? (
             <>
-              <CheckCheck size={14} className="mr-1" />
-              finalizada
+              <CheckCircle2 size={14} className="mr-1 text-black" />
+              <span className="text-black">finalizada</span>
             </>
           ) : (
             <>
-              <Check size={14} className="mr-1" />
-              finalizar
+              <Handshake size={14} className="mr-1 text-blue-600" />
+              <span className="text-blue-600">finalizar</span>
             </>
           )}
         </Button>

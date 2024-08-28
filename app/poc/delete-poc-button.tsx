@@ -22,7 +22,7 @@ export default function DeleteButton({ itemId, itemStatus }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-black hover:text-red-700 p-0" disabled={itemStatus}>
+        <Button variant={"link"} className={`text-red-500 hover:text-red-700 p-0 ${itemStatus && `hidden`}`} disabled={itemStatus}>
           <Trash size={14} className="mr-1" /> remover
         </Button>
       </DialogTrigger>
