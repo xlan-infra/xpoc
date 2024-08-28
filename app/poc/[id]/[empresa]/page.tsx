@@ -8,7 +8,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import EditarPocModal from "../../editar-poc-modal";
-import ExcluirPocModal from "../../excluir-poc-modal";
 
 async function page({ params }) {
   const id = params.id;
@@ -115,7 +114,7 @@ async function page({ params }) {
                 itemStatus={item.status}
                 itemNotas={item.notas}
               />
-              <ExcluirPocModal itemId={item.id} />
+              {/* <ExcluirPocModal itemId={item.id} /> */}
             </div>
           </CardFooter>
         </Card>

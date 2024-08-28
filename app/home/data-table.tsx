@@ -39,6 +39,14 @@ export function DataTable({ data, pocMap, urlMap }) {
   const customGlobalFilter: FilterFn = (row, columnId, filterValue) => {
     const searchValue = filterValue.toLowerCase();
 
+    // Normaliza texto removendo acentos e transformando em minúsculas para comparação
+    const normalizeText = (text) =>
+      text
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/\s+/g, "");
+
     return (
       row.original.model?.toLowerCase().includes(searchValue) ||
       row.original.type?.toLowerCase().includes(searchValue) ||
@@ -46,7 +54,8 @@ export function DataTable({ data, pocMap, urlMap }) {
       row.original.mac?.toLowerCase().includes(searchValue) ||
       row.original.hardware_version?.toLowerCase().includes(searchValue) ||
       row.original.status?.toLowerCase().includes(searchValue) ||
-      row.original.notas?.toLowerCase().includes(searchValue)
+      row.original.notas?.toLowerCase().includes(searchValue) ||
+      normalizeText(row.original.poc_id?.empresa ?? "").includes(normalizeText(searchValue))
     );
   };
 
@@ -127,6 +136,7 @@ export function DataTable({ data, pocMap, urlMap }) {
     },
 
     {
+      acessorKey: "pocs",
       accessorFn: (row) => ({
         id: row.poc_id?.id,
         empresa: row.poc_id?.empresa ?? "",

@@ -8,7 +8,7 @@ export async function getPoc() {
   const { data } = await supabase
     .from("poc")
     .select(`id, empresa, responsavel, local, telefone, email, notas, dt_inicio, dt_fim, status `)
-    .order("status", { ascending: true });
+    .order("dt_inicio", { ascending: true });
 
   return data;
 }

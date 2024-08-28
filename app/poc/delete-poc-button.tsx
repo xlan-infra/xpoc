@@ -1,5 +1,3 @@
-"use client";
-
 import Utils from "@/app/poc/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,13 +17,16 @@ export default function DeleteButton({ itemId, itemStatus }) {
 
   const deleteItem = handleDelete(itemId);
 
+  const status = itemStatus === "Em Andamento";
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className={`text-red-500 hover:text-red-700 p-0 ${itemStatus && `hidden`}`} disabled={itemStatus}>
+        <Button variant={"link"} className={`text-red-500 hover:text-red-700 p-0 ${status && `hidden`}`} disabled={status}>
           <Trash size={14} className="mr-1" /> remover
         </Button>
       </DialogTrigger>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Tem certeza que deseja excluir ?</DialogTitle>

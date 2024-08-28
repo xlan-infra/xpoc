@@ -1,13 +1,14 @@
+import { getPoc } from "../actions/actions_poc";
 import DataCard from "./data-card";
-import NovoPocModal from "./novo-poc-modal";
 
-async function Poc() {
+async function page() {
+  const pocMap = await getPoc();
+
   return (
     <main className="px-2 pb-2 pt-0">
-      <NovoPocModal />
-      <DataCard />
+      <DataCard data={pocMap} />
     </main>
   );
 }
 
-export default Poc;
+export default page;
