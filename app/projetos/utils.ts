@@ -2,19 +2,19 @@
 
 import {useState} from "react";
 import {toast} from "sonner";
-import {addPoc, deletePoc, updatePoc} from "../actions/actions_projetos";
+import {addProjeto, deleteProjeto, updateProjeto} from "../actions/actions_projetos";
 
 export default function Utils() {
   const [isOpen, setIsOpen] = useState(false);
 
   function handleSubmit(data) {
-    addPoc(data);
+    addProjeto(data);
     toast.success("Poc adicionada com sucesso!");
     setIsOpen(false);
   }
 
   function handleUpdate(data) {
-    updatePoc(data);
+    updateProjeto(data);
     toast.info("Poc atualizada com sucesso!");
     setIsOpen(false);
   }
@@ -23,7 +23,7 @@ export default function Utils() {
     event.preventDefault();
     const formData = new FormData();
     formData.append("excluir", itemId);
-    await deletePoc(formData);
+    await deleteProjeto(formData);
     toast.success("Poc removida com sucesso!");
     setIsOpen(false);
   };
@@ -41,5 +41,21 @@ export default function Utils() {
       .replace(" de", "");
   }
 
-  return {isOpen, setIsOpen, handleSubmit, handleUpdate, handleDelete, DateFormat};
+  function calculateDaysSinceStart(dt_inicio) {
+    const startDate = new Date(dt_inicio);
+    const currentDate = new Date();
+    const timeDifference = currentDate - startDate;
+    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    return daysDifference;
+  }
+
+  return {
+    isOpen,
+    setIsOpen,
+    handleSubmit,
+    handleUpdate,
+    handleDelete,
+    DateFormat,
+    calculateDaysSinceStart,
+  };
 }

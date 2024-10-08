@@ -155,7 +155,7 @@ export function DataTable({data, pocMap, urlMap}) {
         empresa: row.poc_id?.empresa ?? "",
       }),
       id: "poc_id_empresa",
-      header: "POC",
+      header: "Projetos",
       cell: ({row}) => {
         const poc = row.original.poc_id;
 
@@ -168,7 +168,7 @@ export function DataTable({data, pocMap, urlMap}) {
 
         return (
           <Badge variant="outline" className="px-2 text-xs">
-            <Link href={`/poc/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}>
+            <Link href={`/projetos/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}>
               {poc?.id ? poc?.empresa : <span className="text-neutral-300">Nenhum</span>}
             </Link>
           </Badge>

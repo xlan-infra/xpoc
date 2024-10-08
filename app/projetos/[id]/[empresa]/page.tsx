@@ -2,7 +2,7 @@ import {
   getEquipamentosByPoc,
   getEquipamentosByPocHistory,
 } from "@/app/actions/actions_equipamentos";
-import {getPocById} from "@/app/actions/actions_projetos";
+import {getProjetoById} from "@/app/actions/actions_projetos";
 import Ping from "@/components/ping";
 import PrintButton from "@/components/print-button";
 import {Button} from "@/components/ui/button";
@@ -15,7 +15,7 @@ import EditarPocModal from "../../modal/editar-projeto-modal";
 async function page({params}) {
   const id = params.id;
 
-  const pocId = await getPocById(id);
+  const pocId = await getProjetoById(id);
   const equipamentosByPocMap = await getEquipamentosByPoc(id);
   const equipamentosByPocHistoryMap = await getEquipamentosByPocHistory(id);
 
@@ -46,7 +46,7 @@ async function page({params}) {
   return (
     <>
       <div className="mb-4 print:hidden">
-        <Link href="/poc">
+        <Link href="/projetos">
           <Button className="p-0" variant="link">
             <ArrowLeft size={14} className="mr-1" />
             Voltar

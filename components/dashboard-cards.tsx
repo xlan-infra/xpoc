@@ -2,12 +2,12 @@ import {
   getEquipamentosCadastrados,
   getEquipamentosStatus,
 } from "@/app/actions/actions_equipamentos";
-import {getPocCount} from "@/app/actions/actions_projetos";
+import {getProjetoCount} from "@/app/actions/actions_projetos";
 import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card";
 
 async function DashboardCards() {
   const equipamentosCadastrados = await getEquipamentosCadastrados();
-  const pocCount = await getPocCount();
+  const pocCount = await getProjetoCount();
   const equipamentosStatus = await getEquipamentosStatus();
 
   return (

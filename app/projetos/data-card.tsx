@@ -4,8 +4,7 @@ import Ping from "@/components/ping";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {Input} from "@/components/ui/input"; // Importe o componente de Input
-import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -18,37 +17,25 @@ import Link from "next/link";
 import {useState} from "react";
 import ExcluirPocModal from "./modal/excluir-projeto-modal";
 import FinalizarPocModal from "./modal/finalizar-projeto-modal";
-import NovoPocModal from "./modal/novo-projeto-modal";
+import NovoProjetoModal from "./modal/novo-projeto-modal";
+import Utils from "./utils";
 
 function DataCard({data}) {
   const [statusFilter, setStatusFilter] = useState("Em Andamento");
+  const [categoria, setCategoria] = useState("poc");
   const [searchTerm, setSearchTerm] = useState("");
 
-  function DateFormat(dateString) {
-    const [year, month, day] = dateString.split("-");
-    const date = new Date(year, month - 1, day);
-    return new Intl.DateTimeFormat("pt-BR", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    })
-      .format(date)
-      .replace(".", "")
-      .replace(" de", "");
-  }
-
-  function calculateDaysSinceStart(dt_inicio) {
-    const startDate = new Date(dt_inicio);
-    const currentDate = new Date();
-    const timeDifference = currentDate - startDate;
-    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    return daysDifference;
-  }
+  const {DateFormat, calculateDaysSinceStart} = Utils();
 
   const filteredPocMap = data
     ?.filter((item) => {
       if (statusFilter === "Todos") return true;
       return item.status === statusFilter;
+    })
+    .filter((item) => {
+      if (categoria === "Todos") return true;
+      if (categoria === "poc") return item.categoria === "poc";
+      if (categoria === "locação") return item.categoria === "locação";
     })
     .filter((item) => {
       if (searchTerm === "") return true;
@@ -59,17 +46,27 @@ function DataCard({data}) {
     <div className="mt-4">
       <div className="mb-4 w-full flex justify-between sm:space-x-4 max-sm:gap-2">
         <div className="flex justify-start">
-          <NovoPocModal />
+          <NovoProjetoModal />
         </div>
 
         <div className="flex items-center space-x-2">
           <div className="flex items-center">
-            <Label>
-              <span className="text-muted-foreground text-sm">Filtrar por status</span>
-            </Label>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <Select value={categoria} onValueChange={setCategoria}>
               <SelectTrigger>
                 <SelectValue placeholder="Selecione o status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="poc">Poc</SelectItem>
+                <SelectItem value="locação">Locação</SelectItem>
+                <SelectItem value="Todos">Todos</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione a Categoria" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Em Andamento">Em Andamento</SelectItem>
@@ -130,7 +127,7 @@ function DataCard({data}) {
               </div>
 
               <div className="flex items-center gap-2 justify-between border-t-2 border-neutral-200">
-                <Link href={`/poc/${item.id}/${item.empresa.toLowerCase()}`}>
+                <Link href={`/projetos/${item.id}/${item.empresa.toLowerCase()}`}>
                   <Button variant={"link"} className="text-black p-0">
                     <NotepadText size={14} className="mr-1" /> detalhes
                   </Button>

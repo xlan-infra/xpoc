@@ -3,10 +3,10 @@
 import {createClient} from "@/utils/supabase/server";
 import {revalidatePath} from "next/cache";
 
-export async function getPoc() {
+export async function getProjeto() {
   const supabase = createClient();
   const {data} = await supabase
-    .from("poc")
+    .from("projetos")
     .select(
       `id, empresa, responsavel, cidade, estado, telefone, email, notas, categoria, dt_inicio, dt_fim, status `
     )
@@ -15,7 +15,7 @@ export async function getPoc() {
   return data;
 }
 
-export async function addPoc(data) {
+export async function addProjeto(data) {
   const {
     empresa,
     responsavel,
@@ -31,7 +31,7 @@ export async function addPoc(data) {
   } = data;
 
   const supabase = createClient();
-  const {error} = await supabase.from("poc").insert({
+  const {error} = await supabase.from("projetos").insert({
     empresa,
     responsavel,
     cidade,
@@ -48,11 +48,11 @@ export async function addPoc(data) {
   if (error) {
     console.error("Erro ao inserir POC:", error);
   } else {
-    revalidatePath("/poc");
+    revalidatePath("/projetos");
   }
 }
 
-export async function updatePoc(data) {
+export async function updateProjeto(data) {
   const {
     id,
     empresa,
@@ -70,7 +70,7 @@ export async function updatePoc(data) {
 
   const supabase = createClient();
   const {error} = await supabase
-    .from("poc")
+    .from("projetos")
     .update({
       empresa,
       responsavel,
@@ -89,26 +89,26 @@ export async function updatePoc(data) {
   if (error) {
     console.error("Erro ao atualizar POC:", error);
   } else {
-    revalidatePath("/poc");
+    revalidatePath("/projetos");
   }
 }
 
-export async function deletePoc(formData) {
+export async function deleteProjeto(formData) {
   const excluir = formData.get("excluir");
 
   const supabase = createClient();
-  const {error} = await supabase.from("poc").delete().eq("id", excluir);
+  const {error} = await supabase.from("projetos").delete().eq("id", excluir);
 
   if (error) {
     console.error("Erro ao deletar POC:", error);
   } else {
-    revalidatePath("/poc");
+    revalidatePath("/projetos");
   }
 }
 
-export async function getPocCount() {
+export async function getProjetoCount() {
   const supabase = createClient();
-  const {count, error} = await supabase.from("poc").select("*", {count: "exact"});
+  const {count, error} = await supabase.from("projetos").select("*", {count: "exact"});
 
   if (error) {
     console.error("Erro ao buscar POCs:", error);
@@ -118,10 +118,10 @@ export async function getPocCount() {
   return count;
 }
 
-export async function getPocByStatus() {
+export async function getProjetoByStatus() {
   const supabase = createClient();
   const {data} = await supabase
-    .from("poc")
+    .from("projetos")
     .select(
       `id, empresa, responsavel, cidade, estado, telefone, email, notas, categoria, dt_inicio, dt_fim, status `
     )
@@ -131,10 +131,10 @@ export async function getPocByStatus() {
   return data;
 }
 
-export async function getPocById(id) {
+export async function getProjetoById(id) {
   const supabase = createClient();
   const {data} = await supabase
-    .from("poc")
+    .from("projetos")
     .select(
       `id, empresa, responsavel, cidade, estado, telefone, email, notas, categoria, dt_inicio, dt_fim, status`
     )
