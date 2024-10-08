@@ -1,14 +1,29 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import Utils from "./utils";
+import {Badge} from "@/components/ui/badge";
+import {Button} from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useForm} from "react-hook-form";
+import {z} from "zod";
+import Utils from "../utils";
 
 const FormSchema = z.object({
   model: z.string().nonempty("Model é obrigatório"),
@@ -22,8 +37,8 @@ const FormSchema = z.object({
   notas: z.string().optional(),
 });
 
-function NovoModal({ pocMap, urlMap }) {
-  const { handleSubmit, isOpen, setIsOpen } = Utils();
+function NovoModal({pocMap, urlMap}) {
+  const {handleSubmit, isOpen, setIsOpen} = Utils();
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -59,7 +74,7 @@ function NovoModal({ pocMap, urlMap }) {
               <FormField
                 control={form.control}
                 name="model"
-                render={({ field }) => (
+                render={({field}) => (
                   <FormItem>
                     <FormLabel>Modelo</FormLabel>
                     <FormControl>
@@ -73,7 +88,7 @@ function NovoModal({ pocMap, urlMap }) {
                 <FormField
                   control={form.control}
                   name="serialNumber"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>N° de Serial</FormLabel>
                       <FormControl>
@@ -86,7 +101,7 @@ function NovoModal({ pocMap, urlMap }) {
                 <FormField
                   control={form.control}
                   name="mac"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>MAC</FormLabel>
                       <FormControl>
@@ -102,7 +117,7 @@ function NovoModal({ pocMap, urlMap }) {
                 <FormField
                   control={form.control}
                   name="hardwareVersion"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>Versão do Hardware</FormLabel>
                       <FormControl>
@@ -115,7 +130,7 @@ function NovoModal({ pocMap, urlMap }) {
                 <FormField
                   control={form.control}
                   name="type"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>Tipo de Equipamento</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -143,13 +158,16 @@ function NovoModal({ pocMap, urlMap }) {
                 <FormField
                   control={form.control}
                   name="poc_id"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
-                      <FormLabel>POC</FormLabel>
-                      <Select onValueChange={(value) => field.onChange(value === "none" ? null : value)} defaultValue={field.value}>
+                      <FormLabel>Projeto</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(value === "none" ? null : value)}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecione a POC" />
+                            <SelectValue placeholder="Selecione o Projeto" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -157,6 +175,9 @@ function NovoModal({ pocMap, urlMap }) {
                           {pocMap?.map((item) => (
                             <SelectItem key={item.id} value={item.id.toString()}>
                               {item.empresa}
+                              <Badge className="ml-2" variant="secondary">
+                                {item.categoria}
+                              </Badge>
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -169,7 +190,7 @@ function NovoModal({ pocMap, urlMap }) {
                 <FormField
                   control={form.control}
                   name="status"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>Status</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -195,7 +216,7 @@ function NovoModal({ pocMap, urlMap }) {
               <FormField
                 control={form.control}
                 name="pagina"
-                render={({ field }) => (
+                render={({field}) => (
                   <FormItem>
                     <FormLabel>Página do Equipamento</FormLabel>
                     <FormControl>
@@ -216,7 +237,7 @@ function NovoModal({ pocMap, urlMap }) {
               <FormField
                 control={form.control}
                 name="notas"
-                render={({ field }) => (
+                render={({field}) => (
                   <FormItem>
                     <FormLabel>Notas</FormLabel>
                     <FormControl>

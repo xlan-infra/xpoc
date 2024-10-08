@@ -1,6 +1,9 @@
-import { getEquipamentosCadastrados, getEquipamentosStatus } from "@/app/actions/actions_equipamentos";
-import { getPocCount } from "@/app/actions/actions_poc";
-import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
+import {
+  getEquipamentosCadastrados,
+  getEquipamentosStatus,
+} from "@/app/actions/actions_equipamentos";
+import {getPocCount} from "@/app/actions/actions_projetos";
+import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card";
 
 async function DashboardCards() {
   const equipamentosCadastrados = await getEquipamentosCadastrados();
@@ -15,7 +18,11 @@ async function DashboardCards() {
         </CardHeader>
         <CardContent>
           {equipamentosCadastrados.map((item) => (
-            <Info key={item.equipamento_type} info1={item.tipo_count} info2={item.equipamento_type} />
+            <Info
+              key={item.equipamento_type}
+              info1={item.tipo_count}
+              info2={item.equipamento_type}
+            />
           ))}
         </CardContent>
       </Card>
@@ -25,7 +32,11 @@ async function DashboardCards() {
         </CardHeader>
         <CardContent>
           {equipamentosStatus.map((item) => (
-            <Info key={item.equipamento_status} info1={item.status_count} info2={item.equipamento_status} />
+            <Info
+              key={item.equipamento_status}
+              info1={item.status_count}
+              info2={item.equipamento_status}
+            />
           ))}
         </CardContent>
       </Card>
@@ -43,7 +54,7 @@ async function DashboardCards() {
 
 export default DashboardCards;
 
-export function Info({ info1, info2 }) {
+export function Info({info1, info2}) {
   return (
     <div className="flex gap-2 items-center">
       <p className="text-xl text-violet-800 font-bold">{info1}</p>

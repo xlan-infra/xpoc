@@ -1,15 +1,18 @@
-import { getEquipamentosByPoc, getEquipamentosByPocHistory } from "@/app/actions/actions_equipamentos";
-import { getPocById } from "@/app/actions/actions_poc";
+import {
+  getEquipamentosByPoc,
+  getEquipamentosByPocHistory,
+} from "@/app/actions/actions_equipamentos";
+import {getPocById} from "@/app/actions/actions_projetos";
 import Ping from "@/components/ping";
 import PrintButton from "@/components/print-button";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft } from "lucide-react";
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {ArrowLeft} from "lucide-react";
 import Link from "next/link";
-import EditarPocModal from "../../editar-poc-modal";
+import EditarPocModal from "../../modal/editar-projeto-modal";
 
-async function page({ params }) {
+async function page({params}) {
   const id = params.id;
 
   const pocId = await getPocById(id);
@@ -54,7 +57,11 @@ async function page({ params }) {
       {pocId?.map((item) => (
         <Card className="print:mt-6 bg-gradient-to-bl from-violet-50/50 from-5%" key={item.id}>
           <CardHeader className="pb-4">
-            <CardTitle className={`text-4xl ${item.status === "Finalizada" && "text-muted-foreground"}`}>{item.empresa}</CardTitle>
+            <CardTitle
+              className={`text-4xl ${item.status === "Finalizada" && "text-muted-foreground"}`}
+            >
+              {item.empresa}
+            </CardTitle>
           </CardHeader>
           <CardContent className="pb-2 grid grid-cols-1 md:grid-cols-2 gap-x-10">
             <div className="flex items-center justify-between space-x-1 border-b border-neutral-100">
@@ -63,7 +70,9 @@ async function page({ params }) {
                 <Ping color={item.status === "Em Andamento" ? "bg-green-500" : "bg-neutral-400"} />
                 {item.status}
                 {item.status === "Em Andamento" && (
-                  <span className="text-neutral-400 italic text-xs">por {calculateDaysSinceStart(item.dt_inicio)} dia(s)</span>
+                  <span className="text-neutral-400 italic text-xs">
+                    por {calculateDaysSinceStart(item.dt_inicio)} dia(s)
+                  </span>
                 )}
                 {item.status === "Finalizada" && ` em ${DateFormat(item.dt_fim)}`}
               </div>
@@ -108,7 +117,8 @@ async function page({ params }) {
                 itemId={item.id}
                 itemEmpresa={item.empresa}
                 itemResponsavel={item.responsavel}
-                itemLocal={item.local}
+                itemCidade={item.cidade}
+                itemEstado={item.estado}
                 itemTelefone={item.telefone}
                 itemEmail={item.email}
                 itemStatus={item.status}
@@ -122,7 +132,9 @@ async function page({ params }) {
 
       <div className="mt-4">
         <h1 className="text-black text-lg">
-          {isFinalizada ? "Histórico de Equipamentos Utilizados pelo Cliente:" : " Equipamentos Em Uso no Cliente:"}
+          {isFinalizada
+            ? "Histórico de Equipamentos Utilizados pelo Cliente:"
+            : " Equipamentos Em Uso no Cliente:"}
         </h1>
       </div>
 

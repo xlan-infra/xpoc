@@ -1,7 +1,7 @@
 "use client";
-import DeletePocButton from "./delete-poc-button";
+import DeletePocButton from "../delete-projeto-button";
 
-function ExcluirPocModal({ itemId, itemStatus }) {
+function ExcluirPocModal({itemId, itemStatus}) {
   return <DeletePocButton itemId={itemId} itemStatus={itemStatus} />;
 }
 

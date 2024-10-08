@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { toast } from "sonner";
-import { addPoc, deletePoc, updatePoc } from "../actions/actions_poc";
+import {useState} from "react";
+import {toast} from "sonner";
+import {addPoc, deletePoc, updatePoc} from "../actions/actions_projetos";
 
 export default function Utils() {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,5 +41,5 @@ export default function Utils() {
       .replace(" de", "");
   }
 
-  return { isOpen, setIsOpen, handleSubmit, handleUpdate, handleDelete, DateFormat };
+  return {isOpen, setIsOpen, handleSubmit, handleUpdate, handleDelete, DateFormat};
 }

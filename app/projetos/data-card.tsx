@@ -1,19 +1,26 @@
 "use client";
 
 import Ping from "@/components/ping";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input"; // Importe o componente de Input
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { NotepadText } from "lucide-react";
+import {Badge} from "@/components/ui/badge";
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {Input} from "@/components/ui/input"; // Importe o componente de Input
+import {Label} from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {NotepadText} from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-import ExcluirPocModal from "./excluir-poc-modal";
-import FinalizarPocModal from "./finalizar-poc-modal";
-import NovoPocModal from "./novo-poc-modal";
+import {useState} from "react";
+import ExcluirPocModal from "./modal/excluir-projeto-modal";
+import FinalizarPocModal from "./modal/finalizar-projeto-modal";
+import NovoPocModal from "./modal/novo-projeto-modal";
 
-function DataCard({ data }) {
+function DataCard({data}) {
   const [statusFilter, setStatusFilter] = useState("Em Andamento");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -73,7 +80,11 @@ function DataCard({ data }) {
           </div>
 
           <div>
-            <Input placeholder="Pesquisar por empresa" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+            <Input
+              placeholder="Pesquisar por empresa"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
       </div>
@@ -82,12 +93,28 @@ function DataCard({ data }) {
         {filteredPocMap?.map((item) => (
           <Card key={item.id}>
             <CardHeader className="pb-4">
-              <CardTitle className={item.status === "Finalizada" && "text-muted-foreground"}>{item.empresa}</CardTitle>
+              <div className="flex justify-between">
+                <CardTitle className={item.status === "Finalizada" && "text-muted-foreground"}>
+                  {item.empresa}
+                </CardTitle>
+                <Badge
+                  className={
+                    item.categoria === "poc"
+                      ? "bg-green-400 hover:bg-green-600 capitalize"
+                      : "bg-orange-400 hover:bg-orange-600 capitalize"
+                  }
+                >
+                  {item.categoria}
+                </Badge>
+              </div>
+
               <CardDescription className="flex items-center gap-1">
                 <Ping color={item.status === "Em Andamento" ? "bg-green-500" : "bg-neutral-400"} />
                 {item.status}
                 {item.status === "Em Andamento" && (
-                  <span className="text-neutral-400 italic text-xs">por {calculateDaysSinceStart(item.dt_inicio)} dia(s)</span>
+                  <span className="text-neutral-400 italic text-xs">
+                    por {calculateDaysSinceStart(item.dt_inicio)} dia(s)
+                  </span>
                 )}
                 {item.status === "Finalizada" && ` em ${DateFormat(item.dt_fim)}`}
               </CardDescription>
@@ -115,11 +142,13 @@ function DataCard({ data }) {
                   itemId={item.id}
                   itemEmpresa={item.empresa}
                   itemResponsavel={item.responsavel}
-                  itemLocal={item.local}
+                  itemCidade={item.cidade}
+                  itemEstado={item.estado}
                   itemTelefone={item.telefone}
                   itemEmail={item.email}
                   itemStatus={item.status}
                   itemNotas={item.notas}
+                  itemCategoria={item.categoria}
                 />
 
                 <ExcluirPocModal itemId={item.id} itemStatus={item.status} />

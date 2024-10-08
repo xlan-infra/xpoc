@@ -1,16 +1,30 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PenLine } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import Utils from "./utils";
+import {Button} from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {PenLine} from "lucide-react";
+import {useState} from "react";
+import {useForm} from "react-hook-form";
+import {z} from "zod";
+import Utils from "../utils";
 
 const FormSchema = z.object({
   id: z.number(),
@@ -18,11 +32,13 @@ const FormSchema = z.object({
   dt_fim: z.string().nullable(),
   empresa: z.string().nonempty("Empresa é obrigatória"),
   responsavel: z.string().nonempty("Responsável é obrigatório"),
-  local: z.string().nonempty("Local é obrigatório"),
+  cidade: z.string().nonempty("Cidade é obrigatória"),
+  estado: z.string().nonempty("Estado é obrigatório"),
   telefone: z.string().nonempty("Telefone é obrigatório"),
   email: z.string().optional(),
   status: z.string().nonempty("Status é obrigatório"),
   notas: z.string().optional(),
+  categoria: z.string().nonempty("Categoria é obrigatória"),
 });
 
 function EditarPocModal({
@@ -31,13 +47,15 @@ function EditarPocModal({
   itemDataFim,
   itemEmpresa,
   itemResponsavel,
-  itemLocal,
+  itemCidade,
+  itemEstado,
   itemTelefone,
   itemEmail,
   itemStatus,
   itemNotas,
+  itemCategoria,
 }) {
-  const { handleUpdate, isOpen, setIsOpen } = Utils();
+  const {handleUpdate, isOpen, setIsOpen} = Utils();
 
   const [status, setStatus] = useState(itemStatus);
 
@@ -49,11 +67,13 @@ function EditarPocModal({
       dt_fim: itemDataFim,
       empresa: itemEmpresa,
       responsavel: itemResponsavel,
-      local: itemLocal,
+      cidade: itemCidade,
+      estado: itemEstado,
       telefone: itemTelefone,
       email: itemEmail,
       status: itemStatus,
       notas: itemNotas,
+      categoria: itemCategoria,
     },
   });
 
@@ -66,11 +86,13 @@ function EditarPocModal({
       dt_inicio: itemDataInicio,
       empresa: itemEmpresa,
       responsavel: itemResponsavel,
-      local: itemLocal,
+      cidade: itemCidade,
+      estado: itemEstado,
       telefone: itemTelefone,
       email: itemEmail,
       status: itemStatus,
       notas: itemNotas,
+      categoria: itemCategoria,
     });
     form.clearErrors();
   };
@@ -84,7 +106,7 @@ function EditarPocModal({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="mb-4">Editar POC</DialogTitle>
+          <DialogTitle className="mb-4">Editar Projeto</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-2">
               {/* Campos do Formulário */}
@@ -92,7 +114,7 @@ function EditarPocModal({
               <FormField
                 control={form.control}
                 name="dt_inicio"
-                render={({ field }) => (
+                render={({field}) => (
                   <FormItem>
                     <FormLabel>Data de Início</FormLabel>
                     <FormControl>
@@ -107,7 +129,7 @@ function EditarPocModal({
                 <FormField
                   control={form.control}
                   name="empresa"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>Empresa</FormLabel>
                       <FormControl>
@@ -120,7 +142,7 @@ function EditarPocModal({
                 <FormField
                   control={form.control}
                   name="responsavel"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>Responsável</FormLabel>
                       <FormControl>
@@ -132,24 +154,40 @@ function EditarPocModal({
                 />
               </div>
 
-              <FormField
-                control={form.control}
-                name="local"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Local</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Local da POC" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="cidade"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormLabel>Cidade</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Cidade" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="estado"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormLabel>Estado</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Estado" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-2 w-full">
                 <FormField
                   control={form.control}
                   name="telefone"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>Telefone</FormLabel>
                       <FormControl>
@@ -163,7 +201,7 @@ function EditarPocModal({
                 <FormField
                   control={form.control}
                   name="email"
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
@@ -177,8 +215,30 @@ function EditarPocModal({
 
               <FormField
                 control={form.control}
+                name="categoria"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Categoria</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione a categoria" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="poc">🟣Poc</SelectItem>
+                        <SelectItem value="locação">🟠Locação</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="status"
-                render={({ field }) => (
+                render={({field}) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
                     <Select
@@ -206,7 +266,7 @@ function EditarPocModal({
               <FormField
                 control={form.control}
                 name="dt_fim"
-                render={({ field }) => (
+                render={({field}) => (
                   <FormItem hidden={status != "Finalizada"}>
                     <FormLabel>Data de Conclusão</FormLabel>
                     <FormControl>
@@ -220,7 +280,7 @@ function EditarPocModal({
               <FormField
                 control={form.control}
                 name="notas"
-                render={({ field }) => (
+                render={({field}) => (
                   <FormItem>
                     <FormLabel>Notas</FormLabel>
                     <FormControl>

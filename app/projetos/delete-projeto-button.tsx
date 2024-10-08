@@ -1,5 +1,5 @@
-import Utils from "@/app/poc/utils";
-import { Button } from "@/components/ui/button";
+import Utils from "@/app/projetos/utils";
+import {Button} from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,10 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Trash } from "lucide-react";
+import {Trash} from "lucide-react";
 
-export default function DeleteButton({ itemId, itemStatus }) {
-  const { handleDelete, isOpen, setIsOpen } = Utils();
+export default function DeleteButton({itemId, itemStatus}) {
+  const {handleDelete, isOpen, setIsOpen} = Utils();
 
   const deleteItem = handleDelete(itemId);
 
@@ -22,7 +22,11 @@ export default function DeleteButton({ itemId, itemStatus }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className={`text-red-500 hover:text-red-700 p-0 ${status && `hidden`}`} disabled={status}>
+        <Button
+          variant={"link"}
+          className={`text-red-500 hover:text-red-700 p-0 ${status && `hidden`}`}
+          disabled={status}
+        >
           <Trash size={14} className="mr-1" /> remover
         </Button>
       </DialogTrigger>

@@ -1,4 +1,4 @@
-import { getPoc } from "../actions/actions_poc";
+import {getPoc} from "../actions/actions_projetos";
 import DataCard from "./data-card";
 
 async function page() {

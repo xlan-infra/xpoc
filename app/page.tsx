@@ -1,9 +1,9 @@
 import Logo from "@/components/logo";
-import { SubmitButton } from "@/components/submit-button";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import {SubmitButton} from "@/components/submit-button";
+import {createClient} from "@/utils/supabase/server";
+import {redirect} from "next/navigation";
 
-export default function Login({ searchParams }: { searchParams: { message: string } }) {
+export default function Page({searchParams}: {searchParams: {message: string}}) {
   const signIn = async (formData: FormData) => {
     "use server";
 
@@ -11,7 +11,7 @@ export default function Login({ searchParams }: { searchParams: { message: strin
     const password = formData.get("password") as string;
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const {error} = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -32,17 +32,34 @@ export default function Login({ searchParams }: { searchParams: { message: strin
         <label className="text-md" htmlFor="email">
           Email
         </label>
-        <input className="rounded-md px-4 py-2 bg-inherit border mb-6" name="email" placeholder="you@example.com" required />
+        <input
+          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          name="email"
+          placeholder="you@example.com"
+          required
+        />
         <label className="text-md" htmlFor="password">
           Password
         </label>
-        <input className="rounded-md px-4 py-2 bg-inherit border mb-6" type="password" name="password" placeholder="••••••••" required />
+        <input
+          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          type="password"
+          name="password"
+          placeholder="••••••••"
+          required
+        />
 
-        <SubmitButton formAction={signIn} className="mb-2 bg-violet-500 hover:bg-violet-700" pendingText="Entrando...">
+        <SubmitButton
+          formAction={signIn}
+          className="mb-2 bg-violet-500 hover:bg-violet-700"
+          pendingText="Entrando..."
+        >
           Login
         </SubmitButton>
 
-        {searchParams?.message && <p className="mt-4 p-4 bg-red-50 text-foreground text-center">{searchParams.message}</p>}
+        {searchParams?.message && (
+          <p className="mt-4 p-4 bg-red-50 text-foreground text-center">{searchParams.message}</p>
+        )}
       </form>
     </div>
   );

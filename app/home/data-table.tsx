@@ -1,9 +1,9 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {Badge} from "@/components/ui/badge";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -18,14 +18,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ArrowUpRight } from "lucide-react";
+import {ArrowUpDown, ArrowUpRight} from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
-import EditarEquipamentoModal from "./editar-equipamento-modal";
-import ExcluirEquipamentoModal from "./excluir-equipamento-modal";
-import NovoModal from "./novo-equipamento-modal";
+import EditarEquipamentoModal from "./modal/editar-equipamento-modal";
+import ExcluirEquipamentoModal from "./modal/excluir-equipamento-modal";
+import NovoModal from "./modal/novo-equipamento-modal";
 
-export function DataTable({ data, pocMap, urlMap }) {
+export function DataTable({data, pocMap, urlMap}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -63,12 +63,13 @@ export function DataTable({ data, pocMap, urlMap }) {
     {
       accessorKey: "model",
       header: "Modelo",
-      cell: ({ row }) => {
+      cell: ({row}) => {
         const equipamento = row.original;
         return (
           <Link rel="noopener noreferrer" target="_blank" href={equipamento.pagina ?? ""}>
             <span className="flex items-center gap-1 font-semibold hover:underline">
-              {row.getValue("model")} {equipamento.pagina && <ArrowUpRight className="h-3 w-3 text-neutral-400" />}
+              {row.getValue("model")}{" "}
+              {equipamento.pagina && <ArrowUpRight className="h-3 w-3 text-neutral-400" />}
             </span>
           </Link>
         );
@@ -77,15 +78,19 @@ export function DataTable({ data, pocMap, urlMap }) {
 
     {
       accessorKey: "type",
-      header: ({ column }) => {
+      header: ({column}) => {
         return (
-          <Button className="p-0" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          <Button
+            className="p-0"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
             Tipo
             <ArrowUpDown className="ml-2 h-3 w-3 text-primary" />
           </Button>
         );
       },
-      cell: ({ row }) => <span>{row.getValue("type")}</span>,
+      cell: ({row}) => <span>{row.getValue("type")}</span>,
     },
 
     {
@@ -95,28 +100,36 @@ export function DataTable({ data, pocMap, urlMap }) {
     {
       accessorKey: "mac",
       header: "Mac",
-      cell: ({ row }) => {
+      cell: ({row}) => {
         const equipamento = row.original;
-        return <span className="flex items-center gap-1">{equipamento.mac != "" ? row.getValue("mac") : "n/a"}</span>;
+        return (
+          <span className="flex items-center gap-1">
+            {equipamento.mac != "" ? row.getValue("mac") : "n/a"}
+          </span>
+        );
       },
     },
     {
       accessorKey: "hardware_version",
       header: "Versão Hw",
-      cell: ({ row }) => <span className="uppercase">{row.getValue("hardware_version")}</span>,
+      cell: ({row}) => <span className="uppercase">{row.getValue("hardware_version")}</span>,
     },
 
     {
       accessorKey: "status",
-      header: ({ column }) => {
+      header: ({column}) => {
         return (
-          <Button className="p-0" variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          <Button
+            className="p-0"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
             Status
             <ArrowUpDown className="ml-2 h-3 w-3 text-primary " />
           </Button>
         );
       },
-      cell: ({ row }) => (
+      cell: ({row}) => (
         <div
           className={(() => {
             const statusClasses = {
@@ -143,7 +156,7 @@ export function DataTable({ data, pocMap, urlMap }) {
       }),
       id: "poc_id_empresa",
       header: "POC",
-      cell: ({ row }) => {
+      cell: ({row}) => {
         const poc = row.original.poc_id;
 
         const normalizeText = (text) =>
@@ -167,7 +180,7 @@ export function DataTable({ data, pocMap, urlMap }) {
       id: "actions",
       header: "Ações",
       enableHiding: false,
-      cell: ({ row }) => {
+      cell: ({row}) => {
         const equipamento = row.original;
         return (
           <div className="gap-2 flex">
@@ -186,7 +199,10 @@ export function DataTable({ data, pocMap, urlMap }) {
               urlMap={urlMap}
             />
 
-            <ExcluirEquipamentoModal equipamentoPocId={equipamento.poc_id?.id} itemId={equipamento.id} />
+            <ExcluirEquipamentoModal
+              equipamentoPocId={equipamento.poc_id?.id}
+              itemId={equipamento.id}
+            />
           </div>
         );
       },
@@ -223,7 +239,12 @@ export function DataTable({ data, pocMap, urlMap }) {
         <NovoModal pocMap={pocMap} urlMap={urlMap} />
 
         <div className="flex gap-2">
-          <Input placeholder="Pesquisar" value={globalFilter} onChange={(event) => setGlobalFilter(event.target.value)} className="max-w-60" />
+          <Input
+            placeholder="Pesquisar"
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value)}
+            className="max-w-60"
+          />
         </div>
       </div>
       <div>
@@ -233,7 +254,9 @@ export function DataTable({ data, pocMap, urlMap }) {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -242,9 +265,15 @@ export function DataTable({ data, pocMap, urlMap }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow className="whitespace-nowrap" key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow
+                  className="whitespace-nowrap"
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
                   ))}
                 </TableRow>
               ))
@@ -268,10 +297,20 @@ export function DataTable({ data, pocMap, urlMap }) {
            </span>
           )} */}
         <div className="space-x-2">
-          <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
             Anterior
           </Button>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
             Próxima
           </Button>
         </div>

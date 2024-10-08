@@ -1,7 +1,7 @@
 import DashboardCards from "@/components/dashboard-cards";
-import { getEquipamentos, getUrlEquipamentos } from "../actions/actions_equipamentos";
-import { getPocByStatus } from "../actions/actions_poc";
-import { DataTable } from "./data-table";
+import {getEquipamentos, getUrlEquipamentos} from "../actions/actions_equipamentos";
+import {getPocByStatus} from "../actions/actions_projetos";
+import {DataTable} from "./data-table";
 
 export default async function page() {
   const equipamentos = await getEquipamentos();
