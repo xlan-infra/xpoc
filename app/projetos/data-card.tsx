@@ -86,9 +86,12 @@ function DataCard({data}) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
         {filteredPocMap?.map((item) => (
-          <Card key={item.id}>
+          <Card
+            key={item.id}
+            className="hover:shadow-lg transition-shadow duration-500 hover:shadow-violet-100"
+          >
             <CardHeader className="pb-4">
               <div className="flex justify-between">
                 <CardTitle className={item.status === "Finalizada" && "text-muted-foreground"}>
