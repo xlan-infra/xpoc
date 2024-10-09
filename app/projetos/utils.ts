@@ -6,6 +6,9 @@ import {addProjeto, deleteProjeto, updateProjeto} from "../actions/actions_proje
 
 export default function Utils() {
   const [isOpen, setIsOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("Em Andamento");
+  const [categoria, setCategoria] = useState("poc");
+  const [searchTerm, setSearchTerm] = useState("");
 
   function handleSubmit(data) {
     addProjeto(data);
@@ -49,6 +52,14 @@ export default function Utils() {
     return daysDifference;
   }
 
+  function formatarNome(nomeCompleto) {
+    const nomes = nomeCompleto.split(" ");
+    if (nomes.length > 1) {
+      return `${nomes[0]} ${nomes[1][0]}.`;
+    }
+    return nomes[0];
+  }
+
   return {
     isOpen,
     setIsOpen,
@@ -57,5 +68,12 @@ export default function Utils() {
     handleDelete,
     DateFormat,
     calculateDaysSinceStart,
+    formatarNome,
+    statusFilter,
+    setStatusFilter,
+    categoria,
+    setCategoria,
+    searchTerm,
+    setSearchTerm,
   };
 }

@@ -5,7 +5,7 @@ import {uiSans} from "./fonts/font";
 import "./globals.css";
 
 export const metadata = {
-  title: "XPOC",
+  title: "XLAN | Home",
 };
 
 const gabarito = Gabarito({subsets: ["latin"]});

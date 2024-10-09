@@ -109,10 +109,71 @@ export function DataTable({data, pocMap, urlMap}) {
         );
       },
     },
+
     {
       accessorKey: "hardware_version",
-      header: "Versão Hw",
-      cell: ({row}) => <span className="uppercase">{row.getValue("hardware_version")}</span>,
+      header: <span className="pr-2">Hardware</span>,
+      cell: ({row}) => <span className="lowercase">{row.getValue("hardware_version")}</span>,
+    },
+
+    {
+      acessorKey: "pocs",
+      accessorFn: (row) => ({
+        id: row.poc_id?.id,
+        empresa: row.poc_id?.empresa ?? "",
+      }),
+      id: "poc_id_empresa",
+      header: "Objetivo",
+      cell: ({row}) => {
+        const poc = row.original.poc_id;
+
+        return (
+          <Link href={`/projetos/${poc?.id ?? ""}/${poc?.empresa ?? ""}`}>
+            {poc?.id ? (
+              <Badge
+                variant={"outline"}
+                className={`flex justify-center ${
+                  poc?.categoria === "poc"
+                    ? "bg-emerald-400 border-none capitalize text-white hover:bg-emerald-600"
+                    : "bg-amber-400 border-none capitalize text-white hover:bg-amber-600"
+                }`}
+              >
+                {poc?.categoria}
+              </Badge>
+            ) : (
+              <span className="text-neutral-300">-</span>
+            )}
+          </Link>
+        );
+      },
+    },
+
+    {
+      acessorKey: "pocs",
+      accessorFn: (row) => ({
+        id: row.poc_id?.id,
+        empresa: row.poc_id?.empresa ?? "",
+      }),
+      id: "poc_id_empresa",
+      header: "Projeto",
+      cell: ({row}) => {
+        const poc = row.original.poc_id;
+
+        const normalizeText = (text) =>
+          text
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/\s+/g, "");
+
+        return (
+          <>
+            <Link href={`/projetos/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}>
+              {poc?.id ? poc?.empresa : <span className="text-neutral-300">-</span>}
+            </Link>
+          </>
+        );
+      },
     },
 
     {
@@ -125,7 +186,7 @@ export function DataTable({data, pocMap, urlMap}) {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Status
-            <ArrowUpDown className="ml-2 h-3 w-3 text-primary " />
+            <ArrowUpDown className="ml-2 h-3 w-3 text-primary" />
           </Button>
         );
       },
@@ -146,34 +207,6 @@ export function DataTable({data, pocMap, urlMap}) {
           {row.getValue("status")}
         </div>
       ),
-    },
-
-    {
-      acessorKey: "pocs",
-      accessorFn: (row) => ({
-        id: row.poc_id?.id,
-        empresa: row.poc_id?.empresa ?? "",
-      }),
-      id: "poc_id_empresa",
-      header: "Projetos",
-      cell: ({row}) => {
-        const poc = row.original.poc_id;
-
-        const normalizeText = (text) =>
-          text
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .replace(/\s+/g, "");
-
-        return (
-          <Badge variant="outline" className="px-2 text-xs">
-            <Link href={`/projetos/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}>
-              {poc?.id ? poc?.empresa : <span className="text-neutral-300">Nenhum</span>}
-            </Link>
-          </Badge>
-        );
-      },
     },
 
     {
@@ -253,7 +286,7 @@ export function DataTable({data, pocMap, urlMap}) {
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead className="px-0" key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}

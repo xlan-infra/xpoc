@@ -3,7 +3,14 @@
 import Ping from "@/components/ping";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {Input} from "@/components/ui/input";
 import {
   Select,
@@ -14,20 +21,27 @@ import {
 } from "@/components/ui/select";
 import {NotepadText} from "lucide-react";
 import Link from "next/link";
-import {useState} from "react";
-import ExcluirPocModal from "./modal/excluir-projeto-modal";
-import FinalizarPocModal from "./modal/finalizar-projeto-modal";
+import ExcluirProjetoModal from "./modal/excluir-projeto-modal";
+import FinalizarProjetoModal from "./modal/finalizar-projeto-modal";
 import NovoProjetoModal from "./modal/novo-projeto-modal";
 import Utils from "./utils";
 
 function DataCard({data}) {
-  const [statusFilter, setStatusFilter] = useState("Em Andamento");
-  const [categoria, setCategoria] = useState("poc");
-  const [searchTerm, setSearchTerm] = useState("");
+  const {
+    DateFormat,
+    calculateDaysSinceStart,
+    isOpen,
+    setIsOpen,
+    formatarNome,
+    statusFilter,
+    setStatusFilter,
+    categoria,
+    setCategoria,
+    searchTerm,
+    setSearchTerm,
+  } = Utils();
 
-  const {DateFormat, calculateDaysSinceStart} = Utils();
-
-  const filteredPocMap = data
+  const filteredProjetoMap = data
     ?.filter((item) => {
       if (statusFilter === "Todos") return true;
       return item.status === statusFilter;
@@ -44,7 +58,7 @@ function DataCard({data}) {
 
   return (
     <div className="mt-4">
-      <div className="mb-4 w-full flex justify-between sm:space-x-4 max-sm:gap-2">
+      <div className="mb-4 w-full flex justify-between">
         <div className="flex justify-start">
           <NovoProjetoModal />
         </div>
@@ -86,74 +100,74 @@ function DataCard({data}) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-        {filteredPocMap?.map((item) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2">
+        {filteredProjetoMap?.map((item) => (
           <Card
             key={item.id}
             className="hover:shadow-lg transition-shadow duration-500 hover:shadow-violet-100"
           >
-            <CardHeader className="pb-4">
+            <CardHeader>
               <div className="flex justify-between">
                 <CardTitle className={item.status === "Finalizada" && "text-muted-foreground"}>
                   {item.empresa}
                 </CardTitle>
                 <Badge
+                  variant={"outline"}
                   className={
                     item.categoria === "poc"
-                      ? "bg-green-400 hover:bg-green-600 capitalize"
-                      : "bg-orange-400 hover:bg-orange-600 capitalize"
+                      ? "bg-emerald-400 border-none capitalize text-white hover:bg-emerald-600"
+                      : "bg-amber-400 border-none capitalize text-white hover:bg-amber-600"
                   }
                 >
                   {item.categoria}
                 </Badge>
               </div>
 
-              <CardDescription className="flex items-center gap-1">
+              <CardDescription className="flex items-center gap-1 text-xs">
                 <Ping color={item.status === "Em Andamento" ? "bg-green-500" : "bg-neutral-400"} />
                 {item.status}
                 {item.status === "Em Andamento" && (
-                  <span className="text-neutral-400 italic text-xs">
-                    por {calculateDaysSinceStart(item.dt_inicio)} dia(s)
-                  </span>
+                  <span>por {calculateDaysSinceStart(item.dt_inicio)} dia(s)</span>
                 )}
                 {item.status === "Finalizada" && ` em ${DateFormat(item.dt_fim)}`}
               </CardDescription>
             </CardHeader>
-            <CardContent className="pb-2 grid gap-2">
-              <div className="flex items-center justify-between space-x-1">
+
+            <CardContent className="grid gap-2">
+              <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground font-medium">Data de Início</p>
                 <p className="text-sm">{DateFormat(item.dt_inicio)}</p>
               </div>
-              <div className="flex items-center justify-between space-x-1">
+              <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground font-medium">Responsável</p>
-                <p className="text-sm">{item.responsavel}</p>
-              </div>
-
-              <div className="flex items-center gap-2 justify-between border-t-2 border-neutral-200">
-                <Link href={`/projetos/${item.id}/${item.empresa.toLowerCase()}`}>
-                  <Button variant={"link"} className="text-black p-0">
-                    <NotepadText size={14} className="mr-1" /> detalhes
-                  </Button>
-                </Link>
-
-                <FinalizarPocModal
-                  itemDataInicio={item.dt_inicio}
-                  itemDataFim={item.dt_fim}
-                  itemId={item.id}
-                  itemEmpresa={item.empresa}
-                  itemResponsavel={item.responsavel}
-                  itemCidade={item.cidade}
-                  itemEstado={item.estado}
-                  itemTelefone={item.telefone}
-                  itemEmail={item.email}
-                  itemStatus={item.status}
-                  itemNotas={item.notas}
-                  itemCategoria={item.categoria}
-                />
-
-                <ExcluirPocModal itemId={item.id} itemStatus={item.status} />
+                <p className="text-sm">{formatarNome(item.responsavel)}</p>
               </div>
             </CardContent>
+
+            <CardFooter className="flex items-center gap-2 justify-between border-t py-0">
+              <Link href={`/projetos/${item.id}/${item.empresa.toLowerCase()}`}>
+                <Button variant={"link"} className="text-black p-0">
+                  <NotepadText size={14} className="mr-1" /> detalhes
+                </Button>
+              </Link>
+
+              <FinalizarProjetoModal
+                itemDataInicio={item.dt_inicio}
+                itemDataFim={item.dt_fim}
+                itemId={item.id}
+                itemEmpresa={item.empresa}
+                itemResponsavel={item.responsavel}
+                itemCidade={item.cidade}
+                itemEstado={item.estado}
+                itemTelefone={item.telefone}
+                itemEmail={item.email}
+                itemStatus={item.status}
+                itemNotas={item.notas}
+                itemCategoria={item.categoria}
+              />
+
+              <ExcluirProjetoModal itemId={item.id} itemStatus={item.status} />
+            </CardFooter>
           </Card>
         ))}
       </div>

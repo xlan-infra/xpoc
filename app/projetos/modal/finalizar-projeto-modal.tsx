@@ -32,7 +32,8 @@ const FormSchema = z.object({
   dt_fim: z.string().optional(),
   empresa: z.string().nonempty("Empresa é obrigatória"),
   responsavel: z.string().nonempty("Responsável é obrigatório"),
-  local: z.string().nonempty("Local é obrigatório"),
+  cidade: z.string().nonempty("Cidade é obrigatória"),
+  estado: z.string().nonempty("Estado é obrigatório"),
   telefone: z.string().nonempty("Telefone é obrigatório"),
   email: z.string(),
   status: z.string().nonempty("Status é obrigatório"),
@@ -117,8 +118,6 @@ function FinalizarPocModal({
           <DialogTitle>Finalizar Projeto</DialogTitle>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-2">
-              {/* Campos do Formulário */}
-
               <FormField
                 control={form.control}
                 name="dt_inicio"

@@ -175,7 +175,17 @@ function NovoModal({pocMap, urlMap}) {
                           {pocMap?.map((item) => (
                             <SelectItem key={item.id} value={item.id.toString()}>
                               {item.empresa}
-                              <Badge className="ml-2" variant="secondary">
+
+                              <Badge
+                                variant={"outline"}
+                                className={`ml-2
+                                  ${
+                                    item.categoria === "poc"
+                                      ? "bg-emerald-400 border-none capitalize text-white hover:bg-emerald-600"
+                                      : "bg-amber-400 border-none capitalize text-white hover:bg-amber-600"
+                                  }
+                                `}
+                              >
                                 {item.categoria}
                               </Badge>
                             </SelectItem>

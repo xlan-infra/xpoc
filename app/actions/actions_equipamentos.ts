@@ -1,25 +1,37 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
-import { revalidatePath } from "next/cache";
+import {createClient} from "@/utils/supabase/server";
+import {revalidatePath} from "next/cache";
 
 export async function getEquipamentos() {
   const supabase = createClient();
-  const { data, error } = await supabase
+  const {data, error} = await supabase
     .from("equipamentos")
-    .select("id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa)")
-    .order("status", { ascending: true });
+    .select(
+      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, categoria)"
+    )
+    .order("status", {ascending: true});
 
   return data;
 }
 
 export async function addEquipamentos(data) {
-  const { model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, poc_id } = data;
+  const {model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, poc_id} = data;
 
   const supabase = createClient();
-  const { error } = await supabase
+  const {error} = await supabase
     .from("equipamentos")
-    .insert({ model, serial_number: serialNumber, mac, hardware_version: hardwareVersion, type, status, pagina, notas, poc_id });
+    .insert({
+      model,
+      serial_number: serialNumber,
+      mac,
+      hardware_version: hardwareVersion,
+      type,
+      status,
+      pagina,
+      notas,
+      poc_id,
+    });
 
   if (error) {
     console.error("Erro ao inserir equipamento:", error);
@@ -37,12 +49,23 @@ export async function deleteEquipamentos(formData: FormData) {
 }
 
 export async function updateEquipamentos(data) {
-  const { id, model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, poc_id } = data;
+  const {id, model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, poc_id} = data;
 
   const supabase = createClient();
   await supabase
     .from("equipamentos")
-    .update({ id, model, serial_number: serialNumber, mac, hardware_version: hardwareVersion, type, status, pagina, notas, poc_id })
+    .update({
+      id,
+      model,
+      serial_number: serialNumber,
+      mac,
+      hardware_version: hardwareVersion,
+      type,
+      status,
+      pagina,
+      notas,
+      poc_id,
+    })
     .eq("id", id);
 
   revalidatePath("/home");
@@ -50,22 +73,26 @@ export async function updateEquipamentos(data) {
 
 export async function getEquipamentosByPoc(id) {
   const supabase = createClient();
-  const { data } = await supabase
+  const {data} = await supabase
     .from("equipamentos")
-    .select("id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, responsavel)")
+    .select(
+      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, responsavel)"
+    )
     .eq("poc_id", id)
-    .order("created_at", { ascending: true });
+    .order("created_at", {ascending: true});
 
   return data;
 }
 
 export async function getEquipamentosByPocHistory(id) {
   const supabase = createClient();
-  const { data } = await supabase
+  const {data} = await supabase
     .from("equipamentos_history")
-    .select("id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, responsavel)")
+    .select(
+      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, responsavel)"
+    )
     .eq("poc_id", id)
-    .order("created_at", { ascending: true });
+    .order("created_at", {ascending: true});
 
   return data;
 }
@@ -73,7 +100,7 @@ export async function getEquipamentosByPocHistory(id) {
 export async function getEquipamentosCadastrados() {
   const supabase = createClient();
 
-  const { data, error } = await supabase.rpc("get_equipamentos_count");
+  const {data, error} = await supabase.rpc("get_equipamentos_count");
 
   if (error) {
     console.error(error);
@@ -86,7 +113,7 @@ export async function getEquipamentosCadastrados() {
 export async function getEquipamentosStatus() {
   const supabase = createClient();
 
-  const { data, error } = await supabase.rpc("get_equipamentos_status_count");
+  const {data, error} = await supabase.rpc("get_equipamentos_status_count");
 
   if (error) {
     console.error(error);
@@ -99,7 +126,7 @@ export async function getEquipamentosStatus() {
 export async function getUrlEquipamentos() {
   const supabase = createClient();
 
-  const { data } = await supabase.from("unique_equipamentos").select("pagina, model");
+  const {data} = await supabase.from("unique_equipamentos").select("pagina, model");
 
   return data;
 }
