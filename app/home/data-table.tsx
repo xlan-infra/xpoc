@@ -1,6 +1,5 @@
 "use client";
 
-import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
@@ -18,9 +17,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {ArrowUpDown, ArrowUpRight} from "lucide-react";
+import {ArrowUpDown, ArrowUpRight, Minus} from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
+import DetalhesEquipamentoModal from "./modal/detalhes-equipamento-modal";
 import EditarEquipamentoModal from "./modal/editar-equipamento-modal";
 import ExcluirEquipamentoModal from "./modal/excluir-equipamento-modal";
 import NovoModal from "./modal/novo-equipamento-modal";
@@ -33,7 +33,7 @@ export function DataTable({data, pocMap, urlMap}) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 30,
+    pageSize: 50,
   });
 
   const customGlobalFilter: FilterFn = (row, columnId, filterValue) => {
@@ -97,24 +97,24 @@ export function DataTable({data, pocMap, urlMap}) {
       accessorKey: "serial_number",
       header: "SN",
     },
-    {
-      accessorKey: "mac",
-      header: "Mac",
-      cell: ({row}) => {
-        const equipamento = row.original;
-        return (
-          <span className="flex items-center gap-1">
-            {equipamento.mac != "" ? row.getValue("mac") : "n/a"}
-          </span>
-        );
-      },
-    },
+    // {
+    //   accessorKey: "mac",
+    //   header: "Mac",
+    //   cell: ({row}) => {
+    //     const equipamento = row.original;
+    //     return (
+    //       <span className="flex items-center gap-1">
+    //         {equipamento.mac != "" ? row.getValue("mac") : "n/a"}
+    //       </span>
+    //     );
+    //   },
+    // },
 
-    {
-      accessorKey: "hardware_version",
-      header: <span className="pr-2">Hardware</span>,
-      cell: ({row}) => <span className="lowercase">{row.getValue("hardware_version")}</span>,
-    },
+    // {
+    //   accessorKey: "hardware_version",
+    //   header: <span className="pr-2">Hardware</span>,
+    //   cell: ({row}) => <span className="lowercase">{row.getValue("hardware_version")}</span>,
+    // },
 
     {
       acessorKey: "pocs",
@@ -130,18 +130,24 @@ export function DataTable({data, pocMap, urlMap}) {
         return (
           <Link href={`/projetos/${poc?.id ?? ""}/${poc?.empresa ?? ""}`}>
             {poc?.id ? (
-              <Badge
-                variant={"outline"}
-                className={`flex justify-center ${
-                  poc?.categoria === "poc"
-                    ? "bg-emerald-400 border-none capitalize text-white hover:bg-emerald-600"
-                    : "bg-amber-400 border-none capitalize text-white hover:bg-amber-600"
-                }`}
-              >
-                {poc?.categoria}
-              </Badge>
+              <div className="flex items-center">
+                <span
+                  className={(() => {
+                    const circleClasses = {
+                      poc: "bg-blue-600",
+                      locação: "bg-orange-600",
+                    };
+                    return `inline-block w-2 h-2 rounded-full mr-1 ${
+                      circleClasses[poc?.categoria]
+                    }`;
+                  })()}
+                ></span>
+                <span className="capitalize">{poc?.categoria}</span>
+              </div>
             ) : (
-              <span className="text-neutral-300">-</span>
+              <span className="text-neutral-300">
+                <Minus />
+              </span>
             )}
           </Link>
         );
@@ -167,11 +173,15 @@ export function DataTable({data, pocMap, urlMap}) {
             .replace(/\s+/g, "");
 
         return (
-          <>
-            <Link href={`/projetos/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}>
-              {poc?.id ? poc?.empresa : <span className="text-neutral-300">-</span>}
-            </Link>
-          </>
+          <Link href={`/projetos/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}>
+            {poc?.id ? (
+              poc?.empresa
+            ) : (
+              <span className="text-neutral-300">
+                <Minus />
+              </span>
+            )}
+          </Link>
         );
       },
     },
@@ -191,20 +201,37 @@ export function DataTable({data, pocMap, urlMap}) {
         );
       },
       cell: ({row}) => (
-        <div
-          className={(() => {
-            const statusClasses = {
-              "Em Estoque": "text-emerald-500 hover:text-emerald-600",
-              "Em Uso": "text-red-500 hover:text-red-600",
-              RMA: "text-blue-500 hover:text-blue-600",
-              Vendido: "text-zinc-500 hover:text-zinc-600",
-              Locado: "text-yellow-500 hover:text-yellow-600",
-            };
+        <div className="flex items-center">
+          <span
+            className={(() => {
+              const circleClasses = {
+                "Em Estoque": "bg-emerald-500",
+                "Em Uso": "bg-red-500",
+                RMA: "bg-blue-500",
+                Vendido: "bg-zinc-500",
+                Locado: "bg-yellow-500",
+              };
 
-            return statusClasses[row.getValue("status")] || "text-neutral-300";
-          })()}
-        >
-          {row.getValue("status")}
+              return `inline-block w-2 h-2 rounded-full mr-1 ${
+                circleClasses[row.getValue("status")]
+              }`;
+            })()}
+          ></span>
+          <span
+            className={(() => {
+              const textClasses = {
+                "Em Estoque": "text-emerald-500 hover:text-emerald-600 capitalize",
+                "Em Uso": "text-red-500 hover:text-red-600 capitalize",
+                RMA: "text-blue-500 hover:text-blue-600 capitalize",
+                Vendido: "text-zinc-500 hover:text-zinc-600 capitalize",
+                Locado: "text-yellow-500 hover:text-yellow-600 capitalize",
+              };
+
+              return [row.getValue("status")];
+            })()}
+          >
+            {row.getValue("status")}
+          </span>
         </div>
       ),
     },
@@ -217,6 +244,21 @@ export function DataTable({data, pocMap, urlMap}) {
         const equipamento = row.original;
         return (
           <div className="gap-2 flex">
+            <DetalhesEquipamentoModal
+              itemId={equipamento.id}
+              itemModelo={equipamento.model}
+              itemNumSerial={equipamento.serial_number}
+              itemMac={equipamento.mac}
+              itemVersaoHardware={equipamento.hardware_version}
+              itemTipoEquipamento={equipamento.type}
+              itemStatus={equipamento.status}
+              itemPagina={equipamento.pagina}
+              itemNotas={equipamento.notas}
+              ItemPocId={equipamento.poc_id?.id}
+              itemPocMap={pocMap}
+              urlMap={urlMap}
+            />
+
             <EditarEquipamentoModal
               itemId={equipamento.id}
               itemModelo={equipamento.model}

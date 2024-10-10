@@ -91,7 +91,7 @@ function EditarEquipamentoModal({
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
         <Button variant={"link"} className="text-black hover:text-blue-800 p-0">
-          <PenLine size={14} className="mr-1" /> editar
+          <PenLine size={16} className="mr-1" />
         </Button>
       </DialogTrigger>
       <DialogContent>

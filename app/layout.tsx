@@ -14,8 +14,8 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="pt-BR" className={`${uiSans.className}`}>
       <body className="bg-background text-foreground">
+        <Header />
         <main className="max-w-screen-lg mx-auto">
-          <Header />
           {children}
           <Toaster position="top-right" duration={2500} />
         </main>

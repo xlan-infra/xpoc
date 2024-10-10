@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,14 +11,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Trash } from "lucide-react";
+import {Trash} from "lucide-react";
 
-export default function DeleteButton({ handledelete, isOpen, setIsOpen, itemStatus }) {
+export default function DeleteButton({handledelete, isOpen, setIsOpen, itemStatus}) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-black hover:text-red-700 p-0" disabled={itemStatus}>
-          <Trash size={14} className="mr-1" /> remover
+        <Button
+          variant={"link"}
+          className="text-black hover:text-red-700 p-0"
+          disabled={itemStatus}
+        >
+          <Trash size={16} className="mr-1" />
         </Button>
       </DialogTrigger>
       <DialogContent>

@@ -1,5 +1,5 @@
 function Logo() {
-  return <p className="font-bold text-2xl">XPOC</p>;
+  return <p className="font-extrabold text-md text-violet-800 ">XLAN</p>;
 }
 
 export default Logo;

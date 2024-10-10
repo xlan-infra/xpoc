@@ -4,20 +4,22 @@ import Logo from "./logo";
 
 function Header() {
   return (
-    <header className="flex items-center justify-between h-14 px-2 md:px-2 bg-background print:hidden">
-      <div className="flex items-center gap-4">
-        <Link href="/" className="flex items-center">
-          <Logo />
-        </Link>
-        <Link href="/home" className="font-medium text-muted-foreground hover:text-primary">
-          Home
-        </Link>
-        <Link href="/projetos" className="font-medium text-muted-foreground hover:text-primary">
-          Projetos
-        </Link>
-      </div>
+    <header className=" bg-violet-100 items-center py-3 print:hidden">
+      <nav className="flex max-w-screen-lg mx-auto items-center justify-between px-2">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="flex items-center">
+            <Logo />
+          </Link>
+          <Link href="/home" className="font-medium text-black hover:text-primary">
+            Home
+          </Link>
+          <Link href="/projetos" className="font-medium text-black hover:text-primary">
+            Projetos
+          </Link>
+        </div>
 
-      <AuthButton />
+        <AuthButton />
+      </nav>
     </header>
   );
 }
