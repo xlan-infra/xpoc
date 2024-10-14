@@ -8,30 +8,28 @@ export async function getEquipamentos() {
   const {data, error} = await supabase
     .from("equipamentos")
     .select(
-      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, categoria)"
+      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, projeto_id (id, empresa, categoria)"
     )
-    .order("status", {ascending: true});
+    .order("status", {ascending: false});
 
   return data;
 }
 
 export async function addEquipamentos(data) {
-  const {model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, poc_id} = data;
+  const {model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, projeto_id} = data;
 
   const supabase = createClient();
-  const {error} = await supabase
-    .from("equipamentos")
-    .insert({
-      model,
-      serial_number: serialNumber,
-      mac,
-      hardware_version: hardwareVersion,
-      type,
-      status,
-      pagina,
-      notas,
-      poc_id,
-    });
+  const {error} = await supabase.from("equipamentos").insert({
+    model,
+    serial_number: serialNumber,
+    mac,
+    hardware_version: hardwareVersion,
+    type,
+    status,
+    pagina,
+    notas,
+    projeto_id,
+  });
 
   if (error) {
     console.error("Erro ao inserir equipamento:", error);
@@ -49,7 +47,8 @@ export async function deleteEquipamentos(formData: FormData) {
 }
 
 export async function updateEquipamentos(data) {
-  const {id, model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, poc_id} = data;
+  const {id, model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, projeto_id} =
+    data;
 
   const supabase = createClient();
   await supabase
@@ -64,7 +63,7 @@ export async function updateEquipamentos(data) {
       status,
       pagina,
       notas,
-      poc_id,
+      projeto_id,
     })
     .eq("id", id);
 
@@ -76,9 +75,9 @@ export async function getEquipamentosByPoc(id) {
   const {data} = await supabase
     .from("equipamentos")
     .select(
-      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, responsavel)"
+      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, projeto_id (id, empresa, responsavel)"
     )
-    .eq("poc_id", id)
+    .eq("projeto_id", id)
     .order("created_at", {ascending: true});
 
   return data;
@@ -89,9 +88,9 @@ export async function getEquipamentosByPocHistory(id) {
   const {data} = await supabase
     .from("equipamentos_history")
     .select(
-      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, poc_id (id, empresa, responsavel)"
+      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, projeto_id (id, empresa, responsavel)"
     )
-    .eq("poc_id", id)
+    .eq("projeto_id", id)
     .order("created_at", {ascending: true});
 
   return data;

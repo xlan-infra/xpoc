@@ -1,5 +1,7 @@
+import Image from "next/image";
+
 function Logo() {
-  return <p className="font-extrabold text-md text-violet-800 ">XLAN</p>;
+  return <Image src="/logo.png" alt="Logo" width={100} height={40} />;
 }
 
 export default Logo;

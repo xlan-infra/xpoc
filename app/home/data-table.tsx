@@ -55,7 +55,7 @@ export function DataTable({data, pocMap, urlMap}) {
       row.original.hardware_version?.toLowerCase().includes(searchValue) ||
       row.original.status?.toLowerCase().includes(searchValue) ||
       row.original.notas?.toLowerCase().includes(searchValue) ||
-      normalizeText(row.original.poc_id?.empresa ?? "").includes(normalizeText(searchValue))
+      normalizeText(row.original.projeto_id?.empresa ?? "").includes(normalizeText(searchValue))
     );
   };
 
@@ -119,23 +119,23 @@ export function DataTable({data, pocMap, urlMap}) {
     {
       acessorKey: "pocs",
       accessorFn: (row) => ({
-        id: row.poc_id?.id,
-        empresa: row.poc_id?.empresa ?? "",
+        id: row.projeto_id?.id,
+        empresa: row.projeto_id?.empresa ?? "",
       }),
-      id: "poc_id_empresa",
+      id: "projeto_id_empresa",
       header: "Objetivo",
       cell: ({row}) => {
-        const poc = row.original.poc_id;
+        const poc = row.original.projeto_id;
 
         return (
-          <Link href={`/projetos/${poc?.id ?? ""}/${poc?.empresa ?? ""}`}>
+          <>
             {poc?.id ? (
               <div className="flex items-center">
                 <span
                   className={(() => {
                     const circleClasses = {
-                      poc: "bg-blue-600",
-                      locação: "bg-orange-600",
+                      poc: "bg-blue-400",
+                      locação: "bg-orange-400",
                     };
                     return `inline-block w-2 h-2 rounded-full mr-1 ${
                       circleClasses[poc?.categoria]
@@ -149,7 +149,7 @@ export function DataTable({data, pocMap, urlMap}) {
                 <Minus />
               </span>
             )}
-          </Link>
+          </>
         );
       },
     },
@@ -157,13 +157,13 @@ export function DataTable({data, pocMap, urlMap}) {
     {
       acessorKey: "pocs",
       accessorFn: (row) => ({
-        id: row.poc_id?.id,
-        empresa: row.poc_id?.empresa ?? "",
+        id: row.projeto_id?.id,
+        empresa: row.projeto_id?.empresa ?? "",
       }),
-      id: "poc_id_empresa",
+      id: "projeto_id_empresa",
       header: "Projeto",
       cell: ({row}) => {
-        const poc = row.original.poc_id;
+        const poc = row.original.projeto_id;
 
         const normalizeText = (text) =>
           text
@@ -173,7 +173,10 @@ export function DataTable({data, pocMap, urlMap}) {
             .replace(/\s+/g, "");
 
         return (
-          <Link href={`/projetos/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}>
+          <Link
+            className="hover:underline"
+            href={`/projetos/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}
+          >
             {poc?.id ? (
               poc?.empresa
             ) : (
@@ -205,11 +208,10 @@ export function DataTable({data, pocMap, urlMap}) {
           <span
             className={(() => {
               const circleClasses = {
-                "Em Estoque": "bg-emerald-500",
-                "Em Uso": "bg-red-500",
-                RMA: "bg-blue-500",
-                Vendido: "bg-zinc-500",
-                Locado: "bg-yellow-500",
+                Estoque: "bg-emerald-400",
+                "Em Uso": "bg-red-400",
+                RMA: "bg-amber-400",
+                Vendido: "bg-zinc-400",
               };
 
               return `inline-block w-2 h-2 rounded-full mr-1 ${
@@ -220,11 +222,10 @@ export function DataTable({data, pocMap, urlMap}) {
           <span
             className={(() => {
               const textClasses = {
-                "Em Estoque": "text-emerald-500 hover:text-emerald-600 capitalize",
+                Estoque: "text-emerald-500 hover:text-emerald-600 capitalize",
                 "Em Uso": "text-red-500 hover:text-red-600 capitalize",
                 RMA: "text-blue-500 hover:text-blue-600 capitalize",
                 Vendido: "text-zinc-500 hover:text-zinc-600 capitalize",
-                Locado: "text-yellow-500 hover:text-yellow-600 capitalize",
               };
 
               return [row.getValue("status")];
@@ -254,7 +255,7 @@ export function DataTable({data, pocMap, urlMap}) {
               itemStatus={equipamento.status}
               itemPagina={equipamento.pagina}
               itemNotas={equipamento.notas}
-              ItemPocId={equipamento.poc_id?.id}
+              ItemPocId={equipamento.projeto_id?.id}
               itemPocMap={pocMap}
               urlMap={urlMap}
             />
@@ -269,13 +270,13 @@ export function DataTable({data, pocMap, urlMap}) {
               itemStatus={equipamento.status}
               itemPagina={equipamento.pagina}
               itemNotas={equipamento.notas}
-              ItemPocId={equipamento.poc_id?.id}
+              ItemPocId={equipamento.projeto_id?.id}
               itemPocMap={pocMap}
               urlMap={urlMap}
             />
 
             <ExcluirEquipamentoModal
-              equipamentoPocId={equipamento.poc_id?.id}
+              equipamentoPocId={equipamento.projeto_id?.id}
               itemId={equipamento.id}
             />
           </div>
@@ -310,7 +311,7 @@ export function DataTable({data, pocMap, urlMap}) {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center py-6">
+      <div className="flex justify-between items-center py-4">
         <NovoModal pocMap={pocMap} urlMap={urlMap} />
 
         <div className="flex gap-2">

@@ -70,9 +70,9 @@ function DataCard({data}) {
                 <SelectValue placeholder="Selecione o status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="poc">Poc</SelectItem>
-                <SelectItem value="locação">Locação</SelectItem>
-                <SelectItem value="Todos">Todos</SelectItem>
+                <SelectItem value="poc">🔵Poc</SelectItem>
+                <SelectItem value="locação">🟠Locação</SelectItem>
+                <SelectItem value="Todos">⚫Todos</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -83,9 +83,9 @@ function DataCard({data}) {
                 <SelectValue placeholder="Selecione a Categoria" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Em Andamento">Em Andamento</SelectItem>
-                <SelectItem value="Finalizada">Finalizada</SelectItem>
-                <SelectItem value="Todos">Todos</SelectItem>
+                <SelectItem value="Em Andamento">🟢Em Andamento</SelectItem>
+                <SelectItem value="Finalizada">⚪Finalizada</SelectItem>
+                <SelectItem value="Todos">⚫Todos</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -115,8 +115,8 @@ function DataCard({data}) {
                   variant={"outline"}
                   className={
                     item.categoria === "poc"
-                      ? "bg-emerald-400 border-none capitalize text-white hover:bg-emerald-600"
-                      : "bg-amber-400 border-none capitalize text-white hover:bg-amber-600"
+                      ? "bg-blue-400 border-none capitalize text-white hover:bg-blue-600"
+                      : "bg-orange-400 border-none capitalize text-white hover:bg-orange-600"
                   }
                 >
                   {item.categoria}

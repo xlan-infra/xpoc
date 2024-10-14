@@ -33,7 +33,7 @@ const FormSchema = z.object({
   type: z.string().nonempty("Tipo é obrigatório"),
   status: z.string().nonempty("Status é obrigatório"),
   pagina: z.string().optional(),
-  poc_id: z.any().optional(),
+  projeto_id: z.any().optional(),
   notas: z.string().optional(),
 });
 
@@ -49,7 +49,7 @@ function NovoModal({pocMap, urlMap}) {
       hardwareVersion: "",
       type: "",
       status: "",
-      poc_id: "",
+      projeto_id: "",
       notas: "",
     },
   });
@@ -157,7 +157,7 @@ function NovoModal({pocMap, urlMap}) {
               <div className="grid grid-cols-2 gap-2 w-full">
                 <FormField
                   control={form.control}
-                  name="poc_id"
+                  name="projeto_id"
                   render={({field}) => (
                     <FormItem>
                       <FormLabel>Projeto</FormLabel>
@@ -174,20 +174,19 @@ function NovoModal({pocMap, urlMap}) {
                           <SelectItem value="none">Nenhum</SelectItem>
                           {pocMap?.map((item) => (
                             <SelectItem key={item.id} value={item.id.toString()}>
-                              {item.empresa}
-
                               <Badge
                                 variant={"outline"}
-                                className={`ml-2
+                                className={`mr-2
                                   ${
                                     item.categoria === "poc"
-                                      ? "bg-emerald-400 border-none capitalize text-white hover:bg-emerald-600"
-                                      : "bg-amber-400 border-none capitalize text-white hover:bg-amber-600"
+                                      ? "bg-blue-400 border-none capitalize text-white hover:bg-blue-600"
+                                      : "bg-orange-400 border-none capitalize text-white hover:bg-orange-600"
                                   }
                                 `}
                               >
                                 {item.categoria}
                               </Badge>
+                              {item.empresa}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -211,8 +210,7 @@ function NovoModal({pocMap, urlMap}) {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="Em Uso">Em Uso</SelectItem>
-                          <SelectItem value="Em Estoque">Em Estoque</SelectItem>
-                          <SelectItem value="Locado">Locado</SelectItem>
+                          <SelectItem value="Estoque">Estoque</SelectItem>
                           <SelectItem value="Vendido">Vendido</SelectItem>
                           <SelectItem value="RMA">RMA</SelectItem>
                         </SelectContent>

@@ -1,5 +1,6 @@
 "use client";
 
+import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {
   Dialog,
@@ -35,7 +36,7 @@ const FormSchema = z.object({
   status: z.string().nonempty("Status é obrigatório"),
   pagina: z.string().optional(),
   notas: z.string().optional(),
-  poc_id: z.any().optional(),
+  projeto_id: z.any().optional(),
 });
 
 function EditarEquipamentoModal({
@@ -65,7 +66,7 @@ function EditarEquipamentoModal({
       type: itemTipoEquipamento,
       status: itemStatus,
       pagina: itemPagina,
-      poc_id: ItemPocId,
+      projeto_id: ItemPocId,
       notas: itemNotas,
     },
   });
@@ -81,7 +82,7 @@ function EditarEquipamentoModal({
       type: itemTipoEquipamento,
       status: itemStatus,
       pagina: itemPagina,
-      poc_id: ItemPocId,
+      projeto_id: ItemPocId,
       notas: itemNotas,
     });
     form.clearErrors();
@@ -186,7 +187,7 @@ function EditarEquipamentoModal({
               <div className="grid grid-cols-2 gap-2 w-full">
                 <FormField
                   control={form.control}
-                  name="poc_id"
+                  name="projeto_id"
                   render={({field}) => (
                     <FormItem>
                       <FormLabel>POC</FormLabel>
@@ -199,10 +200,23 @@ function EditarEquipamentoModal({
                             <SelectValue placeholder="Selecione a POC" />
                           </SelectTrigger>
                         </FormControl>
+
                         <SelectContent>
                           <SelectItem value="none">Nenhum</SelectItem>
                           {itemPocMap?.map((item) => (
                             <SelectItem key={item.id} value={item.id.toString()}>
+                              <Badge
+                                variant={"outline"}
+                                className={`mr-2
+                                  ${
+                                    item.categoria === "poc"
+                                      ? "bg-blue-400 border-none capitalize text-white hover:bg-blue-600"
+                                      : "bg-orange-400 border-none capitalize text-white hover:bg-orange-600"
+                                  }
+                                `}
+                              >
+                                {item.categoria}
+                              </Badge>
                               {item.empresa}
                             </SelectItem>
                           ))}
@@ -227,8 +241,7 @@ function EditarEquipamentoModal({
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="Em Uso">Em Uso</SelectItem>
-                          <SelectItem value="Em Estoque">Em Estoque</SelectItem>
-                          <SelectItem value="Locado">Locado</SelectItem>
+                          <SelectItem value="Estoque">Estoque</SelectItem>
                           <SelectItem value="Vendido">Vendido</SelectItem>
                           <SelectItem value="RMA">RMA</SelectItem>
                         </SelectContent>

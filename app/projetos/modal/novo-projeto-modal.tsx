@@ -209,7 +209,7 @@ function NovoPocModal() {
                   name="email"
                   render={({field}) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Email (Opcional)</FormLabel>
                       <FormControl>
                         <Input placeholder="Email de Contato" {...field} />
                       </FormControl>
@@ -232,7 +232,7 @@ function NovoPocModal() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="poc">🟣Poc</SelectItem>
+                        <SelectItem value="poc">🔵Poc</SelectItem>
                         <SelectItem value="locação">🟠Locação</SelectItem>
                       </SelectContent>
                     </Select>
