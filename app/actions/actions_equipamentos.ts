@@ -70,7 +70,7 @@ export async function updateEquipamentos(data) {
   revalidatePath("/home");
 }
 
-export async function getEquipamentosByPoc(id) {
+export async function getEquipamentosByProjeto(id) {
   const supabase = createClient();
   const {data} = await supabase
     .from("equipamentos")
@@ -83,7 +83,7 @@ export async function getEquipamentosByPoc(id) {
   return data;
 }
 
-export async function getEquipamentosByPocHistory(id) {
+export async function getEquipamentosByProjetoHistory(id) {
   const supabase = createClient();
   const {data} = await supabase
     .from("equipamentos_history")

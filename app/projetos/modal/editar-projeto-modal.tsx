@@ -203,7 +203,7 @@ function EditarPocModal({
                   name="email"
                   render={({field}) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Email (Opcional)</FormLabel>
                       <FormControl>
                         <Input placeholder="Email de Contato" {...field} />
                       </FormControl>
@@ -218,7 +218,7 @@ function EditarPocModal({
                 name="categoria"
                 render={({field}) => (
                   <FormItem>
-                    <FormLabel>Categoria</FormLabel>
+                    <FormLabel>Projeto</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>

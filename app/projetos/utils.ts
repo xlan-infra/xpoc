@@ -12,13 +12,13 @@ export default function Utils() {
 
   function handleSubmit(data) {
     addProjeto(data);
-    toast.success("Poc adicionada com sucesso!");
+    toast.success("Projeto adicionado com sucesso!");
     setIsOpen(false);
   }
 
   function handleUpdate(data) {
     updateProjeto(data);
-    toast.info("Poc atualizada com sucesso!");
+    toast.info("Projeto atualizado com sucesso!");
     setIsOpen(false);
   }
 
@@ -27,7 +27,7 @@ export default function Utils() {
     const formData = new FormData();
     formData.append("excluir", itemId);
     await deleteProjeto(formData);
-    toast.success("Poc removida com sucesso!");
+    toast.success("Projeto removido com sucesso!");
     setIsOpen(false);
   };
 

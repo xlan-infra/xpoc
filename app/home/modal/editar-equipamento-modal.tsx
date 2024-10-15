@@ -48,7 +48,7 @@ function EditarEquipamentoModal({
   itemTipoEquipamento,
   itemStatus,
   itemPagina,
-  ItemPocId,
+  itemProjetoId,
   itemPocMap,
   itemNotas,
   urlMap,
@@ -66,7 +66,7 @@ function EditarEquipamentoModal({
       type: itemTipoEquipamento,
       status: itemStatus,
       pagina: itemPagina,
-      projeto_id: ItemPocId,
+      projeto_id: itemProjetoId,
       notas: itemNotas,
     },
   });
@@ -82,7 +82,7 @@ function EditarEquipamentoModal({
       type: itemTipoEquipamento,
       status: itemStatus,
       pagina: itemPagina,
-      projeto_id: ItemPocId,
+      projeto_id: itemProjetoId,
       notas: itemNotas,
     });
     form.clearErrors();
@@ -190,14 +190,14 @@ function EditarEquipamentoModal({
                   name="projeto_id"
                   render={({field}) => (
                     <FormItem>
-                      <FormLabel>POC</FormLabel>
+                      <FormLabel>Projeto</FormLabel>
                       <Select
                         onValueChange={(value) => field.onChange(value === "none" ? null : value)}
                         defaultValue={field.value ? field.value.toString() : field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecione a POC" />
+                            <SelectValue placeholder="Selecione o Projeto" />
                           </SelectTrigger>
                         </FormControl>
 

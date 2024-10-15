@@ -1,26 +1,27 @@
 import {
-  getEquipamentosByPoc,
-  getEquipamentosByPocHistory,
+  getEquipamentosByProjeto,
+  getEquipamentosByProjetoHistory,
 } from "@/app/actions/actions_equipamentos";
 import {getProjetoById} from "@/app/actions/actions_projetos";
 import Ping from "@/components/ping";
 import PrintButton from "@/components/print-button";
+import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {ArrowLeft} from "lucide-react";
 import Link from "next/link";
-import EditarPocModal from "../../modal/editar-projeto-modal";
+import EditarProjetoModal from "../../modal/editar-projeto-modal";
 
 async function page({params}) {
   const id = params.id;
 
   const pocId = await getProjetoById(id);
-  const equipamentosByPocMap = await getEquipamentosByPoc(id);
-  const equipamentosByPocHistoryMap = await getEquipamentosByPocHistory(id);
+  const equipamentosByProjetoMap = await getEquipamentosByProjeto(id);
+  const equipamentosByProjetoHistoryMap = await getEquipamentosByProjetoHistory(id);
 
   const isFinalizada = pocId?.some((item) => item.status === "Finalizada");
-  const equipamentosMap = isFinalizada ? equipamentosByPocHistoryMap : equipamentosByPocMap;
+  const equipamentosMap = isFinalizada ? equipamentosByProjetoHistoryMap : equipamentosByProjetoMap;
 
   function DateFormat(dateString) {
     const [year, month, day] = dateString.split("-");
@@ -45,7 +46,7 @@ async function page({params}) {
 
   return (
     <>
-      <div className="mb-4 print:hidden">
+      <div className="my-4 print:hidden">
         <Link href="/projetos">
           <Button className="p-0" variant="link">
             <ArrowLeft size={14} className="mr-1" />
@@ -58,7 +59,7 @@ async function page({params}) {
         <Card className="print:mt-6 bg-gradient-to-bl from-violet-50/50 from-5%" key={item.id}>
           <CardHeader className="pb-4">
             <CardTitle
-              className={`text-4xl ${item.status === "Finalizada" && "text-muted-foreground"}`}
+              className={`text-3xl ${item.status === "Finalizada" && "text-muted-foreground"}`}
             >
               {item.empresa}
             </CardTitle>
@@ -99,19 +100,38 @@ async function page({params}) {
               <p className="text-lg">{item.email ? item.email : "n/a"}</p>
             </div>
             <div className="flex items-center justify-between space-x-1 border-b border-neutral-100">
-              <p className="text-lg text-muted-foreground font-medium">Observações</p>
-              <p className="text-lg">{item.notas ? item.notas : "n/a"}</p>
+              <p className="text-lg text-muted-foreground font-medium">Objetivo</p>
+              <span className="text-lg">
+                {item.categoria ? (
+                  <Badge
+                    variant={"outline"}
+                    className={
+                      item.categoria === "poc"
+                        ? "bg-blue-400 border-none capitalize text-white hover:bg-blue-600"
+                        : "bg-orange-400 border-none capitalize text-white hover:bg-orange-600"
+                    }
+                  >
+                    {item.categoria}
+                  </Badge>
+                ) : (
+                  "n/a"
+                )}
+              </span>
             </div>
             <div className="flex items-center justify-between space-x-1 border-b border-neutral-100">
               <p className="text-lg text-muted-foreground font-medium">Local</p>
-              <p className="text-lg">{item.local ? item.local : "n/a"}</p>
+              <p className="text-lg">{item.cidade ? `${item.cidade}, ${item.estado}` : "n/a"}</p>
+            </div>
+            <div className="flex items-center justify-between space-x-1 border-b border-neutral-100">
+              <p className="text-lg text-muted-foreground font-medium">Observações</p>
+              <p className="text-lg">{item.notas ? item.notas : "n/a"}</p>
             </div>
           </CardContent>
           <CardFooter>
             <div className="flex items-center gap-2 justify-between print:hidden">
               <PrintButton />
 
-              <EditarPocModal
+              <EditarProjetoModal
                 itemDataInicio={item.dt_inicio}
                 itemDataFim={item.dt_fim}
                 itemId={item.id}
@@ -123,6 +143,7 @@ async function page({params}) {
                 itemEmail={item.email}
                 itemStatus={item.status}
                 itemNotas={item.notas}
+                itemCategoria={item.categoria}
               />
               {/* <ExcluirPocModal itemId={item.id} /> */}
             </div>
@@ -153,7 +174,7 @@ async function page({params}) {
             {equipamentosMap.map((item) => (
               <TableRow key={item.id} className="whitespace-nowrap">
                 <TableCell className="py-2">
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1 px-1">
                     <Ping color={isFinalizada ? "bg-neutral-400" : "bg-green-500"} />
                     {item.model}
                   </span>

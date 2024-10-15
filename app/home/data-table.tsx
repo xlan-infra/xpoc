@@ -3,6 +3,7 @@
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -17,7 +18,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {ArrowUpDown, ArrowUpRight, Minus} from "lucide-react";
+import {ArrowUpDown, ArrowUpRight, MessageSquareText, Minus} from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 import DetalhesEquipamentoModal from "./modal/detalhes-equipamento-modal";
@@ -55,7 +56,8 @@ export function DataTable({data, pocMap, urlMap}) {
       row.original.hardware_version?.toLowerCase().includes(searchValue) ||
       row.original.status?.toLowerCase().includes(searchValue) ||
       row.original.notas?.toLowerCase().includes(searchValue) ||
-      normalizeText(row.original.projeto_id?.empresa ?? "").includes(normalizeText(searchValue))
+      normalizeText(row.original.projeto_id?.empresa ?? "").includes(normalizeText(searchValue)) ||
+      normalizeText(row.original.projeto_id?.categoria ?? "").includes(normalizeText(searchValue))
     );
   };
 
@@ -70,6 +72,16 @@ export function DataTable({data, pocMap, urlMap}) {
             <span className="flex items-center gap-1 font-semibold hover:underline">
               {row.getValue("model")}{" "}
               {equipamento.pagina && <ArrowUpRight className="h-3 w-3 text-neutral-400" />}
+              {equipamento.notas != "" && (
+                <TooltipProvider delayDuration={300}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <MessageSquareText className="text-neutral-400" size={12} />
+                    </TooltipTrigger>
+                    <TooltipContent>{equipamento.notas}</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
             </span>
           </Link>
         );
@@ -97,24 +109,6 @@ export function DataTable({data, pocMap, urlMap}) {
       accessorKey: "serial_number",
       header: "SN",
     },
-    // {
-    //   accessorKey: "mac",
-    //   header: "Mac",
-    //   cell: ({row}) => {
-    //     const equipamento = row.original;
-    //     return (
-    //       <span className="flex items-center gap-1">
-    //         {equipamento.mac != "" ? row.getValue("mac") : "n/a"}
-    //       </span>
-    //     );
-    //   },
-    // },
-
-    // {
-    //   accessorKey: "hardware_version",
-    //   header: <span className="pr-2">Hardware</span>,
-    //   cell: ({row}) => <span className="lowercase">{row.getValue("hardware_version")}</span>,
-    // },
 
     {
       acessorKey: "pocs",
@@ -123,7 +117,18 @@ export function DataTable({data, pocMap, urlMap}) {
         empresa: row.projeto_id?.empresa ?? "",
       }),
       id: "projeto_id_empresa",
-      header: "Objetivo",
+      header: ({column}) => {
+        return (
+          <Button
+            className="p-0"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Projeto
+            <ArrowUpDown className="ml-2 h-3 w-3 text-primary" />
+          </Button>
+        );
+      },
       cell: ({row}) => {
         const poc = row.original.projeto_id;
 
@@ -161,7 +166,18 @@ export function DataTable({data, pocMap, urlMap}) {
         empresa: row.projeto_id?.empresa ?? "",
       }),
       id: "projeto_id_empresa",
-      header: "Projeto",
+      header: ({column}) => {
+        return (
+          <Button
+            className="p-0"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Empresa
+            <ArrowUpDown className="ml-2 h-3 w-3 text-primary" />
+          </Button>
+        );
+      },
       cell: ({row}) => {
         const poc = row.original.projeto_id;
 
@@ -270,7 +286,7 @@ export function DataTable({data, pocMap, urlMap}) {
               itemStatus={equipamento.status}
               itemPagina={equipamento.pagina}
               itemNotas={equipamento.notas}
-              ItemPocId={equipamento.projeto_id?.id}
+              itemProjetoId={equipamento.projeto_id?.id}
               itemPocMap={pocMap}
               urlMap={urlMap}
             />
