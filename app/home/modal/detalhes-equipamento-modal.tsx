@@ -1,6 +1,6 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {Eye} from "lucide-react";
+import { Eye } from "lucide-react";
 import Link from "next/link";
 import Utils from "../utils";
 
@@ -23,19 +23,24 @@ function DetalhesEquipamentoModal({
   itemPagina,
   itemNotas,
 }) {
-  const {isOpen, setIsOpen} = Utils();
+  const { isOpen, setIsOpen } = Utils();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-black hover:text-green-800 p-0">
+        <Button
+          variant={"link"}
+          className="text-black hover:text-green-800 p-0"
+        >
           <Eye size={16} className="mr-1" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md p-6 rounded-lg shadow-lg">
         {/* Status no canto superior direito */}
         <div className="flex justify-between items-center">
-          <DialogTitle className="mb-2 text-xl">Detalhes do Equipamento</DialogTitle>
+          <DialogTitle className="mb-2 text-xl">
+            Detalhes do Equipamento
+          </DialogTitle>
         </div>
 
         <DialogDescription>
@@ -54,11 +59,15 @@ function DetalhesEquipamentoModal({
             </div>
             <div className="flex justify-between">
               <strong className="text-black">Versão Hardware</strong>
-              <span>{itemVersaoHardware ? itemVersaoHardware : "Não informado"}</span>
+              <span>
+                {itemVersaoHardware ? itemVersaoHardware : "Não informado"}
+              </span>
             </div>
             <div className="flex justify-between">
               <strong className="text-black">Tipo Equipamento</strong>
-              <span>{itemTipoEquipamento ? itemTipoEquipamento : "Não informado"}</span>
+              <span>
+                {itemTipoEquipamento ? itemTipoEquipamento : "Não informado"}
+              </span>
             </div>
             <div className="flex justify-between">
               <strong className="text-black">Status</strong>
@@ -71,7 +80,9 @@ function DetalhesEquipamentoModal({
               </Link>
             </div>
             {itemNotas && (
-              <div className="bg-amber-100 p-3 text-amber-600 rounded">{itemNotas}</div>
+              <div className="bg-amber-100 p-3 text-amber-600 rounded">
+                {itemNotas}
+              </div>
             )}
           </div>
         </DialogDescription>

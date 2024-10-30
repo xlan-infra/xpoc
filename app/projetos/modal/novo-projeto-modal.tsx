@@ -1,6 +1,6 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,8 +10,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -19,10 +26,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {useState} from "react";
-import {useForm} from "react-hook-form";
-import {z} from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import Utils from "../utils";
 
 // Função para converter string para Date, se a string não estiver vazia
@@ -31,7 +38,10 @@ const parseDateString = (str) => (str ? new Date(str) : undefined);
 const FormSchema = z.object({
   dt_inicio: z
     .string()
-    .refine((date) => !isNaN(new Date(date).getTime()), "Data de Início inválida"),
+    .refine(
+      (date) => !isNaN(new Date(date).getTime()),
+      "Data de Início inválida"
+    ),
   dt_fim: z.preprocess(parseDateString, z.date().optional()),
   empresa: z.string().nonempty("Empresa é obrigatória"),
   responsavel: z.string().nonempty("Responsável é obrigatório"),
@@ -41,11 +51,11 @@ const FormSchema = z.object({
   email: z.string().optional(),
   notas: z.string().optional(),
   status: z.string().nonempty("Status é obrigatório"),
-  categoria: z.string().nonempty("Categoria é obrigatória"),
+  projeto: z.string().nonempty("projeto é obrigatória"),
 });
 
 function NovoPocModal() {
-  const {handleSubmit, isOpen, setIsOpen} = Utils();
+  const { handleSubmit, isOpen, setIsOpen } = Utils();
 
   const [status, setStatus] = useState("");
 
@@ -62,7 +72,7 @@ function NovoPocModal() {
       email: "",
       notas: "",
       status: "",
-      categoria: "",
+      projeto: "",
     },
   });
 
@@ -81,13 +91,16 @@ function NovoPocModal() {
         <DialogHeader>
           <DialogTitle className="mb-4">Novo Projeto</DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-2"
+            >
               {/* Campos do Formulário */}
 
               <FormField
                 control={form.control}
                 name="dt_inicio"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Data de Início</FormLabel>
                     <FormControl>
@@ -102,7 +115,7 @@ function NovoPocModal() {
                 <FormField
                   control={form.control}
                   name="empresa"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Empresa</FormLabel>
                       <FormControl>
@@ -115,7 +128,7 @@ function NovoPocModal() {
                 <FormField
                   control={form.control}
                   name="responsavel"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Responsável</FormLabel>
                       <FormControl>
@@ -131,7 +144,7 @@ function NovoPocModal() {
                 <FormField
                   control={form.control}
                   name="cidade"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Cidade</FormLabel>
                       <FormControl>
@@ -144,10 +157,13 @@ function NovoPocModal() {
                 <FormField
                   control={form.control}
                   name="estado"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Estado</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione o estado" />
@@ -173,7 +189,9 @@ function NovoPocModal() {
                           <SelectItem value="PE">Pernambuco</SelectItem>
                           <SelectItem value="PI">Piauí</SelectItem>
                           <SelectItem value="RJ">Rio de Janeiro</SelectItem>
-                          <SelectItem value="RN">Rio Grande do Norte</SelectItem>
+                          <SelectItem value="RN">
+                            Rio Grande do Norte
+                          </SelectItem>
                           <SelectItem value="RS">Rio Grande do Sul</SelectItem>
                           <SelectItem value="RO">Rondônia</SelectItem>
                           <SelectItem value="RR">Roraima</SelectItem>
@@ -193,7 +211,7 @@ function NovoPocModal() {
                 <FormField
                   control={form.control}
                   name="telefone"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Telefone</FormLabel>
                       <FormControl>
@@ -207,7 +225,7 @@ function NovoPocModal() {
                 <FormField
                   control={form.control}
                   name="email"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email (Opcional)</FormLabel>
                       <FormControl>
@@ -221,14 +239,17 @@ function NovoPocModal() {
 
               <FormField
                 control={form.control}
-                name="categoria"
-                render={({field}) => (
+                name="projeto"
+                render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Categoria</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormLabel>projeto</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selecione a categoria" />
+                          <SelectValue placeholder="Selecione a projeto" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -244,7 +265,7 @@ function NovoPocModal() {
               <FormField
                 control={form.control}
                 name="status"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
                     <Select
@@ -260,7 +281,9 @@ function NovoPocModal() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Em Andamento">Em Andamento</SelectItem>
+                        <SelectItem value="Em Andamento">
+                          Em Andamento
+                        </SelectItem>
                         <SelectItem value="Finalizada">Finalizada</SelectItem>
                       </SelectContent>
                     </Select>
@@ -273,7 +296,7 @@ function NovoPocModal() {
                 <FormField
                   control={form.control}
                   name="dt_fim"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Data de Conclusão</FormLabel>
                       <FormControl>
@@ -288,7 +311,7 @@ function NovoPocModal() {
               <FormField
                 control={form.control}
                 name="notas"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Notas</FormLabel>
                     <FormControl>

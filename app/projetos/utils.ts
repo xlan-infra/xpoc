@@ -1,13 +1,17 @@
 "use client";
 
-import {useState} from "react";
-import {toast} from "sonner";
-import {addProjeto, deleteProjeto, updateProjeto} from "../actions/actions_projetos";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+  addProjeto,
+  deleteProjeto,
+  updateProjeto,
+} from "../actions/actions_projetos";
 
 export default function Utils() {
   const [isOpen, setIsOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("Em Andamento");
-  const [categoria, setCategoria] = useState("poc");
+  const [projeto, setProjeto] = useState("poc");
   const [searchTerm, setSearchTerm] = useState("");
 
   function handleSubmit(data) {
@@ -71,8 +75,8 @@ export default function Utils() {
     formatarNome,
     statusFilter,
     setStatusFilter,
-    categoria,
-    setCategoria,
+    projeto,
+    setProjeto,
     searchTerm,
     setSearchTerm,
   };

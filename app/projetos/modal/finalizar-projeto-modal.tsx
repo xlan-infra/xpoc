@@ -1,6 +1,6 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,8 +10,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -19,11 +26,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {CheckCircle2, Handshake} from "lucide-react";
-import {useState} from "react";
-import {useForm} from "react-hook-form";
-import {z} from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CheckCircle2, Handshake } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import Utils from "../utils";
 
 const FormSchema = z.object({
@@ -52,9 +59,9 @@ function FinalizarPocModal({
   itemEmail,
   itemStatus,
   itemNotas,
-  itemCategoria,
+  itemProjeto,
 }) {
-  const {handleUpdate, isOpen, setIsOpen} = Utils();
+  const { handleUpdate, isOpen, setIsOpen } = Utils();
 
   const [status, setStatus] = useState(itemStatus);
 
@@ -72,7 +79,7 @@ function FinalizarPocModal({
       email: itemEmail,
       status: itemStatus,
       notas: itemNotas,
-      categoria: itemCategoria,
+      projeto: itemProjeto,
     },
   });
 
@@ -91,7 +98,7 @@ function FinalizarPocModal({
       email: itemEmail,
       status: itemStatus,
       notas: itemNotas,
-      categoria: itemCategoria,
+      projeto: itemProjeto,
     });
     form.clearErrors();
   };
@@ -99,7 +106,11 @@ function FinalizarPocModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button variant="link" className="p-0" disabled={itemStatus === "Finalizada"}>
+        <Button
+          variant="link"
+          className="p-0"
+          disabled={itemStatus === "Finalizada"}
+        >
           {itemStatus === "Finalizada" ? (
             <>
               <CheckCircle2 size={14} className="mr-1 text-black" />
@@ -117,11 +128,14 @@ function FinalizarPocModal({
         <DialogHeader>
           <DialogTitle>Finalizar Projeto</DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-2">
+            <form
+              onSubmit={form.handleSubmit(handleUpdate)}
+              className="space-y-2"
+            >
               <FormField
                 control={form.control}
                 name="dt_inicio"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem hidden>
                     <FormLabel>Data de Início</FormLabel>
                     <FormControl>
@@ -136,7 +150,7 @@ function FinalizarPocModal({
                 <FormField
                   control={form.control}
                   name="empresa"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem hidden>
                       <FormLabel>Empresa</FormLabel>
                       <FormControl>
@@ -149,7 +163,7 @@ function FinalizarPocModal({
                 <FormField
                   control={form.control}
                   name="responsavel"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem hidden>
                       <FormLabel>Responsável</FormLabel>
                       <FormControl>
@@ -165,7 +179,7 @@ function FinalizarPocModal({
                 <FormField
                   control={form.control}
                   name="cidade"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem hidden>
                       <FormLabel>Cidade</FormLabel>
                       <FormControl>
@@ -178,7 +192,7 @@ function FinalizarPocModal({
                 <FormField
                   control={form.control}
                   name="estado"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem hidden>
                       <FormLabel>Estado</FormLabel>
                       <FormControl>
@@ -193,7 +207,7 @@ function FinalizarPocModal({
                 <FormField
                   control={form.control}
                   name="telefone"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem hidden>
                       <FormLabel>Telefone</FormLabel>
                       <FormControl>
@@ -207,7 +221,7 @@ function FinalizarPocModal({
                 <FormField
                   control={form.control}
                   name="email"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem hidden>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
@@ -221,14 +235,17 @@ function FinalizarPocModal({
 
               <FormField
                 control={form.control}
-                name="categoria"
-                render={({field}) => (
+                name="projeto"
+                render={({ field }) => (
                   <FormItem hidden>
-                    <FormLabel>Categoria</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormLabel>Projeto</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selecione a categoria" />
+                          <SelectValue placeholder="Selecione a projeto" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -244,7 +261,7 @@ function FinalizarPocModal({
               <FormField
                 control={form.control}
                 name="status"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
                     <Select
@@ -260,7 +277,9 @@ function FinalizarPocModal({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Em Andamento">Em Andamento</SelectItem>
+                        <SelectItem value="Em Andamento">
+                          Em Andamento
+                        </SelectItem>
                         <SelectItem value="Finalizada">Finalizada</SelectItem>
                       </SelectContent>
                     </Select>
@@ -273,7 +292,7 @@ function FinalizarPocModal({
                 <FormField
                   control={form.control}
                   name="dt_fim"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Data de Conclusão</FormLabel>
                       <FormControl>
@@ -288,7 +307,7 @@ function FinalizarPocModal({
               <FormField
                 control={form.control}
                 name="notas"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem hidden>
                     <FormLabel>Notas</FormLabel>
                     <FormControl>

@@ -1,16 +1,17 @@
 import Header from "@/components/main-header";
-import {Toaster} from "@/components/ui/sonner";
-import {Gabarito} from "next/font/google";
-import {uiSans} from "./fonts/font";
+import { Toaster } from "@/components/ui/sonner";
+import { uiSans } from "./fonts/font";
 import "./globals.css";
 
 export const metadata = {
   title: "XLAN | Home",
 };
 
-const gabarito = Gabarito({subsets: ["latin"]});
-
-export default function RootLayout({children}: {children: React.ReactNode}) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="pt-BR" className={`${uiSans.className}`}>
       <body className="bg-background text-foreground">

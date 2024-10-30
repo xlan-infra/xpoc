@@ -1,9 +1,21 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -18,7 +30,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {ArrowUpDown, ArrowUpRight, MessageSquareText, Minus} from "lucide-react";
+import {
+  ArrowUpDown,
+  ArrowUpRight,
+  MessageSquareText,
+  Minus,
+} from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 import DetalhesEquipamentoModal from "./modal/detalhes-equipamento-modal";
@@ -26,11 +43,14 @@ import EditarEquipamentoModal from "./modal/editar-equipamento-modal";
 import ExcluirEquipamentoModal from "./modal/excluir-equipamento-modal";
 import NovoModal from "./modal/novo-equipamento-modal";
 
-export function DataTable({data, pocMap, urlMap}) {
+export function DataTable({ data, pocMap, urlMap }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
@@ -56,8 +76,12 @@ export function DataTable({data, pocMap, urlMap}) {
       row.original.hardware_version?.toLowerCase().includes(searchValue) ||
       row.original.status?.toLowerCase().includes(searchValue) ||
       row.original.notas?.toLowerCase().includes(searchValue) ||
-      normalizeText(row.original.projeto_id?.empresa ?? "").includes(normalizeText(searchValue)) ||
-      normalizeText(row.original.projeto_id?.categoria ?? "").includes(normalizeText(searchValue))
+      normalizeText(row.original.projeto_id?.empresa ?? "").includes(
+        normalizeText(searchValue)
+      ) ||
+      normalizeText(row.original.projeto_id?.projeto ?? "").includes(
+        normalizeText(searchValue)
+      )
     );
   };
 
@@ -65,18 +89,27 @@ export function DataTable({data, pocMap, urlMap}) {
     {
       accessorKey: "model",
       header: "Modelo",
-      cell: ({row}) => {
+      cell: ({ row }) => {
         const equipamento = row.original;
         return (
-          <Link rel="noopener noreferrer" target="_blank" href={equipamento.pagina ?? ""}>
+          <Link
+            rel="noopener noreferrer"
+            target="_blank"
+            href={equipamento.pagina ?? ""}
+          >
             <span className="flex items-center gap-1 font-semibold hover:underline">
               {row.getValue("model")}{" "}
-              {equipamento.pagina && <ArrowUpRight className="h-3 w-3 text-neutral-400" />}
+              {equipamento.pagina && (
+                <ArrowUpRight className="h-3 w-3 text-neutral-400" />
+              )}
               {equipamento.notas != "" && (
                 <TooltipProvider delayDuration={300}>
                   <Tooltip>
                     <TooltipTrigger>
-                      <MessageSquareText className="text-neutral-400" size={12} />
+                      <MessageSquareText
+                        className="text-neutral-400"
+                        size={12}
+                      />
                     </TooltipTrigger>
                     <TooltipContent>{equipamento.notas}</TooltipContent>
                   </Tooltip>
@@ -90,7 +123,7 @@ export function DataTable({data, pocMap, urlMap}) {
 
     {
       accessorKey: "type",
-      header: ({column}) => {
+      header: ({ column }) => {
         return (
           <Button
             className="p-0"
@@ -102,7 +135,7 @@ export function DataTable({data, pocMap, urlMap}) {
           </Button>
         );
       },
-      cell: ({row}) => <span>{row.getValue("type")}</span>,
+      cell: ({ row }) => <span>{row.getValue("type")}</span>,
     },
 
     {
@@ -117,7 +150,7 @@ export function DataTable({data, pocMap, urlMap}) {
         empresa: row.projeto_id?.empresa ?? "",
       }),
       id: "projeto_id_empresa",
-      header: ({column}) => {
+      header: ({ column }) => {
         return (
           <Button
             className="p-0"
@@ -129,7 +162,7 @@ export function DataTable({data, pocMap, urlMap}) {
           </Button>
         );
       },
-      cell: ({row}) => {
+      cell: ({ row }) => {
         const poc = row.original.projeto_id;
 
         return (
@@ -143,11 +176,11 @@ export function DataTable({data, pocMap, urlMap}) {
                       locação: "bg-orange-400",
                     };
                     return `inline-block w-2 h-2 rounded-full mr-1 ${
-                      circleClasses[poc?.categoria]
+                      circleClasses[poc?.projeto]
                     }`;
                   })()}
                 ></span>
-                <span className="capitalize">{poc?.categoria}</span>
+                <span className="capitalize">{poc?.projeto}</span>
               </div>
             ) : (
               <span className="text-neutral-300">
@@ -166,7 +199,7 @@ export function DataTable({data, pocMap, urlMap}) {
         empresa: row.projeto_id?.empresa ?? "",
       }),
       id: "projeto_id_empresa",
-      header: ({column}) => {
+      header: ({ column }) => {
         return (
           <Button
             className="p-0"
@@ -178,7 +211,7 @@ export function DataTable({data, pocMap, urlMap}) {
           </Button>
         );
       },
-      cell: ({row}) => {
+      cell: ({ row }) => {
         const poc = row.original.projeto_id;
 
         const normalizeText = (text) =>
@@ -191,7 +224,9 @@ export function DataTable({data, pocMap, urlMap}) {
         return (
           <Link
             className="hover:underline"
-            href={`/projetos/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}
+            href={`/projetos/${poc?.id ?? ""}/${normalizeText(
+              poc?.empresa ?? ""
+            )}`}
           >
             {poc?.id ? (
               poc?.empresa
@@ -207,7 +242,7 @@ export function DataTable({data, pocMap, urlMap}) {
 
     {
       accessorKey: "status",
-      header: ({column}) => {
+      header: ({ column }) => {
         return (
           <Button
             className="p-0"
@@ -219,7 +254,7 @@ export function DataTable({data, pocMap, urlMap}) {
           </Button>
         );
       },
-      cell: ({row}) => (
+      cell: ({ row }) => (
         <div className="flex items-center">
           <span
             className={(() => {
@@ -257,7 +292,7 @@ export function DataTable({data, pocMap, urlMap}) {
       id: "actions",
       header: "Ações",
       enableHiding: false,
-      cell: ({row}) => {
+      cell: ({ row }) => {
         const equipamento = row.original;
         return (
           <div className="gap-2 flex">
@@ -271,9 +306,6 @@ export function DataTable({data, pocMap, urlMap}) {
               itemStatus={equipamento.status}
               itemPagina={equipamento.pagina}
               itemNotas={equipamento.notas}
-              ItemPocId={equipamento.projeto_id?.id}
-              itemPocMap={pocMap}
-              urlMap={urlMap}
             />
 
             <EditarEquipamentoModal
@@ -292,7 +324,7 @@ export function DataTable({data, pocMap, urlMap}) {
             />
 
             <ExcluirEquipamentoModal
-              equipamentoPocId={equipamento.projeto_id?.id}
+              equipamentoProjetoId={equipamento.projeto_id?.id}
               itemId={equipamento.id}
             />
           </div>
@@ -348,7 +380,10 @@ export function DataTable({data, pocMap, urlMap}) {
                   <TableHead className="px-0" key={header.id}>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -364,14 +399,20 @@ export function DataTable({data, pocMap, urlMap}) {
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   Nenhum resultado encontrado.
                 </TableCell>
               </TableRow>
@@ -380,14 +421,6 @@ export function DataTable({data, pocMap, urlMap}) {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        {/* {table.getRowModel().rows?.length === 0 ? null : (
-            <span>
-              Exibindo {table.getRowModel().rows.length} de {table.getRowModel().totalRows} registros
-            </span>
-             <span className="text-muted-foreground text-sm">
-             {table.getState().pagination.pageIndex + 1} de {table.getPageCount().toLocaleString()}
-           </span>
-          )} */}
         <div className="space-x-2">
           <Button
             variant="outline"

@@ -1,25 +1,35 @@
 "use server";
 
-import {createClient} from "@/utils/supabase/server";
-import {revalidatePath} from "next/cache";
+import { createClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function getEquipamentos() {
   const supabase = createClient();
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from("equipamentos")
     .select(
-      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, projeto_id (id, empresa, categoria)"
+      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, projeto_id (id, empresa, projeto)"
     )
-    .order("status", {ascending: false});
+    .order("status", { ascending: false });
 
   return data;
 }
 
 export async function addEquipamentos(data) {
-  const {model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, projeto_id} = data;
+  const {
+    model,
+    serialNumber,
+    mac,
+    hardwareVersion,
+    type,
+    status,
+    pagina,
+    notas,
+    projeto_id,
+  } = data;
 
   const supabase = createClient();
-  const {error} = await supabase.from("equipamentos").insert({
+  const { error } = await supabase.from("equipamentos").insert({
     model,
     serial_number: serialNumber,
     mac,
@@ -47,8 +57,18 @@ export async function deleteEquipamentos(formData: FormData) {
 }
 
 export async function updateEquipamentos(data) {
-  const {id, model, serialNumber, mac, hardwareVersion, type, status, pagina, notas, projeto_id} =
-    data;
+  const {
+    id,
+    model,
+    serialNumber,
+    mac,
+    hardwareVersion,
+    type,
+    status,
+    pagina,
+    notas,
+    projeto_id,
+  } = data;
 
   const supabase = createClient();
   await supabase
@@ -72,26 +92,26 @@ export async function updateEquipamentos(data) {
 
 export async function getEquipamentosByProjeto(id) {
   const supabase = createClient();
-  const {data} = await supabase
+  const { data } = await supabase
     .from("equipamentos")
     .select(
       "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, projeto_id (id, empresa, responsavel)"
     )
     .eq("projeto_id", id)
-    .order("created_at", {ascending: true});
+    .order("created_at", { ascending: true });
 
   return data;
 }
 
 export async function getEquipamentosByProjetoHistory(id) {
   const supabase = createClient();
-  const {data} = await supabase
+  const { data } = await supabase
     .from("equipamentos_history")
     .select(
       "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, projeto_id (id, empresa, responsavel)"
     )
     .eq("projeto_id", id)
-    .order("created_at", {ascending: true});
+    .order("created_at", { ascending: true });
 
   return data;
 }
@@ -99,7 +119,7 @@ export async function getEquipamentosByProjetoHistory(id) {
 export async function getEquipamentosCadastrados() {
   const supabase = createClient();
 
-  const {data, error} = await supabase.rpc("get_equipamentos_count");
+  const { data, error } = await supabase.rpc("get_equipamentos_count");
 
   if (error) {
     console.error(error);
@@ -112,7 +132,7 @@ export async function getEquipamentosCadastrados() {
 export async function getEquipamentosStatus() {
   const supabase = createClient();
 
-  const {data, error} = await supabase.rpc("get_equipamentos_status_count");
+  const { data, error } = await supabase.rpc("get_equipamentos_status_count");
 
   if (error) {
     console.error(error);
@@ -125,7 +145,9 @@ export async function getEquipamentosStatus() {
 export async function getUrlEquipamentos() {
   const supabase = createClient();
 
-  const {data} = await supabase.from("unique_equipamentos").select("pagina, model");
+  const { data } = await supabase
+    .from("unique_equipamentos")
+    .select("pagina, model");
 
   return data;
 }

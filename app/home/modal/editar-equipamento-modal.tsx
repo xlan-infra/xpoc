@@ -1,7 +1,7 @@
 "use client";
 
-import {Badge} from "@/components/ui/badge";
-import {Button} from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,8 +11,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -20,10 +27,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {PenLine} from "lucide-react";
-import {useForm} from "react-hook-form";
-import {z} from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PenLine } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import Utils from "../utils";
 
 const FormSchema = z.object({
@@ -53,7 +60,7 @@ function EditarEquipamentoModal({
   itemNotas,
   urlMap,
 }) {
-  const {handleUpdate, isOpen, setIsOpen} = Utils();
+  const { handleUpdate, isOpen, setIsOpen } = Utils();
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -99,11 +106,14 @@ function EditarEquipamentoModal({
         <DialogHeader>
           <DialogTitle className="mb-4">Editar Equipamento</DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleUpdate)} className="space-y-2">
+            <form
+              onSubmit={form.handleSubmit(handleUpdate)}
+              className="space-y-2"
+            >
               <FormField
                 control={form.control}
                 name="model"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Modelo</FormLabel>
                     <FormControl>
@@ -117,7 +127,7 @@ function EditarEquipamentoModal({
                 <FormField
                   control={form.control}
                   name="serialNumber"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>N° de Serial</FormLabel>
                       <FormControl>
@@ -131,7 +141,7 @@ function EditarEquipamentoModal({
                 <FormField
                   control={form.control}
                   name="mac"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>MAC</FormLabel>
                       <FormControl>
@@ -146,7 +156,7 @@ function EditarEquipamentoModal({
                 <FormField
                   control={form.control}
                   name="hardwareVersion"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Versão do Hardware</FormLabel>
                       <FormControl>
@@ -160,20 +170,29 @@ function EditarEquipamentoModal({
                 <FormField
                   control={form.control}
                   name="type"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Tipo de Equipamento</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione o tipo" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Access Point">Access Point</SelectItem>
-                          <SelectItem value="Controladora">Controladora</SelectItem>
+                          <SelectItem value="Access Point">
+                            Access Point
+                          </SelectItem>
+                          <SelectItem value="Controladora">
+                            Controladora
+                          </SelectItem>
                           <SelectItem value="GBIC">GBIC</SelectItem>
-                          <SelectItem value="Injetor PoE">Injetor PoE</SelectItem>
+                          <SelectItem value="Injetor PoE">
+                            Injetor PoE
+                          </SelectItem>
                           <SelectItem value="Roteador">Roteador</SelectItem>
                           <SelectItem value="Switch">Switch</SelectItem>
                         </SelectContent>
@@ -188,12 +207,16 @@ function EditarEquipamentoModal({
                 <FormField
                   control={form.control}
                   name="projeto_id"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Projeto</FormLabel>
                       <Select
-                        onValueChange={(value) => field.onChange(value === "none" ? null : value)}
-                        defaultValue={field.value ? field.value.toString() : field.value}
+                        onValueChange={(value) =>
+                          field.onChange(value === "none" ? null : value)
+                        }
+                        defaultValue={
+                          field.value ? field.value.toString() : field.value
+                        }
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -204,18 +227,21 @@ function EditarEquipamentoModal({
                         <SelectContent>
                           <SelectItem value="none">Nenhum</SelectItem>
                           {itemPocMap?.map((item) => (
-                            <SelectItem key={item.id} value={item.id.toString()}>
+                            <SelectItem
+                              key={item.id}
+                              value={item.id.toString()}
+                            >
                               <Badge
                                 variant={"outline"}
                                 className={`mr-2
                                   ${
-                                    item.categoria === "poc"
+                                    item.projeto === "poc"
                                       ? "bg-blue-400 border-none capitalize text-white hover:bg-blue-600"
                                       : "bg-orange-400 border-none capitalize text-white hover:bg-orange-600"
                                   }
                                 `}
                               >
-                                {item.categoria}
+                                {item.projeto}
                               </Badge>
                               {item.empresa}
                             </SelectItem>
@@ -230,10 +256,13 @@ function EditarEquipamentoModal({
                 <FormField
                   control={form.control}
                   name="status"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel>Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione o status" />
@@ -255,7 +284,7 @@ function EditarEquipamentoModal({
               <FormField
                 control={form.control}
                 name="pagina"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Página do Equipamento</FormLabel>
                     <FormControl>
@@ -276,7 +305,7 @@ function EditarEquipamentoModal({
               <FormField
                 control={form.control}
                 name="notas"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Notas</FormLabel>
                     <FormControl>

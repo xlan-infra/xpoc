@@ -1,8 +1,8 @@
 "use client";
 
 import Ping from "@/components/ping";
-import {Badge} from "@/components/ui/badge";
-import {Button} from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -19,14 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {NotepadText} from "lucide-react";
+import { NotepadText } from "lucide-react";
 import Link from "next/link";
 import ExcluirProjetoModal from "./modal/excluir-projeto-modal";
 import FinalizarProjetoModal from "./modal/finalizar-projeto-modal";
 import NovoProjetoModal from "./modal/novo-projeto-modal";
 import Utils from "./utils";
 
-function DataCard({data}) {
+function DataCard({ data }) {
   const {
     DateFormat,
     calculateDaysSinceStart,
@@ -35,8 +35,8 @@ function DataCard({data}) {
     formatarNome,
     statusFilter,
     setStatusFilter,
-    categoria,
-    setCategoria,
+    projeto,
+    setProjeto,
     searchTerm,
     setSearchTerm,
   } = Utils();
@@ -47,9 +47,9 @@ function DataCard({data}) {
       return item.status === statusFilter;
     })
     .filter((item) => {
-      if (categoria === "Todos") return true;
-      if (categoria === "poc") return item.categoria === "poc";
-      if (categoria === "locação") return item.categoria === "locação";
+      if (projeto === "Todos") return true;
+      if (projeto === "poc") return item.projeto === "poc";
+      if (projeto === "locação") return item.projeto === "locação";
     })
     .filter((item) => {
       if (searchTerm === "") return true;
@@ -65,7 +65,7 @@ function DataCard({data}) {
 
         <div className="flex items-center space-x-2">
           <div className="flex items-center">
-            <Select value={categoria} onValueChange={setCategoria}>
+            <Select value={projeto} onValueChange={setProjeto}>
               <SelectTrigger>
                 <SelectValue placeholder="Selecione o status" />
               </SelectTrigger>
@@ -80,7 +80,7 @@ function DataCard({data}) {
           <div className="flex items-center">
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger>
-                <SelectValue placeholder="Selecione a Categoria" />
+                <SelectValue placeholder="Selecione a projeto" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Em Andamento">🟢Em Andamento</SelectItem>
@@ -108,38 +108,55 @@ function DataCard({data}) {
           >
             <CardHeader>
               <div className="flex justify-between">
-                <CardTitle className={item.status === "Finalizada" && "text-muted-foreground"}>
+                <CardTitle
+                  className={
+                    item.status === "Finalizada" && "text-muted-foreground"
+                  }
+                >
                   {item.empresa}
                 </CardTitle>
                 <Badge
                   variant={"outline"}
                   className={
-                    item.categoria === "poc"
+                    item.projeto === "poc"
                       ? "bg-blue-400 border-none capitalize text-white hover:bg-blue-600"
                       : "bg-orange-400 border-none capitalize text-white hover:bg-orange-600"
                   }
                 >
-                  {item.categoria}
+                  {item.projeto}
                 </Badge>
               </div>
 
               <CardDescription className="flex items-center gap-1 text-xs">
-                <Ping color={item.status === "Em Andamento" ? "bg-green-500" : "bg-neutral-400"} />
+                <Ping
+                  color={
+                    item.status === "Em Andamento"
+                      ? "bg-green-500"
+                      : "bg-neutral-400"
+                  }
+                />
                 {item.status}
                 {item.status === "Em Andamento" && (
-                  <span>por {calculateDaysSinceStart(item.dt_inicio)} dia(s)</span>
+                  <span>
+                    por {calculateDaysSinceStart(item.dt_inicio)} dia(s)
+                  </span>
                 )}
-                {item.status === "Finalizada" && ` em ${DateFormat(item.dt_fim)}`}
+                {item.status === "Finalizada" &&
+                  ` em ${DateFormat(item.dt_fim)}`}
               </CardDescription>
             </CardHeader>
 
             <CardContent className="grid gap-2">
               <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground font-medium">Data de Início</p>
+                <p className="text-sm text-muted-foreground font-medium">
+                  Data de Início
+                </p>
                 <p className="text-sm">{DateFormat(item.dt_inicio)}</p>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground font-medium">Responsável</p>
+                <p className="text-sm text-muted-foreground font-medium">
+                  Responsável
+                </p>
                 <p className="text-sm">{formatarNome(item.responsavel)}</p>
               </div>
             </CardContent>
@@ -163,7 +180,7 @@ function DataCard({data}) {
                 itemEmail={item.email}
                 itemStatus={item.status}
                 itemNotas={item.notas}
-                itemCategoria={item.categoria}
+                itemProjeto={item.projeto}
               />
 
               <ExcluirProjetoModal itemId={item.id} itemStatus={item.status} />

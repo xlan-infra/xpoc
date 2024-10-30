@@ -1,16 +1,16 @@
 "use server";
 
-import {createClient} from "@/utils/supabase/server";
-import {revalidatePath} from "next/cache";
+import { createClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function getProjeto() {
   const supabase = createClient();
-  const {data} = await supabase
+  const { data } = await supabase
     .from("projetos")
     .select(
-      `id, empresa, responsavel, cidade, estado, telefone, email, notas, categoria, dt_inicio, dt_fim, status `
+      `id, empresa, responsavel, cidade, estado, telefone, email, notas, projeto, dt_inicio, dt_fim, status `
     )
-    .order("dt_inicio", {ascending: true});
+    .order("dt_inicio", { ascending: true });
 
   return data;
 }
@@ -24,14 +24,14 @@ export async function addProjeto(data) {
     telefone,
     email,
     notas,
-    categoria,
+    projeto,
     dt_inicio,
     dt_fim,
     status,
   } = data;
 
   const supabase = createClient();
-  const {error} = await supabase.from("projetos").insert({
+  const { error } = await supabase.from("projetos").insert({
     empresa,
     responsavel,
     cidade,
@@ -39,7 +39,7 @@ export async function addProjeto(data) {
     telefone,
     email,
     notas,
-    categoria,
+    projeto,
     dt_inicio,
     dt_fim,
     status,
@@ -62,14 +62,14 @@ export async function updateProjeto(data) {
     telefone,
     email,
     notas,
-    categoria,
+    projeto,
     dt_inicio,
     dt_fim,
     status,
   } = data;
 
   const supabase = createClient();
-  const {error} = await supabase
+  const { error } = await supabase
     .from("projetos")
     .update({
       empresa,
@@ -79,7 +79,7 @@ export async function updateProjeto(data) {
       telefone,
       email,
       notas,
-      categoria,
+      projeto,
       dt_inicio,
       dt_fim,
       status,
@@ -97,7 +97,7 @@ export async function deleteProjeto(formData) {
   const excluir = formData.get("excluir");
 
   const supabase = createClient();
-  const {error} = await supabase.from("projetos").delete().eq("id", excluir);
+  const { error } = await supabase.from("projetos").delete().eq("id", excluir);
 
   if (error) {
     console.error("Erro ao deletar POC:", error);
@@ -108,7 +108,9 @@ export async function deleteProjeto(formData) {
 
 export async function getProjetoCount() {
   const supabase = createClient();
-  const {count, error} = await supabase.from("projetos").select("*", {count: "exact"});
+  const { count, error } = await supabase
+    .from("projetos")
+    .select("*", { count: "exact" });
 
   if (error) {
     console.error("Erro ao buscar POCs:", error);
@@ -120,23 +122,23 @@ export async function getProjetoCount() {
 
 export async function getProjetoByStatus() {
   const supabase = createClient();
-  const {data} = await supabase
+  const { data } = await supabase
     .from("projetos")
     .select(
-      `id, empresa, responsavel, cidade, estado, telefone, email, notas, categoria, dt_inicio, dt_fim, status `
+      `id, empresa, responsavel, cidade, estado, telefone, email, notas, projeto, dt_inicio, dt_fim, status `
     )
     .eq("status", "Em Andamento")
-    .order("status", {ascending: true});
+    .order("status", { ascending: true });
 
   return data;
 }
 
 export async function getProjetoById(id) {
   const supabase = createClient();
-  const {data} = await supabase
+  const { data } = await supabase
     .from("projetos")
     .select(
-      `id, empresa, responsavel, cidade, estado, telefone, email, notas, categoria, dt_inicio, dt_fim, status`
+      `id, empresa, responsavel, cidade, estado, telefone, email, notas, projeto, dt_inicio, dt_fim, status`
     )
     .eq("id", id);
 
