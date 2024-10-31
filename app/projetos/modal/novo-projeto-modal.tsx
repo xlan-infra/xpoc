@@ -242,7 +242,7 @@ function NovoPocModal() {
                 name="projeto"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>projeto</FormLabel>
+                    <FormLabel>Projeto</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
