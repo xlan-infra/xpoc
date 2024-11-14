@@ -200,7 +200,7 @@ function NovoModal({ pocMap, urlMap }) {
                             >
                               <Badge
                                 variant={"outline"}
-                                className={`mr-2
+                                className={`mr-1
                                   ${
                                     item.projeto === "poc"
                                       ? "bg-blue-400 border-none capitalize text-white hover:bg-blue-600"

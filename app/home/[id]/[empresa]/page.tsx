@@ -61,7 +61,7 @@ async function page({ params }) {
   return (
     <>
       <div className="my-4 print:hidden">
-        <Link href="/projetos">
+        <Link href="/home">
           <Button className="p-0" variant="link">
             <ArrowLeft size={14} className="mr-1" />
             Voltar

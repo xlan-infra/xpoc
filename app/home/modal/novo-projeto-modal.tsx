@@ -1,5 +1,6 @@
 "use client";
 
+import Ping from "@/components/ping";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -27,96 +28,72 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PenLine } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Utils from "../utils";
 
+// Função para converter string para Date, se a string não estiver vazia
+const parseDateString = (str) => (str ? new Date(str) : undefined);
+
 const FormSchema = z.object({
-  id: z.number(),
-  dt_inicio: z.string().optional(),
-  dt_fim: z.string().nullable(),
+  dt_inicio: z
+    .string()
+    .refine(
+      (date) => !isNaN(new Date(date).getTime()),
+      "Data de Início inválida"
+    ),
+  dt_fim: z.preprocess(parseDateString, z.date().optional()),
   empresa: z.string().nonempty("Empresa é obrigatória"),
   responsavel: z.string().nonempty("Responsável é obrigatório"),
-  cidade: z.string().nonempty("Cidade é obrigatória"),
+  cidade: z.string().nonempty("Cidade é obrigatório"),
   estado: z.string().nonempty("Estado é obrigatório"),
   telefone: z.string().nonempty("Telefone é obrigatório"),
   email: z.string().optional(),
-  status: z.string().nonempty("Status é obrigatório"),
   notas: z.string().optional(),
+  status: z.string().nonempty("Status é obrigatório"),
   projeto: z.string().nonempty("projeto é obrigatória"),
 });
 
-function EditarPocModal({
-  itemId,
-  itemDataInicio,
-  itemDataFim,
-  itemEmpresa,
-  itemResponsavel,
-  itemCidade,
-  itemEstado,
-  itemTelefone,
-  itemEmail,
-  itemStatus,
-  itemNotas,
-  itemProjeto,
-}) {
-  const { handleUpdate, isOpen, setIsOpen } = Utils();
+function NovoPocModal() {
+  const { handleSubmit, isOpen, setIsOpen } = Utils();
 
-  const [status, setStatus] = useState(itemStatus);
+  const [status, setStatus] = useState("");
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      id: itemId,
-      dt_inicio: itemDataInicio,
-      dt_fim: itemDataFim,
-      empresa: itemEmpresa,
-      responsavel: itemResponsavel,
-      cidade: itemCidade,
-      estado: itemEstado,
-      telefone: itemTelefone,
-      email: itemEmail,
-      status: itemStatus,
-      notas: itemNotas,
-      projeto: itemProjeto,
+      dt_inicio: "",
+      dt_fim: "",
+      empresa: "",
+      responsavel: "",
+      cidade: "",
+      estado: "",
+      telefone: "",
+      email: "",
+      notas: "",
+      status: "",
+      projeto: "",
     },
   });
 
   const onClosed = () => {
     setIsOpen(!isOpen);
-    setStatus(itemStatus);
-    form.reset({
-      id: itemId,
-      dt_fim: itemDataFim,
-      dt_inicio: itemDataInicio,
-      empresa: itemEmpresa,
-      responsavel: itemResponsavel,
-      cidade: itemCidade,
-      estado: itemEstado,
-      telefone: itemTelefone,
-      email: itemEmail,
-      status: itemStatus,
-      notas: itemNotas,
-      projeto: itemProjeto,
-    });
+    form.reset();
     form.clearErrors();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClosed}>
       <DialogTrigger asChild>
-        <Button variant={"link"} className="text-black hover:text-blue-800 p-0">
-          <PenLine size={14} className="mr-1" /> editar
-        </Button>
+        <Button>Novo Projeto</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="mb-4">Editar Projeto</DialogTitle>
+          <DialogTitle className="mb-4">Novo Projeto</DialogTitle>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(handleUpdate)}
+              onSubmit={form.handleSubmit(handleSubmit)}
               className="space-y-2"
             >
               {/* Campos do Formulário */}
@@ -184,9 +161,47 @@ function EditarPocModal({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Estado</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Estado" {...field} />
-                      </FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o estado" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="AC">Acre</SelectItem>
+                          <SelectItem value="AL">Alagoas</SelectItem>
+                          <SelectItem value="AP">Amapá</SelectItem>
+                          <SelectItem value="AM">Amazonas</SelectItem>
+                          <SelectItem value="BA">Bahia</SelectItem>
+                          <SelectItem value="CE">Ceará</SelectItem>
+                          <SelectItem value="DF">Distrito Federal</SelectItem>
+                          <SelectItem value="ES">Espírito Santo</SelectItem>
+                          <SelectItem value="GO">Goiás</SelectItem>
+                          <SelectItem value="MA">Maranhão</SelectItem>
+                          <SelectItem value="MT">Mato Grosso</SelectItem>
+                          <SelectItem value="MS">Mato Grosso do Sul</SelectItem>
+                          <SelectItem value="MG">Minas Gerais</SelectItem>
+                          <SelectItem value="PA">Pará</SelectItem>
+                          <SelectItem value="PB">Paraíba</SelectItem>
+                          <SelectItem value="PR">Paraná</SelectItem>
+                          <SelectItem value="PE">Pernambuco</SelectItem>
+                          <SelectItem value="PI">Piauí</SelectItem>
+                          <SelectItem value="RJ">Rio de Janeiro</SelectItem>
+                          <SelectItem value="RN">
+                            Rio Grande do Norte
+                          </SelectItem>
+                          <SelectItem value="RS">Rio Grande do Sul</SelectItem>
+                          <SelectItem value="RO">Rondônia</SelectItem>
+                          <SelectItem value="RR">Roraima</SelectItem>
+                          <SelectItem value="SC">Santa Catarina</SelectItem>
+                          <SelectItem value="SP">São Paulo</SelectItem>
+                          <SelectItem value="SE">Sergipe</SelectItem>
+                          <SelectItem value="TO">Tocantins</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -239,8 +254,18 @@ function EditarPocModal({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="poc">🟣Poc</SelectItem>
-                        <SelectItem value="locação">🟠Locação</SelectItem>
+                        <SelectItem value="poc">
+                          <div className="flex items-center space-x-2">
+                            <Ping color={"bg-blue-400"} />
+                            <span>Poc</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="locação">
+                          <div className="flex items-center space-x-2">
+                            <Ping color={"bg-orange-400"} />
+                            <span>Locação</span>
+                          </div>
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -278,19 +303,21 @@ function EditarPocModal({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="dt_fim"
-                render={({ field }) => (
-                  <FormItem hidden={status != "Finalizada"}>
-                    <FormLabel>Data de Conclusão</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {status === "Finalizada" && (
+                <FormField
+                  control={form.control}
+                  name="dt_fim"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Data de Conclusão</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}
@@ -324,4 +351,4 @@ function EditarPocModal({
   );
 }
 
-export default EditarPocModal;
+export default NovoPocModal;

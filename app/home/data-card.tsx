@@ -70,9 +70,24 @@ function DataCard({ data }) {
                 <SelectValue placeholder="Selecione o status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="poc">🔵Poc</SelectItem>
-                <SelectItem value="locação">🟠Locação</SelectItem>
-                <SelectItem value="Todos">⚫Todos</SelectItem>
+                <SelectItem value="poc">
+                  <div className="flex items-center space-x-2">
+                    <Ping color={"bg-blue-400"} />
+                    <span>Poc</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="locação">
+                  <div className="flex items-center space-x-2">
+                    <Ping color={"bg-orange-400"} />
+                    <span>Locação</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Todos">
+                  <div className="flex items-center space-x-2">
+                    <Ping color={"bg-black"} />
+                    <span>Todos</span>
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -83,9 +98,24 @@ function DataCard({ data }) {
                 <SelectValue placeholder="Selecione a projeto" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Em Andamento">🟢Em Andamento</SelectItem>
-                <SelectItem value="Finalizada">⚪Finalizada</SelectItem>
-                <SelectItem value="Todos">⚫Todos</SelectItem>
+                <SelectItem value="Em Andamento">
+                  <div className="flex items-center space-x-2">
+                    <Ping color={"bg-green-500"} />
+                    <span>Em Andamento</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Finalizada">
+                  <div className="flex items-center space-x-2">
+                    <Ping color={"bg-neutral-400"} />
+                    <span>Finalizada</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Todos">
+                  <div className="flex items-center space-x-2">
+                    <Ping color={"bg-black"} />
+                    <span>Todos</span>
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -129,6 +159,7 @@ function DataCard({ data }) {
 
               <CardDescription className="flex items-center gap-1 text-xs">
                 <Ping
+                  animate={"animate-ping"}
                   color={
                     item.status === "Em Andamento"
                       ? "bg-green-500"
@@ -162,7 +193,7 @@ function DataCard({ data }) {
             </CardContent>
 
             <CardFooter className="flex items-center gap-2 justify-between border-t py-0">
-              <Link href={`/projetos/${item.id}/${item.empresa.toLowerCase()}`}>
+              <Link href={`/home/${item.id}/${item.empresa.toLowerCase()}`}>
                 <Button variant={"link"} className="text-black p-0">
                   <NotepadText size={14} className="mr-1" /> detalhes
                 </Button>

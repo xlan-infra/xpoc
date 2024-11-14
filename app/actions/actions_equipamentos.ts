@@ -108,7 +108,7 @@ export async function getEquipamentosByProjetoHistory(id) {
   const { data } = await supabase
     .from("equipamentos_history")
     .select(
-      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, projeto_id (id, empresa, responsavel)"
+      "id, model, serial_number, mac, hardware_version, type, status, pagina, notas, projeto_id (id, empresa, responsavel), equipamento_id (id)"
     )
     .eq("projeto_id", id)
     .order("created_at", { ascending: true });

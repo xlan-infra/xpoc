@@ -46,7 +46,7 @@ export async function addProjeto(data) {
   });
 
   if (error) {
-    console.error("Erro ao inserir POC:", error);
+    console.error("Erro ao inserir Projeto:", error);
   } else {
     revalidatePath("/projetos");
   }
@@ -87,7 +87,7 @@ export async function updateProjeto(data) {
     .eq("id", id);
 
   if (error) {
-    console.error("Erro ao atualizar POC:", error);
+    console.error("Erro ao atualizar Projeto:", error);
   } else {
     revalidatePath("/projetos");
   }
@@ -100,7 +100,7 @@ export async function deleteProjeto(formData) {
   const { error } = await supabase.from("projetos").delete().eq("id", excluir);
 
   if (error) {
-    console.error("Erro ao deletar POC:", error);
+    console.error("Erro ao deletar Projeto:", error);
   } else {
     revalidatePath("/projetos");
   }
@@ -113,7 +113,7 @@ export async function getProjetoCount() {
     .select("*", { count: "exact" });
 
   if (error) {
-    console.error("Erro ao buscar POCs:", error);
+    console.error("Erro ao buscar Projetos:", error);
     return null;
   }
 

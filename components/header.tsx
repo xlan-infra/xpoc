@@ -1,4 +1,4 @@
-import {createClient} from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import AuthButton from "./auth-button";
 import Logo from "./logo";
@@ -7,7 +7,7 @@ export default async function Header() {
   const supabase = createClient();
 
   const {
-    data: {user},
+    data: { user },
   } = await supabase.auth.getUser();
 
   return (
@@ -19,14 +19,17 @@ export default async function Header() {
           </Link>
           {user && (
             <>
-              <Link href="/home" className="text-white hover:underline underline-offset-4 text-sm">
+              <Link
+                href="/home"
+                className="text-white hover:underline underline-offset-4 text-sm"
+              >
                 Home
               </Link>
               <Link
-                href="/projetos"
+                href="/equipamentos"
                 className="text-white hover:underline underline-offset-4 text-sm"
               >
-                Projetos
+                Equipamentos
               </Link>
             </>
           )}

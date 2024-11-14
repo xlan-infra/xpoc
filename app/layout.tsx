@@ -1,4 +1,4 @@
-import Header from "@/components/main-header";
+import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
 import { uiSans } from "./fonts/font";
 import "./globals.css";

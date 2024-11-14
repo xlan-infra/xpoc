@@ -1,6 +1,5 @@
-"use client";
-
-import {Button} from "@/components/ui/button";
+import Utils from "@/app/home/utils";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,26 +10,35 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {Trash} from "lucide-react";
+import { Trash } from "lucide-react";
 
-export default function DeleteButton({handledelete, isOpen, setIsOpen, itemStatus}) {
+export default function ExcluirPocModal({ itemId, itemStatus }) {
+  const { handleDelete, isOpen, setIsOpen } = Utils();
+  const deleteItem = handleDelete(itemId);
+
+  const status = itemStatus === "Em Andamento";
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           variant={"link"}
-          className="text-black hover:text-red-700 p-0"
-          disabled={itemStatus}
+          className={`text-red-500 hover:text-red-700 p-0 ${
+            status && `hidden`
+          }`}
+          disabled={status}
         >
-          <Trash size={16} className="mr-1" />
+          <Trash size={14} className="mr-1" /> remover
         </Button>
       </DialogTrigger>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Tem certeza que deseja excluir ?</DialogTitle>
           <DialogDescription>
             <p>
-              Isso não pode ser desfeito. Isso excluirá seus dados <strong>permanentemente</strong>.
+              Isso não pode ser desfeito. Isso excluirá seus dados{" "}
+              <strong>permanentemente</strong>.
             </p>
           </DialogDescription>
         </DialogHeader>
@@ -40,7 +48,7 @@ export default function DeleteButton({handledelete, isOpen, setIsOpen, itemStatu
               Cancelar
             </Button>
           </DialogClose>
-          <form className="w-1/2" onSubmit={handledelete}>
+          <form className="w-1/2" onSubmit={deleteItem}>
             <Button variant="destructive" className="w-full" type="submit">
               Sim, quero excluir
             </Button>
