@@ -72,21 +72,35 @@ function DataCard({ data }) {
               <SelectContent>
                 <SelectItem value="poc">
                   <div className="flex items-center space-x-2">
-                    <Ping color={"bg-blue-400"} />
-                    <span>Poc</span>
+                    <Badge
+                      variant={"outline"}
+                      className={
+                        "bg-blue-400 border-none capitalize text-white hover:bg-blue-600"
+                      }
+                    >
+                      Poc
+                    </Badge>
                   </div>
                 </SelectItem>
                 <SelectItem value="locação">
-                  <div className="flex items-center space-x-2">
-                    <Ping color={"bg-orange-400"} />
-                    <span>Locação</span>
-                  </div>
+                  <Badge
+                    variant={"outline"}
+                    className={
+                      "bg-orange-400 border-none capitalize text-white hover:bg-orange-600"
+                    }
+                  >
+                    Locação
+                  </Badge>
                 </SelectItem>
                 <SelectItem value="Todos">
-                  <div className="flex items-center space-x-2">
-                    <Ping color={"bg-black"} />
-                    <span>Todos</span>
-                  </div>
+                  <Badge
+                    variant={"outline"}
+                    className={
+                      "bg-black border-none capitalize text-white hover:bg-black"
+                    }
+                  >
+                    Todos
+                  </Badge>
                 </SelectItem>
               </SelectContent>
             </Select>
