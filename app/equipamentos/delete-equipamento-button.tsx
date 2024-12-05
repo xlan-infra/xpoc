@@ -25,7 +25,7 @@ export default function DeleteButton({
         <Button
           variant={"link"}
           className="text-black hover:text-red-700 p-0"
-          disabled={itemStatus}
+          disabled={itemStatus != "Estoque"}
         >
           <Trash size={16} className="mr-1" />
         </Button>

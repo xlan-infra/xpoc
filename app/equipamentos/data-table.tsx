@@ -231,9 +231,7 @@ export function DataTable({ data, pocMap, urlMap }) {
         return (
           <Link
             className="hover:underline"
-            href={`/projetos/${poc?.id ?? ""}/${normalizeText(
-              poc?.empresa ?? ""
-            )}`}
+            href={`/home/${poc?.id ?? ""}/${normalizeText(poc?.empresa ?? "")}`}
           >
             {poc?.id ? (
               poc?.empresa
@@ -333,8 +331,8 @@ export function DataTable({ data, pocMap, urlMap }) {
             />
 
             <ExcluirEquipamentoModal
-              equipamentoProjetoId={equipamento.projeto_id?.id}
               itemId={equipamento.id}
+              itemStatus={row.getValue("status")}
             />
           </div>
         );
@@ -424,7 +422,12 @@ export function DataTable({ data, pocMap, urlMap }) {
         <TableBody>
           {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow
+                key={row.id}
+                className={`${
+                  row.getValue("status") === "Arquivado" && "text-neutral-400"
+                } `}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

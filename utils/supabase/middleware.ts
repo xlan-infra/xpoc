@@ -1,8 +1,8 @@
-import {createServerClient} from "@supabase/ssr";
-import {type NextRequest, NextResponse} from "next/server";
+import { createServerClient } from "@supabase/ssr";
+import { type NextRequest, NextResponse } from "next/server";
 
 export const updateSession = async (request: NextRequest) => {
-  const protectedRoutes = ["/home", "/projetos"];
+  const protectedRoutes = ["/home", "/equipamentos"];
 
   try {
     const supabase = createServerClient(
@@ -14,7 +14,9 @@ export const updateSession = async (request: NextRequest) => {
             return request.cookies.getAll();
           },
           setAll(cookiesToSet) {
-            cookiesToSet.forEach(({name, value}) => request.cookies.set(name, value));
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value)
+            );
           },
         },
       }
@@ -22,7 +24,7 @@ export const updateSession = async (request: NextRequest) => {
 
     // Obtém a sessão do usuário
     const {
-      data: {session},
+      data: { session },
     } = await supabase.auth.getSession();
 
     // Se a rota atual for "/" e o usuário estiver logado, redireciona para "/home"
@@ -47,7 +49,9 @@ export const updateSession = async (request: NextRequest) => {
 
     // Atualiza os cookies no response
     const cookiesToSet = request.cookies.getAll();
-    cookiesToSet.forEach(({name, value, options}) => response.cookies.set(name, value, options));
+    cookiesToSet.forEach(({ name, value, options }) =>
+      response.cookies.set(name, value, options)
+    );
 
     return response;
   } catch (e) {

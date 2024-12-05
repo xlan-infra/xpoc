@@ -3,18 +3,15 @@
 import DeleteEquipamentoButton from "../delete-equipamento-button";
 import Utils from "../utils";
 
-export default function ExcluirEquipamentoModal({
-  itemId,
-  equipamentoProjetoId,
-}) {
+export default function ExcluirEquipamentoModal({ itemId, itemStatus }) {
   const { handleDelete, isOpen, setIsOpen } = Utils();
 
   return (
     <DeleteEquipamentoButton
-      itemStatus={equipamentoProjetoId}
       handledelete={handleDelete(itemId)}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
+      itemStatus={itemStatus}
     />
   );
 }
