@@ -3,6 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -263,6 +270,7 @@ export function DataTable({ data, pocMap, urlMap }) {
                 "Em Uso": "bg-red-400",
                 RMA: "bg-amber-400",
                 Vendido: "bg-zinc-400",
+                Arquivado: "bg-neutral-600",
               };
 
               return `inline-block w-2 h-2 rounded-full mr-1 ${
@@ -277,6 +285,7 @@ export function DataTable({ data, pocMap, urlMap }) {
                 "Em Uso": "text-red-500 hover:text-red-600 capitalize",
                 RMA: "text-blue-500 hover:text-blue-600 capitalize",
                 Vendido: "text-zinc-500 hover:text-zinc-600 capitalize",
+                Arquivado: "text-neutral-500 hover:text-neutral-600 capitalize",
               };
 
               return [row.getValue("status")];
@@ -362,83 +371,94 @@ export function DataTable({ data, pocMap, urlMap }) {
       <div className="flex justify-between items-center py-4">
         <NovoModal pocMap={pocMap} urlMap={urlMap} />
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <Input
             placeholder="Pesquisar"
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)}
             className="max-w-60"
           />
+
+          {/* Filtro de Status */}
+          <Select
+            onValueChange={(value) =>
+              setColumnFilters((filters) => [
+                ...filters.filter((filter) => filter.id !== "status"),
+                value === "Todos" ? {} : { id: "status", value },
+              ])
+            }
+            defaultValue="Todos"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Filtrar por Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Todos">Todos</SelectItem>
+              <SelectItem value="Estoque">Estoque</SelectItem>
+              <SelectItem value="Em Uso">Em Uso</SelectItem>
+              <SelectItem value="RMA">RMA</SelectItem>
+              <SelectItem value="Vendido">Vendido</SelectItem>
+              <SelectItem value="Arquivado">Arquivado</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
-      <div>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead className="px-0" key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
+
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </TableHead>
+              ))}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
                 ))}
               </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  className="whitespace-nowrap"
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  Nenhum resultado encontrado.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="text-center">
+                Nenhum resultado encontrado.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Anterior
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Próxima
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Anterior
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Próxima
+        </Button>
       </div>
     </div>
   );

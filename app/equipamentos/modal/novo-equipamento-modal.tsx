@@ -240,6 +240,7 @@ function NovoModal({ pocMap, urlMap }) {
                           <SelectItem value="Estoque">Estoque</SelectItem>
                           <SelectItem value="Vendido">Vendido</SelectItem>
                           <SelectItem value="RMA">RMA</SelectItem>
+                          <SelectItem value="Arquivado">Arquivado</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
