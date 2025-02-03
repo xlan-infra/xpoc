@@ -1,8 +1,12 @@
-import {SubmitButton} from "@/components/submit-button";
-import {createClient} from "@/utils/supabase/server";
-import {redirect} from "next/navigation";
+import { SubmitButton } from "@/components/submit-button";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function Page({searchParams}: {searchParams: {message: string}}) {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { message: string };
+}) {
   const signIn = async (formData: FormData) => {
     "use server";
 
@@ -10,7 +14,7 @@ export default function Page({searchParams}: {searchParams: {message: string}}) 
     const password = formData.get("password") as string;
     const supabase = createClient();
 
-    const {error} = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -25,12 +29,14 @@ export default function Page({searchParams}: {searchParams: {message: string}}) 
   return (
     <div className="flex items-center justify-center">
       <form className="flex flex-col w-full max-w-md gap-4 m-36">
-        <div className="flex justify-center mb-4 text-md uppercase">Entre com sua a conta</div>
+        <div className="flex justify-center mb-4 text-md uppercase">
+          Entre com sua a conta
+        </div>
         <label htmlFor="email">Email</label>
         <input
           className="rounded-md px-4 py-2 border"
           name="email"
-          placeholder="you@example.com"
+          placeholder="seu@email.com"
           required
         />
         <label htmlFor="password">Senha</label>
@@ -41,11 +47,17 @@ export default function Page({searchParams}: {searchParams: {message: string}}) 
           placeholder="••••••••"
           required
         />
-        <SubmitButton formAction={signIn} className="bg-[#5F259F]" pendingText="Entrando...">
+        <SubmitButton
+          formAction={signIn}
+          className="bg-[#5F259F]"
+          pendingText="Entrando..."
+        >
           Login
         </SubmitButton>
         {searchParams?.message && (
-          <p className="mt-2 p-2 bg-red-100 text-center">{searchParams.message}</p>
+          <p className="mt-2 p-2 bg-red-100 text-center">
+            {searchParams.message}
+          </p>
         )}
       </form>
     </div>
