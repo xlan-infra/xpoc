@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import AuthButton from "./auth-button";
 import Logo from "./logo";
+import NavLink from "./nav-link";
 
 export default async function Header() {
   const supabase = createClient();
@@ -18,20 +19,10 @@ export default async function Header() {
             <Logo />
           </Link>
           {user && (
-            <>
-              <Link
-                href="/home"
-                className="text-white hover:underline underline-offset-4 text-sm"
-              >
-                Home
-              </Link>
-              <Link
-                href="/equipamentos"
-                className="text-white hover:underline underline-offset-4 text-sm"
-              >
-                Equipamentos
-              </Link>
-            </>
+            <div className="flex gap-4">
+              <NavLink href="/home">Home</NavLink>
+              <NavLink href="/equipamentos">Equipamentos</NavLink>
+            </div>
           )}
         </div>
         <AuthButton />
