@@ -27,14 +27,17 @@ export default function EquipmentTabs({
           <TabsTrigger value="locacao">Locação</TabsTrigger>
         </TabsList>
 
-        <TabsList className="w-fit">
-          <TabsTrigger value="Todos" onClick={() => setStatus("Todos")}>Todos</TabsTrigger>
-          <TabsTrigger value="Estoque" onClick={() => setStatus("Estoque")}>Estoque</TabsTrigger>
-          <TabsTrigger value="Em Uso" onClick={() => setStatus("Em Uso")}>Em Uso</TabsTrigger>
-          <TabsTrigger value="RMA" onClick={() => setStatus("RMA")}>RMA</TabsTrigger>
-          <TabsTrigger value="Vendido" onClick={() => setStatus("Vendido")}>Vendido</TabsTrigger>
-          <TabsTrigger value="Arquivado" onClick={() => setStatus("Arquivado")}>Arquivado</TabsTrigger>
-        </TabsList>
+        {/* Separate Tabs component to control status without changing project tab */}
+        <Tabs value={status} onValueChange={setStatus} className="w-fit">
+          <TabsList>
+            <TabsTrigger value="Todos">Todos</TabsTrigger>
+            <TabsTrigger value="Estoque">Estoque</TabsTrigger>
+            <TabsTrigger value="Em Uso">Em Uso</TabsTrigger>
+            <TabsTrigger value="RMA">RMA</TabsTrigger>
+            <TabsTrigger value="Vendido">Vendido</TabsTrigger>
+            <TabsTrigger value="Arquivado">Arquivado</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       <TabsContent value="poc">
