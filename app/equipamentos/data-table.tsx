@@ -406,8 +406,8 @@ export function DataTable({ data, pocMap, urlMap }) {
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+              {headerGroup.headers.map((header, index) => (
+                <TableHead key={header.index}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -428,8 +428,8 @@ export function DataTable({ data, pocMap, urlMap }) {
                   row.getValue("status") === "Arquivado" && "text-neutral-400"
                 } `}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                {row.getVisibleCells().map((cell, index) => (
+                  <TableCell key={cell.row}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
