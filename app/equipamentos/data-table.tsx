@@ -53,11 +53,11 @@ import NovoModal from "./modal/novo-equipamento-modal";
 export function DataTable({ data, pocMap, urlMap }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([
-    { id: "projeto_tipo", value: "poc" },
-  ]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({ projeto_tipo: false });
+    React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
@@ -93,13 +93,6 @@ export function DataTable({ data, pocMap, urlMap }) {
   };
 
   const columns: ColumnDef[] = [
-    {
-      accessorKey: "projeto_tipo",
-      accessorFn: (row) => row.projeto_id?.projeto ?? "",
-      id: "projeto_tipo",
-      header: "Projeto",
-      cell: () => null,
-    },
     {
       accessorKey: "model",
       header: "Modelo",
@@ -383,25 +376,6 @@ export function DataTable({ data, pocMap, urlMap }) {
             onChange={(event) => setGlobalFilter(event.target.value)}
             className="max-w-60"
           />
-
-          {/* Filtro de Projeto */}
-          <Select
-            onValueChange={(value) =>
-              setColumnFilters((filters) => [
-                ...filters.filter((filter) => filter.id !== "projeto_tipo"),
-                { id: "projeto_tipo", value },
-              ])
-            }
-            defaultValue="poc"
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Projeto" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="poc">POC</SelectItem>
-              <SelectItem value="locação">Locação</SelectItem>
-            </SelectContent>
-          </Select>
 
           {/* Filtro de Status */}
           <Select
