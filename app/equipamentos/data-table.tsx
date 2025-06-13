@@ -3,12 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -25,7 +23,6 @@ import {
 } from "@/components/ui/tooltip";
 import {
   ColumnDef,
-  ColumnFiltersState,
   FilterFn,
   PaginationState,
   SortingState,
@@ -53,9 +50,6 @@ import NovoModal from "./modal/novo-equipamento-modal";
 export function DataTable({ data, pocMap, urlMap }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -63,6 +57,7 @@ export function DataTable({ data, pocMap, urlMap }) {
     pageIndex: 0,
     pageSize: 50,
   });
+  const [selectedTab, setSelectedTab] = React.useState("Todos");
 
   const customGlobalFilter: FilterFn = (row, columnId, filterValue) => {
     const searchValue = filterValue.toLowerCase();
@@ -91,6 +86,14 @@ export function DataTable({ data, pocMap, urlMap }) {
       )
     );
   };
+
+  const filteredData = React.useMemo(() => {
+    if (selectedTab === "Todos") return data;
+    if (selectedTab === "poc" || selectedTab === "locação") {
+      return data.filter((item) => item.projeto_id?.projeto === selectedTab);
+    }
+    return data.filter((item) => item.status === selectedTab);
+  }, [data, selectedTab]);
 
   const columns: ColumnDef[] = [
     {
@@ -341,10 +344,9 @@ export function DataTable({ data, pocMap, urlMap }) {
   ];
 
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -356,7 +358,6 @@ export function DataTable({ data, pocMap, urlMap }) {
     globalFilterFn: customGlobalFilter,
     state: {
       sorting,
-      columnFilters,
       columnVisibility,
       rowSelection,
       pagination,
@@ -366,6 +367,17 @@ export function DataTable({ data, pocMap, urlMap }) {
 
   return (
     <div className="w-full">
+      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="mb-2">
+        <TabsList>
+          <TabsTrigger value="Todos">Todos</TabsTrigger>
+          <TabsTrigger value="poc">Poc</TabsTrigger>
+          <TabsTrigger value="locação">Locação</TabsTrigger>
+          <TabsTrigger value="Estoque">Estoque</TabsTrigger>
+          <TabsTrigger value="RMA">RMA</TabsTrigger>
+          <TabsTrigger value="Vendido">Vendido</TabsTrigger>
+          <TabsTrigger value="Arquivado">Arquivado</TabsTrigger>
+        </TabsList>
+      </Tabs>
       <div className="flex justify-between items-center py-4">
         <NovoModal pocMap={pocMap} urlMap={urlMap} />
 
@@ -376,29 +388,6 @@ export function DataTable({ data, pocMap, urlMap }) {
             onChange={(event) => setGlobalFilter(event.target.value)}
             className="max-w-60"
           />
-
-          {/* Filtro de Status */}
-          <Select
-            onValueChange={(value) =>
-              setColumnFilters((filters) => [
-                ...filters.filter((filter) => filter.id !== "status"),
-                value === "Todos" ? {} : { id: "status", value },
-              ])
-            }
-            defaultValue="Todos"
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Todos">Todos</SelectItem>
-              <SelectItem value="Estoque">Estoque</SelectItem>
-              <SelectItem value="Em Uso">Em Uso</SelectItem>
-              <SelectItem value="RMA">RMA</SelectItem>
-              <SelectItem value="Vendido">Vendido</SelectItem>
-              <SelectItem value="Arquivado">Arquivado</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
       </div>
 
