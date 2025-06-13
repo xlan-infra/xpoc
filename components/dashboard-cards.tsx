@@ -17,9 +17,9 @@ async function DashboardCards() {
           <CardDescription>Equipamentos cadastrados</CardDescription>
         </CardHeader>
         <CardContent>
-          {equipamentosCadastrados.map((item) => (
+          {equipamentosCadastrados.map((item, index) => (
             <Info
-              key={item.equipamento_type}
+              key={`${item.equipamento_type}-${index}`}
               info1={item.tipo_count}
               info2={item.equipamento_type}
             />
@@ -31,9 +31,9 @@ async function DashboardCards() {
           <CardDescription>Status dos equipamentos</CardDescription>
         </CardHeader>
         <CardContent>
-          {equipamentosStatus.map((item) => (
+          {equipamentosStatus.map((item, index) => (
             <Info
-              key={item.equipamento_status}
+              key={`${item.equipamento_status}-${index}`}
               info1={item.status_count}
               info2={item.equipamento_status}
             />
