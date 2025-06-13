@@ -4,8 +4,7 @@ import {
   getUrlEquipamentos,
 } from "../actions/actions_equipamentos";
 import { getProjetoByStatus } from "../actions/actions_projetos";
-import { DataTable } from "./data-table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import EquipmentTabs from "./equipment-tabs";
 
 export default async function page() {
   const equipamentos = await getEquipamentos();
@@ -26,18 +25,12 @@ export default async function page() {
         <Wifi className="text-primary" /> Equipamentos
       </h1>
 
-      <Tabs defaultValue="poc" className="mt-4">
-        <TabsList>
-          <TabsTrigger value="poc">POC</TabsTrigger>
-          <TabsTrigger value="locacao">Locação</TabsTrigger>
-        </TabsList>
-        <TabsContent value="poc">
-          <DataTable urlMap={urlMap} data={equipamentosPoc} pocMap={poc} />
-        </TabsContent>
-        <TabsContent value="locacao">
-          <DataTable urlMap={urlMap} data={equipamentosLocacao} pocMap={poc} />
-        </TabsContent>
-      </Tabs>
+      <EquipmentTabs
+        equipamentosPoc={equipamentosPoc}
+        equipamentosLocacao={equipamentosLocacao}
+        pocMap={poc}
+        urlMap={urlMap}
+      />
     </main>
   );
 }

@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -44,7 +43,7 @@ import EditarEquipamentoModal from "./modal/editar-equipamento-modal";
 import ExcluirEquipamentoModal from "./modal/excluir-equipamento-modal";
 import NovoModal from "./modal/novo-equipamento-modal";
 
-export function DataTable({ data, pocMap, urlMap }) {
+export function DataTable({ data, pocMap, urlMap, statusFilter = "Todos" }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -57,7 +56,11 @@ export function DataTable({ data, pocMap, urlMap }) {
     pageIndex: 0,
     pageSize: 50,
   });
-  const [statusTab, setStatusTab] = React.useState("Todos");
+
+  const filteredData = React.useMemo(() => {
+    if (statusFilter === "Todos") return data;
+    return data.filter((item) => item.status === statusFilter);
+  }, [data, statusFilter]);
 
   const customGlobalFilter: FilterFn = (row, columnId, filterValue) => {
     const searchValue = filterValue.toLowerCase();
@@ -336,7 +339,7 @@ export function DataTable({ data, pocMap, urlMap }) {
   ];
 
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -372,26 +375,6 @@ export function DataTable({ data, pocMap, urlMap }) {
             className="max-w-60"
           />
 
-          <Tabs
-            value={statusTab}
-            defaultValue="Todos"
-            onValueChange={(value) => {
-              setStatusTab(value);
-              setColumnFilters((filters) => [
-                ...filters.filter((filter) => filter.id !== "status"),
-                value === "Todos" ? {} : { id: "status", value },
-              ]);
-            }}
-          >
-            <TabsList>
-              <TabsTrigger value="Todos">Todos</TabsTrigger>
-              <TabsTrigger value="Estoque">Estoque</TabsTrigger>
-              <TabsTrigger value="Em Uso">Em Uso</TabsTrigger>
-              <TabsTrigger value="RMA">RMA</TabsTrigger>
-              <TabsTrigger value="Vendido">Vendido</TabsTrigger>
-              <TabsTrigger value="Arquivado">Arquivado</TabsTrigger>
-            </TabsList>
-          </Tabs>
         </div>
       </div>
 
