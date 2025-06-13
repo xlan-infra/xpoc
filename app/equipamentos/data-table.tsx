@@ -429,7 +429,7 @@ export function DataTable({ data, pocMap, urlMap }) {
                 } `}
               >
                 {row.getVisibleCells().map((cell, index) => (
-                  <TableCell key={cell.row}>
+                  <TableCell key={`${row.id}-${index}`}> 
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
