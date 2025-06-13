@@ -2,13 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -63,6 +57,7 @@ export function DataTable({ data, pocMap, urlMap }) {
     pageIndex: 0,
     pageSize: 50,
   });
+  const [statusTab, setStatusTab] = React.useState("Todos");
 
   const customGlobalFilter: FilterFn = (row, columnId, filterValue) => {
     const searchValue = filterValue.toLowerCase();
@@ -377,28 +372,26 @@ export function DataTable({ data, pocMap, urlMap }) {
             className="max-w-60"
           />
 
-          {/* Filtro de Status */}
-          <Select
-            onValueChange={(value) =>
+          <Tabs
+            value={statusTab}
+            defaultValue="Todos"
+            onValueChange={(value) => {
+              setStatusTab(value);
               setColumnFilters((filters) => [
                 ...filters.filter((filter) => filter.id !== "status"),
                 value === "Todos" ? {} : { id: "status", value },
-              ])
-            }
-            defaultValue="Todos"
+              ]);
+            }}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Todos">Todos</SelectItem>
-              <SelectItem value="Estoque">Estoque</SelectItem>
-              <SelectItem value="Em Uso">Em Uso</SelectItem>
-              <SelectItem value="RMA">RMA</SelectItem>
-              <SelectItem value="Vendido">Vendido</SelectItem>
-              <SelectItem value="Arquivado">Arquivado</SelectItem>
-            </SelectContent>
-          </Select>
+            <TabsList>
+              <TabsTrigger value="Todos">Todos</TabsTrigger>
+              <TabsTrigger value="Estoque">Estoque</TabsTrigger>
+              <TabsTrigger value="Em Uso">Em Uso</TabsTrigger>
+              <TabsTrigger value="RMA">RMA</TabsTrigger>
+              <TabsTrigger value="Vendido">Vendido</TabsTrigger>
+              <TabsTrigger value="Arquivado">Arquivado</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
       </div>
 
