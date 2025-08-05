@@ -12,6 +12,7 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
+import Ping from "./ping";
 
 async function DashboardCards() {
   const equipamentosCadastrados = await getEquipamentosCadastrados();
@@ -53,20 +54,25 @@ async function DashboardCards() {
       </Card>
       <Card className="hover:shadow-lg transition-shadow duration-500 hover:shadow-violet-100">
         <CardHeader className="pb-2">
-          <CardDescription>Pocs cadastradas</CardDescription>
+          <CardDescription className="flex items-center gap-1">
+            <Ping color={"bg-blue-400"} /> Pocs cadastradas
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Info info1={pocCount} info2={"POCs"} />
+          <Info info1={pocCount} info2={"POCs Totais"} />
           <Info info1={pocStatus.finalizadas} info2={"Finalizadas"} />
           <Info info1={pocStatus.emAndamento} info2={"Em Andamento"} />
         </CardContent>
       </Card>
       <Card className="hover:shadow-lg transition-shadow duration-500 hover:shadow-violet-100">
         <CardHeader className="pb-2">
-          <CardDescription>Locações cadastradas</CardDescription>
+          <CardDescription className="flex items-center gap-1">
+            <Ping color={"bg-orange-400"} />
+            Locações cadastradas
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Info info1={locacaoCount} info2={"Locações"} />
+          <Info info1={locacaoCount} info2={"Locações Totais"} />
           <Info info1={locacaoStatus.finalizadas} info2={"Finalizadas"} />
           <Info info1={locacaoStatus.emAndamento} info2={"Em Andamento"} />
         </CardContent>
