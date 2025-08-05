@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -28,6 +29,7 @@ import {
   ColumnFiltersState,
   FilterFn,
   PaginationState,
+  Row,
   SortingState,
   VisibilityState,
   flexRender,
@@ -128,18 +130,40 @@ export function DataTable({ data, pocMap, urlMap }) {
     );
   };
 
+  const getRowClass = (row: Row<any>) => {
+    return row.getIsSelected() ? "bg-orange-100" : "";
+  };
+
   const columns: ColumnDef[] = [
     {
       id: "rowNumber",
-      header: "#",
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllRowsSelected(!!value)}
+          aria-label="Selecionar todos"
+        />
+      ),
       cell: ({ row, table }) => {
         const rowIndex = table
           .getRowModel()
           .rows.findIndex((r) => r.id === row.id);
+
         return (
-          <span className="text-muted-foreground text-xs">{rowIndex + 1}</span>
+          <div className="flex items-center gap-2">
+            <Checkbox
+              checked={row.getIsSelected()}
+              onCheckedChange={(value) => row.toggleSelected(!!value)}
+              aria-label={`Selecionar linha ${rowIndex + 1}`}
+            />
+            <span className="text-muted-foreground text-xs">
+              {rowIndex + 1}
+            </span>
+          </div>
         );
       },
+      enableSorting: false,
+      enableHiding: false,
     },
 
     {
@@ -623,9 +647,11 @@ export function DataTable({ data, pocMap, urlMap }) {
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className={`${
-                  row.getValue("status") === "Arquivado" && "text-neutral-400"
-                } `}
+                className={`${row.getIsSelected() ? "bg-orange-100" : ""} ${
+                  row.getValue("status") === "Arquivado"
+                    ? "text-neutral-400"
+                    : ""
+                }`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
