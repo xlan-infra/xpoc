@@ -64,33 +64,38 @@ export function DataTable({ data, pocMap, urlMap }) {
     pageSize: 50,
   });
 
-  const modelos = React.useMemo(
+  const modeloOptions = React.useMemo(
     () => Array.from(new Set(data.map((item) => item.model).filter(Boolean))),
     [data]
   );
-
-  const tipos = React.useMemo(
+  const tipoOptions = React.useMemo(
     () => Array.from(new Set(data.map((item) => item.type).filter(Boolean))),
     [data]
   );
-
-  const projetos = React.useMemo(
+  const projetoOptions = React.useMemo(
     () =>
       Array.from(
         new Set(
-          data.map((item) => item.projeto_id?.projeto).filter(Boolean)
+          data
+            .map((item) => item.projeto_id?.projeto)
+            .filter((item) => item && item !== "")
         )
       ),
     [data]
   );
-
-  const empresas = React.useMemo(
+  const empresaOptions = React.useMemo(
     () =>
       Array.from(
         new Set(
-          data.map((item) => item.projeto_id?.empresa).filter(Boolean)
+          data
+            .map((item) => item.projeto_id?.empresa)
+            .filter((item) => item && item !== "")
         )
       ),
+    [data]
+  );
+  const statusOptions = React.useMemo(
+    () => Array.from(new Set(data.map((item) => item.status).filter(Boolean))),
     [data]
   );
 
@@ -414,11 +419,11 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Modelo" />
+              <SelectValue placeholder="Modelo" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
-              {modelos.map((item) => (
+              {modeloOptions.map((item) => (
                 <SelectItem key={item} value={item}>
                   {item}
                 </SelectItem>
@@ -430,23 +435,23 @@ export function DataTable({ data, pocMap, urlMap }) {
           <Select
             onValueChange={(value) =>
               setColumnFilters((filters) => {
-                const withoutTipo = filters.filter(
+                const withoutType = filters.filter(
                   (filter) => filter.id !== "type"
                 );
                 return value === "Todos"
-                  ? withoutTipo
-                  : [...withoutTipo, { id: "type", value }];
+                  ? withoutType
+                  : [...withoutType, { id: "type", value }];
               })
             }
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Tipo" />
+              <SelectValue placeholder="Tipo" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
-              {tipos.map((item) => (
-                <SelectItem key={item} value={item} className="capitalize">
+              {tipoOptions.map((item) => (
+                <SelectItem key={item} value={item}>
                   {item}
                 </SelectItem>
               ))}
@@ -468,12 +473,12 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Projeto" />
+              <SelectValue placeholder="Projeto" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
-              {projetos.map((item) => (
-                <SelectItem key={item} value={item} className="capitalize">
+              {projetoOptions.map((item) => (
+                <SelectItem key={item} value={item}>
                   {item}
                 </SelectItem>
               ))}
@@ -495,11 +500,11 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Empresa" />
+              <SelectValue placeholder="Empresa" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
-              {empresas.map((item) => (
+              {empresaOptions.map((item) => (
                 <SelectItem key={item} value={item}>
                   {item}
                 </SelectItem>
@@ -522,15 +527,15 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Status" />
+              <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
-              <SelectItem value="Estoque">Estoque</SelectItem>
-              <SelectItem value="Em Uso">Em Uso</SelectItem>
-              <SelectItem value="RMA">RMA</SelectItem>
-              <SelectItem value="Vendido">Vendido</SelectItem>
-              <SelectItem value="Arquivado">Arquivado</SelectItem>
+              {statusOptions.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

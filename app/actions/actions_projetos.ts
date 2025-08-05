@@ -120,31 +120,30 @@ export async function getProjetoCount() {
   return count;
 }
 
-export async function getPocStatusCount() {
+export async function getProjetoStatusCount() {
   const supabase = createClient();
 
-  const [{ count: emAndamento }, { count: finalizadas }, { count: total }] =
-    await Promise.all([
-      supabase
-        .from("projetos")
-        .select("*", { count: "exact", head: true })
-        .eq("projeto", "poc")
-        .eq("status", "Em Andamento"),
-      supabase
-        .from("projetos")
-        .select("*", { count: "exact", head: true })
-        .eq("projeto", "poc")
-        .eq("status", "Finalizada"),
-      supabase
-        .from("projetos")
-        .select("*", { count: "exact", head: true })
-        .eq("projeto", "poc"),
-    ]);
+  const [emAndamento, finalizadas] = await Promise.all([
+    supabase
+      .from("projetos")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "Em Andamento"),
+    supabase
+      .from("projetos")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "Finalizada"),
+  ]);
+
+  if (emAndamento.error) {
+    console.error("Erro ao buscar Projetos:", emAndamento.error);
+  }
+  if (finalizadas.error) {
+    console.error("Erro ao buscar Projetos:", finalizadas.error);
+  }
 
   return {
-    abertas: emAndamento ?? 0,
-    finalizadas: finalizadas ?? 0,
-    total: total ?? 0,
+    emAndamento: emAndamento.count ?? 0,
+    finalizadas: finalizadas.count ?? 0,
   };
 }
 
