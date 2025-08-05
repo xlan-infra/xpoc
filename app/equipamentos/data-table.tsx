@@ -424,7 +424,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Modelo" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Modelo:</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
@@ -452,7 +455,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Tipo" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Tipo:</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
@@ -480,7 +486,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Projeto" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Projeto:</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
@@ -508,7 +517,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Empresa" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Empresa:</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
@@ -537,7 +549,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Status" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground">Status:</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>

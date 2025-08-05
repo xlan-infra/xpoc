@@ -15,12 +15,14 @@ import {
 
 async function DashboardCards() {
   const equipamentosCadastrados = await getEquipamentosCadastrados();
-  const pocCount = await getProjetoCount();
-  const pocStatus = await getProjetoStatusCount();
+  const pocCount = await getProjetoCount("poc");
+  const pocStatus = await getProjetoStatusCount("poc");
+  const locacaoCount = await getProjetoCount("locação");
+  const locacaoStatus = await getProjetoStatusCount("locação");
   const equipamentosStatus = await getEquipamentosStatus();
 
   return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
       <Card className="hover:shadow-lg transition-shadow duration-500 hover:shadow-violet-100">
         <CardHeader className="pb-2">
           <CardDescription>Equipamentos cadastrados</CardDescription>
@@ -57,6 +59,16 @@ async function DashboardCards() {
           <Info info1={pocCount} info2={"POCs"} />
           <Info info1={pocStatus.finalizadas} info2={"Finalizadas"} />
           <Info info1={pocStatus.emAndamento} info2={"Em Andamento"} />
+        </CardContent>
+      </Card>
+      <Card className="hover:shadow-lg transition-shadow duration-500 hover:shadow-violet-100">
+        <CardHeader className="pb-2">
+          <CardDescription>Locações cadastradas</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Info info1={locacaoCount} info2={"Locações"} />
+          <Info info1={locacaoStatus.finalizadas} info2={"Finalizadas"} />
+          <Info info1={locacaoStatus.emAndamento} info2={"Em Andamento"} />
         </CardContent>
       </Card>
     </div>

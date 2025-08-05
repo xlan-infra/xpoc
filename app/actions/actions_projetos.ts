@@ -106,32 +106,47 @@ export async function deleteProjeto(formData) {
   }
 }
 
-export async function getProjetoCount() {
+export async function getProjetoCount(projetoType?: string) {
   const supabase = createClient();
-  const { count, error } = await supabase
+  let query = supabase
     .from("projetos")
-    .select("*", { count: "exact" });
+    .select("*", { count: "exact", head: true });
+
+  if (projetoType) {
+    query = query.eq("projeto", projetoType);
+  }
+
+  const { count, error } = await query;
 
   if (error) {
     console.error("Erro ao buscar Projetos:", error);
-    return null;
+    return 0;
   }
 
-  return count;
+  return count ?? 0;
 }
 
-export async function getProjetoStatusCount() {
+export async function getProjetoStatusCount(projetoType?: string) {
   const supabase = createClient();
 
+  const emAndamentoQuery = supabase
+    .from("projetos")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "Em Andamento");
+
+  const finalizadasQuery = supabase
+    .from("projetos")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "Finalizada");
+
+  if (projetoType) {
+    emAndamentoQuery.eq("projeto", projetoType);
+    finalizadasQuery.eq("projeto", projetoType);
+  }
+
   const [emAndamento, finalizadas] = await Promise.all([
-    supabase
-      .from("projetos")
-      .select("*", { count: "exact", head: true })
-      .eq("status", "Em Andamento"),
-    supabase
-      .from("projetos")
-      .select("*", { count: "exact", head: true })
-      .eq("status", "Finalizada"),
+    emAndamentoQuery,
+    finalizadasQuery,
   ]);
 
   if (emAndamento.error) {
