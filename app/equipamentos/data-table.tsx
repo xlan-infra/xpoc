@@ -64,6 +64,41 @@ export function DataTable({ data, pocMap, urlMap }) {
     pageSize: 50,
   });
 
+  const modeloOptions = React.useMemo(
+    () => Array.from(new Set(data.map((item) => item.model).filter(Boolean))),
+    [data]
+  );
+  const tipoOptions = React.useMemo(
+    () => Array.from(new Set(data.map((item) => item.type).filter(Boolean))),
+    [data]
+  );
+  const projetoOptions = React.useMemo(
+    () =>
+      Array.from(
+        new Set(
+          data
+            .map((item) => item.projeto_id?.projeto)
+            .filter((item) => item && item !== "")
+        )
+      ),
+    [data]
+  );
+  const empresaOptions = React.useMemo(
+    () =>
+      Array.from(
+        new Set(
+          data
+            .map((item) => item.projeto_id?.empresa)
+            .filter((item) => item && item !== "")
+        )
+      ),
+    [data]
+  );
+  const statusOptions = React.useMemo(
+    () => Array.from(new Set(data.map((item) => item.status).filter(Boolean))),
+    [data]
+  );
+
   const customGlobalFilter: FilterFn = (row, columnId, filterValue) => {
     const searchValue = filterValue.toLowerCase();
 
@@ -151,10 +186,7 @@ export function DataTable({ data, pocMap, urlMap }) {
     },
 
     {
-      accessorFn: (row) => ({
-        id: row.projeto_id?.id,
-        empresa: row.projeto_id?.empresa ?? "",
-      }),
+      accessorFn: (row) => row.projeto_id?.projeto ?? "",
       id: "projeto",
       header: ({ column }) => {
         return (
@@ -199,10 +231,7 @@ export function DataTable({ data, pocMap, urlMap }) {
     },
 
     {
-      accessorFn: (row) => ({
-        id: row.projeto_id?.id,
-        empresa: row.projeto_id?.empresa ?? "",
-      }),
+      accessorFn: (row) => row.projeto_id?.empresa ?? "",
       id: "empresa",
       header: ({ column }) => {
         return (
@@ -375,6 +404,114 @@ export function DataTable({ data, pocMap, urlMap }) {
             className="max-w-60"
           />
 
+          {/* Filtro de Modelo */}
+          <Select
+            onValueChange={(value) =>
+              setColumnFilters((filters) => {
+                const withoutModel = filters.filter(
+                  (filter) => filter.id !== "model"
+                );
+                return value === "Todos"
+                  ? withoutModel
+                  : [...withoutModel, { id: "model", value }];
+              })
+            }
+            defaultValue="Todos"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Modelo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Todos">Todos</SelectItem>
+              {modeloOptions.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Filtro de Tipo */}
+          <Select
+            onValueChange={(value) =>
+              setColumnFilters((filters) => {
+                const withoutType = filters.filter(
+                  (filter) => filter.id !== "type"
+                );
+                return value === "Todos"
+                  ? withoutType
+                  : [...withoutType, { id: "type", value }];
+              })
+            }
+            defaultValue="Todos"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Tipo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Todos">Todos</SelectItem>
+              {tipoOptions.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Filtro de Projeto */}
+          <Select
+            onValueChange={(value) =>
+              setColumnFilters((filters) => {
+                const withoutProjeto = filters.filter(
+                  (filter) => filter.id !== "projeto"
+                );
+                return value === "Todos"
+                  ? withoutProjeto
+                  : [...withoutProjeto, { id: "projeto", value }];
+              })
+            }
+            defaultValue="Todos"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Projeto" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Todos">Todos</SelectItem>
+              {projetoOptions.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Filtro de Empresa */}
+          <Select
+            onValueChange={(value) =>
+              setColumnFilters((filters) => {
+                const withoutEmpresa = filters.filter(
+                  (filter) => filter.id !== "empresa"
+                );
+                return value === "Todos"
+                  ? withoutEmpresa
+                  : [...withoutEmpresa, { id: "empresa", value }];
+              })
+            }
+            defaultValue="Todos"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Empresa" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Todos">Todos</SelectItem>
+              {empresaOptions.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           {/* Filtro de Status */}
           <Select
             onValueChange={(value) =>
@@ -390,15 +527,15 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Status" />
+              <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
-              <SelectItem value="Estoque">Estoque</SelectItem>
-              <SelectItem value="Em Uso">Em Uso</SelectItem>
-              <SelectItem value="RMA">RMA</SelectItem>
-              <SelectItem value="Vendido">Vendido</SelectItem>
-              <SelectItem value="Arquivado">Arquivado</SelectItem>
+              {statusOptions.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
