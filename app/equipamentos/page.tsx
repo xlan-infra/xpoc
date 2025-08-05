@@ -1,3 +1,4 @@
+import DashboardCards from "@/components/dashboard-cards";
 import { Wifi } from "lucide-react";
 import {
   getEquipamentos,
@@ -13,7 +14,7 @@ export default async function page() {
 
   return (
     <main className="px-2 pb-2 pt-4">
-      {/* <DashboardCards /> */}
+      <DashboardCards />
       <h1 className="border-b pb-2 text-xl font-bold tracking-tight flex items-center gap-1">
         <Wifi className="text-primary" /> Equipamentos
       </h1>

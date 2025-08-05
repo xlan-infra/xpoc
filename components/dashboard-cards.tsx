@@ -2,8 +2,13 @@ import {
   getEquipamentosCadastrados,
   getEquipamentosStatus,
 } from "@/app/actions/actions_equipamentos";
-import {getProjetoCount} from "@/app/actions/actions_projetos";
-import {Card, CardContent, CardDescription, CardHeader} from "@/components/ui/card";
+import { getProjetoCount } from "@/app/actions/actions_projetos";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "@/components/ui/card";
 
 async function DashboardCards() {
   const equipamentosCadastrados = await getEquipamentosCadastrados();
@@ -11,8 +16,8 @@ async function DashboardCards() {
   const equipamentosStatus = await getEquipamentosStatus();
 
   return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-      <Card className="bg-gradient-to-bl from-violet-50/50 from-5% ">
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
+      <Card className="hover:shadow-lg transition-shadow duration-500 hover:shadow-violet-100">
         <CardHeader className="pb-2">
           <CardDescription>Equipamentos cadastrados</CardDescription>
         </CardHeader>
@@ -26,7 +31,7 @@ async function DashboardCards() {
           ))}
         </CardContent>
       </Card>
-      <Card className="bg-gradient-to-bl from-violet-50/50 from-5%">
+      <Card className="hover:shadow-lg transition-shadow duration-500 hover:shadow-violet-100">
         <CardHeader className="pb-2">
           <CardDescription>Status dos equipamentos</CardDescription>
         </CardHeader>
@@ -40,7 +45,7 @@ async function DashboardCards() {
           ))}
         </CardContent>
       </Card>
-      <Card className="bg-gradient-to-bl from-violet-50/50 from-5%">
+      <Card className="hover:shadow-lg transition-shadow duration-500 hover:shadow-violet-100">
         <CardHeader className="pb-2">
           <CardDescription>Pocs cadastradas</CardDescription>
         </CardHeader>
@@ -54,7 +59,7 @@ async function DashboardCards() {
 
 export default DashboardCards;
 
-export function Info({info1, info2}) {
+export function Info({ info1, info2 }) {
   return (
     <div className="flex gap-2 items-center">
       <p className="text-xl text-violet-800 font-bold">{info1}</p>
