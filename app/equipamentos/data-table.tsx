@@ -130,6 +130,19 @@ export function DataTable({ data, pocMap, urlMap }) {
 
   const columns: ColumnDef[] = [
     {
+      id: "rowNumber",
+      header: "#",
+      cell: ({ row, table }) => {
+        const rowIndex = table
+          .getRowModel()
+          .rows.findIndex((r) => r.id === row.id);
+        return (
+          <span className="text-muted-foreground text-xs">{rowIndex + 1}</span>
+        );
+      },
+    },
+
+    {
       accessorKey: "model",
       header: "Modelo",
       cell: ({ row }) => {
@@ -140,7 +153,7 @@ export function DataTable({ data, pocMap, urlMap }) {
             target="_blank"
             href={equipamento.pagina ?? ""}
           >
-            <span className="flex items-center gap-1 font-semibold hover:underline">
+            <span className="flex items-center gap-1 truncate font-semibold hover:underline">
               {row.getValue("model")}{" "}
               {equipamento.pagina && (
                 <ArrowUpRight className="h-3 w-3 text-neutral-400" />
@@ -429,8 +442,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             }
             defaultValue="Todos"
           >
-            <SelectTrigger>
-              <div className="flex items-center gap-1">
+            <SelectTrigger
+              className={isFilterActive("model") ? "bg-primary/10" : ""}
+            >
+              <div className="flex items-center gap-1 truncate ">
                 <span className="text-muted-foreground text-xs">Modelo</span>
                 <SelectValue />
               </div>
@@ -460,8 +475,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             }
             defaultValue="Todos"
           >
-            <SelectTrigger>
-              <div className="flex items-center gap-1">
+            <SelectTrigger
+              className={isFilterActive("type") ? "bg-primary/10" : ""}
+            >
+              <div className="flex items-center gap-1 truncate">
                 <span className="text-muted-foreground text-xs">Tipo</span>
                 <SelectValue />
               </div>
@@ -491,8 +508,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             }
             defaultValue="Todos"
           >
-            <SelectTrigger>
-              <div className="flex items-center gap-1">
+            <SelectTrigger
+              className={isFilterActive("projeto") ? "bg-primary/10" : ""}
+            >
+              <div className="flex items-center gap-1 truncate">
                 <span className="text-muted-foreground text-xs">Projeto</span>
                 <SelectValue />
               </div>
@@ -522,8 +541,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             }
             defaultValue="Todos"
           >
-            <SelectTrigger>
-              <div className="flex items-center gap-1">
+            <SelectTrigger
+              className={isFilterActive("empresa") ? "bg-primary/10" : ""}
+            >
+              <div className="flex items-center gap-1 truncate">
                 <span className="text-muted-foreground text-xs">Empresa</span>
                 <SelectValue />
               </div>
@@ -554,8 +575,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             }
             defaultValue="Todos"
           >
-            <SelectTrigger>
-              <div className="flex items-center gap-1">
+            <SelectTrigger
+              className={isFilterActive("status") ? "bg-primary/10" : ""}
+            >
+              <div className="flex items-center gap-1 truncate">
                 <span className="text-muted-foreground text-xs ">Status</span>
                 <SelectValue />
               </div>

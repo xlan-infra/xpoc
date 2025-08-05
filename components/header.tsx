@@ -13,7 +13,7 @@ export default async function Header() {
 
   return (
     <header className="bg-[#5F259F] print:hidden py-4">
-      <nav className="flex max-w-screen-lg mx-auto items-center justify-between px-2">
+      <nav className="flex w-6xl mx-auto items-center justify-between px-2">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center">
             <Logo />
