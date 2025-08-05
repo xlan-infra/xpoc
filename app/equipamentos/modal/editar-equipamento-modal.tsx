@@ -289,12 +289,12 @@ function EditarEquipamentoModal({
                   <FormItem>
                     <FormLabel>Página do Equipamento</FormLabel>
                     <FormControl>
-                      <Input placeholder="URL" list="url-list" {...field} li />
+                      <Input placeholder="URL" list="url-list" {...field} />
                     </FormControl>
                     <FormMessage />
                     <datalist id="url-list">
-                      {urlMap?.map((item) => (
-                        <option key={item.pagina} value={item.pagina}>
+                      {urlMap?.map((item, index) => (
+                        <option key={`${item.pagina}-${index}`} value={item.pagina}>
                           {item.model}
                         </option>
                       ))}

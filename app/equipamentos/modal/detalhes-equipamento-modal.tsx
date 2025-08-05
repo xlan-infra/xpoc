@@ -43,7 +43,7 @@ function DetalhesEquipamentoModal({
           </DialogTitle>
         </div>
 
-        <DialogDescription>
+        <DialogDescription asChild>
           <div className="flex flex-col space-y-3">
             <div className="flex justify-between">
               <strong className="text-black">Modelo</strong>

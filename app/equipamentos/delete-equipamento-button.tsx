@@ -34,10 +34,8 @@ export default function DeleteButton({
         <DialogHeader>
           <DialogTitle>Tem certeza que deseja excluir ?</DialogTitle>
           <DialogDescription>
-            <p>
-              Isso não pode ser desfeito. Isso excluirá seus dados{" "}
-              <strong>permanentemente</strong>.
-            </p>
+            Isso não pode ser desfeito. Isso excluirá seus dados{" "}
+            <strong>permanentemente</strong>.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="w-full flex gap-2">
