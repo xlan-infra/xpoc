@@ -120,6 +120,34 @@ export async function getProjetoCount() {
   return count;
 }
 
+export async function getPocStatusCount() {
+  const supabase = createClient();
+
+  const [{ count: emAndamento }, { count: finalizadas }, { count: total }] =
+    await Promise.all([
+      supabase
+        .from("projetos")
+        .select("*", { count: "exact", head: true })
+        .eq("projeto", "poc")
+        .eq("status", "Em Andamento"),
+      supabase
+        .from("projetos")
+        .select("*", { count: "exact", head: true })
+        .eq("projeto", "poc")
+        .eq("status", "Finalizada"),
+      supabase
+        .from("projetos")
+        .select("*", { count: "exact", head: true })
+        .eq("projeto", "poc"),
+    ]);
+
+  return {
+    abertas: emAndamento ?? 0,
+    finalizadas: finalizadas ?? 0,
+    total: total ?? 0,
+  };
+}
+
 export async function getProjetoByStatus() {
   const supabase = createClient();
   const { data } = await supabase

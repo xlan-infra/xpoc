@@ -64,6 +64,36 @@ export function DataTable({ data, pocMap, urlMap }) {
     pageSize: 50,
   });
 
+  const modelos = React.useMemo(
+    () => Array.from(new Set(data.map((item) => item.model).filter(Boolean))),
+    [data]
+  );
+
+  const tipos = React.useMemo(
+    () => Array.from(new Set(data.map((item) => item.type).filter(Boolean))),
+    [data]
+  );
+
+  const projetos = React.useMemo(
+    () =>
+      Array.from(
+        new Set(
+          data.map((item) => item.projeto_id?.projeto).filter(Boolean)
+        )
+      ),
+    [data]
+  );
+
+  const empresas = React.useMemo(
+    () =>
+      Array.from(
+        new Set(
+          data.map((item) => item.projeto_id?.empresa).filter(Boolean)
+        )
+      ),
+    [data]
+  );
+
   const customGlobalFilter: FilterFn = (row, columnId, filterValue) => {
     const searchValue = filterValue.toLowerCase();
 
@@ -151,10 +181,7 @@ export function DataTable({ data, pocMap, urlMap }) {
     },
 
     {
-      accessorFn: (row) => ({
-        id: row.projeto_id?.id,
-        empresa: row.projeto_id?.empresa ?? "",
-      }),
+      accessorFn: (row) => row.projeto_id?.projeto ?? "",
       id: "projeto",
       header: ({ column }) => {
         return (
@@ -199,10 +226,7 @@ export function DataTable({ data, pocMap, urlMap }) {
     },
 
     {
-      accessorFn: (row) => ({
-        id: row.projeto_id?.id,
-        empresa: row.projeto_id?.empresa ?? "",
-      }),
+      accessorFn: (row) => row.projeto_id?.empresa ?? "",
       id: "empresa",
       header: ({ column }) => {
         return (
@@ -374,6 +398,114 @@ export function DataTable({ data, pocMap, urlMap }) {
             onChange={(event) => setGlobalFilter(event.target.value)}
             className="max-w-60"
           />
+
+          {/* Filtro de Modelo */}
+          <Select
+            onValueChange={(value) =>
+              setColumnFilters((filters) => {
+                const withoutModel = filters.filter(
+                  (filter) => filter.id !== "model"
+                );
+                return value === "Todos"
+                  ? withoutModel
+                  : [...withoutModel, { id: "model", value }];
+              })
+            }
+            defaultValue="Todos"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Filtrar por Modelo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Todos">Todos</SelectItem>
+              {modelos.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Filtro de Tipo */}
+          <Select
+            onValueChange={(value) =>
+              setColumnFilters((filters) => {
+                const withoutTipo = filters.filter(
+                  (filter) => filter.id !== "type"
+                );
+                return value === "Todos"
+                  ? withoutTipo
+                  : [...withoutTipo, { id: "type", value }];
+              })
+            }
+            defaultValue="Todos"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Filtrar por Tipo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Todos">Todos</SelectItem>
+              {tipos.map((item) => (
+                <SelectItem key={item} value={item} className="capitalize">
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Filtro de Projeto */}
+          <Select
+            onValueChange={(value) =>
+              setColumnFilters((filters) => {
+                const withoutProjeto = filters.filter(
+                  (filter) => filter.id !== "projeto"
+                );
+                return value === "Todos"
+                  ? withoutProjeto
+                  : [...withoutProjeto, { id: "projeto", value }];
+              })
+            }
+            defaultValue="Todos"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Filtrar por Projeto" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Todos">Todos</SelectItem>
+              {projetos.map((item) => (
+                <SelectItem key={item} value={item} className="capitalize">
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Filtro de Empresa */}
+          <Select
+            onValueChange={(value) =>
+              setColumnFilters((filters) => {
+                const withoutEmpresa = filters.filter(
+                  (filter) => filter.id !== "empresa"
+                );
+                return value === "Todos"
+                  ? withoutEmpresa
+                  : [...withoutEmpresa, { id: "empresa", value }];
+              })
+            }
+            defaultValue="Todos"
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Filtrar por Empresa" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Todos">Todos</SelectItem>
+              {empresas.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           {/* Filtro de Status */}
           <Select
