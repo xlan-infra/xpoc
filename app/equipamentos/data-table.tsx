@@ -151,12 +151,11 @@ export function DataTable({ data, pocMap, urlMap }) {
     },
 
     {
-      acessorKey: "pocs",
       accessorFn: (row) => ({
         id: row.projeto_id?.id,
         empresa: row.projeto_id?.empresa ?? "",
       }),
-      id: "projeto_id_empresa",
+      id: "projeto",
       header: ({ column }) => {
         return (
           <Button
@@ -200,12 +199,11 @@ export function DataTable({ data, pocMap, urlMap }) {
     },
 
     {
-      acessorKey: "pocs",
       accessorFn: (row) => ({
         id: row.projeto_id?.id,
         empresa: row.projeto_id?.empresa ?? "",
       }),
-      id: "projeto_id_empresa",
+      id: "empresa",
       header: ({ column }) => {
         return (
           <Button
@@ -380,10 +378,14 @@ export function DataTable({ data, pocMap, urlMap }) {
           {/* Filtro de Status */}
           <Select
             onValueChange={(value) =>
-              setColumnFilters((filters) => [
-                ...filters.filter((filter) => filter.id !== "status"),
-                value === "Todos" ? {} : { id: "status", value },
-              ])
+              setColumnFilters((filters) => {
+                const withoutStatus = filters.filter(
+                  (filter) => filter.id !== "status"
+                );
+                return value === "Todos"
+                  ? withoutStatus
+                  : [...withoutStatus, { id: "status", value }];
+              })
             }
             defaultValue="Todos"
           >
@@ -406,8 +408,8 @@ export function DataTable({ data, pocMap, urlMap }) {
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header, index) => (
-                <TableHead key={header.index}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -428,8 +430,8 @@ export function DataTable({ data, pocMap, urlMap }) {
                   row.getValue("status") === "Arquivado" && "text-neutral-400"
                 } `}
               >
-                {row.getVisibleCells().map((cell, index) => (
-                  <TableCell key={`${row.id}-${index}`}> 
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
