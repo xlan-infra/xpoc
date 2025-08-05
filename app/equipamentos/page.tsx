@@ -14,10 +14,10 @@ export default async function page() {
 
   return (
     <main className="px-2 pb-2 pt-4">
-      <DashboardCards />
-      <h1 className="border-b pb-2 text-xl font-bold tracking-tight flex items-center gap-1">
+      <h1 className="border-b mb-4 pb-2 text-xl font-bold tracking-tight flex items-center gap-1">
         <Wifi className="text-primary" /> Equipamentos
       </h1>
+      <DashboardCards />
       <DataTable urlMap={urlMap} data={equipamentos} pocMap={poc} />
     </main>
   );

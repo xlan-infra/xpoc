@@ -398,15 +398,21 @@ export function DataTable({ data, pocMap, urlMap }) {
     setFilterKey((k) => k + 1);
   };
 
+  const hasActiveFilters = globalFilter !== "" || columnFilters.length > 0;
+  const isFilterActive = (id: string) =>
+    columnFilters.some((filter) => filter.id === id);
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center py-4">
         <NovoModal pocMap={pocMap} urlMap={urlMap} />
 
-        <div className="flex gap-2 items-center">
-          <Button variant="link" onClick={handleClearFilters}>
-            Limpar
-          </Button>
+        <div className="flex gap-1 items-center">
+          {hasActiveFilters && (
+            <Button variant="link" onClick={handleClearFilters}>
+              Limpar
+            </Button>
+          )}
 
           {/* Filtro de Modelo */}
           <Select
@@ -424,7 +430,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Modelo" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground text-xs">Modelo</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
@@ -452,7 +461,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Tipo" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground text-xs">Tipo</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
@@ -480,7 +492,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Projeto" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground text-xs">Projeto</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
@@ -508,7 +523,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Empresa" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground text-xs">Empresa</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
@@ -537,7 +555,10 @@ export function DataTable({ data, pocMap, urlMap }) {
             defaultValue="Todos"
           >
             <SelectTrigger>
-              <SelectValue placeholder="Status" />
+              <div className="flex items-center gap-1">
+                <span className="text-muted-foreground text-xs ">Status</span>
+                <SelectValue />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
@@ -553,7 +574,6 @@ export function DataTable({ data, pocMap, urlMap }) {
             placeholder="Pesquisar"
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)}
-            className="w-40"
           />
         </div>
       </div>
