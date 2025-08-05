@@ -404,6 +404,10 @@ export function DataTable({ data, pocMap, urlMap }) {
         <NovoModal pocMap={pocMap} urlMap={urlMap} />
 
         <div className="flex gap-2 items-center">
+          <Button variant="link" onClick={handleClearFilters}>
+            Limpar
+          </Button>
+
           {/* Filtro de Modelo */}
           <Select
             key={`model-${filterKey}`}
@@ -508,6 +512,7 @@ export function DataTable({ data, pocMap, urlMap }) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Todos">Todos</SelectItem>
+
               {empresaOptions.map((item) => (
                 <SelectItem key={item} value={item}>
                   {item}
@@ -544,15 +549,11 @@ export function DataTable({ data, pocMap, urlMap }) {
             </SelectContent>
           </Select>
 
-          <Button variant="link" onClick={handleClearFilters}>
-            Limpar
-          </Button>
-
           <Input
             placeholder="Pesquisar"
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)}
-            className="max-w-60"
+            className="w-40"
           />
         </div>
       </div>
