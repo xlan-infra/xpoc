@@ -28,10 +28,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Utils from "../utils";
+import { Checkbox } from "@/components/ui/checkbox";
+import { createClient } from "@/utils/supabase/client";
 
 // Função para converter string para Date, se a string não estiver vazia
 const parseDateString = (str) => (str ? new Date(str) : undefined);
@@ -53,12 +55,14 @@ const FormSchema = z.object({
   notas: z.string().optional(),
   status: z.string().nonempty("Status é obrigatório"),
   projeto: z.string().nonempty("projeto é obrigatória"),
+  equipamentos: z.array(z.number()).optional(),
 });
 
 function NovoPocModal() {
   const { handleSubmit, isOpen, setIsOpen } = Utils();
 
   const [status, setStatus] = useState("");
+  const [equipamentos, setEquipamentos] = useState([]);
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -74,8 +78,21 @@ function NovoPocModal() {
       notas: "",
       status: "",
       projeto: "",
+      equipamentos: [],
     },
   });
+
+  useEffect(() => {
+    const fetchEquipamentos = async () => {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("equipamentos")
+        .select("id, model, serial_number")
+        .eq("status", "Estoque");
+      setEquipamentos(data || []);
+    };
+    fetchEquipamentos();
+  }, []);
 
   const onClosed = () => {
     setIsOpen(!isOpen);
@@ -268,6 +285,43 @@ function NovoPocModal() {
                         </SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="equipamentos"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Equipamentos</FormLabel>
+                    <FormControl>
+                      <div className="max-h-40 overflow-y-auto border rounded p-2 space-y-1">
+                        {equipamentos.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              checked={field.value?.includes(item.id)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  field.onChange([...(field.value || []), item.id]);
+                                } else {
+                                  field.onChange(
+                                    field.value?.filter((id) => id !== item.id) || [],
+                                  );
+                                }
+                              }}
+                            />
+                            <span className="text-sm">
+                              {item.model} - {item.serial_number}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

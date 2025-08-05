@@ -7,6 +7,7 @@ import {
   deleteProjeto,
   updateProjeto,
 } from "../actions/actions_projetos";
+import { assignEquipamentosProjeto } from "../actions/actions_equipamentos";
 
 export default function Utils() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,14 +15,22 @@ export default function Utils() {
   const [projeto, setProjeto] = useState("poc");
   const [searchTerm, setSearchTerm] = useState("");
 
-  function handleSubmit(data) {
-    addProjeto(data);
+  async function handleSubmit(data) {
+    const { equipamentos, ...projetoData } = data;
+    const projetoId = await addProjeto(projetoData);
+    if (equipamentos?.length && projetoId) {
+      await assignEquipamentosProjeto(equipamentos, projetoId);
+    }
     toast.success("Projeto adicionado com sucesso!");
     setIsOpen(false);
   }
 
-  function handleUpdate(data) {
-    updateProjeto(data);
+  async function handleUpdate(data) {
+    const { equipamentos, ...projetoData } = data;
+    await updateProjeto(projetoData);
+    if (equipamentos?.length) {
+      await assignEquipamentosProjeto(equipamentos, projetoData.id);
+    }
     toast.info("Projeto atualizado com sucesso!");
     setIsOpen(false);
   }
