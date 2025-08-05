@@ -398,15 +398,21 @@ export function DataTable({ data, pocMap, urlMap }) {
     setFilterKey((k) => k + 1);
   };
 
+  const hasActiveFilters = globalFilter !== "" || columnFilters.length > 0;
+  const isFilterActive = (id: string) =>
+    columnFilters.some((filter) => filter.id === id);
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center py-4">
         <NovoModal pocMap={pocMap} urlMap={urlMap} />
 
         <div className="flex gap-1 items-center">
-          <Button variant="link" onClick={handleClearFilters}>
-            Limpar
-          </Button>
+          {hasActiveFilters && (
+            <Button variant="link" onClick={handleClearFilters}>
+              Limpar
+            </Button>
+          )}
 
           {/* Filtro de Modelo */}
           <Select
@@ -425,7 +431,7 @@ export function DataTable({ data, pocMap, urlMap }) {
           >
             <SelectTrigger>
               <div className="flex items-center gap-1">
-                <span className="text-muted-foreground text-xs">Modelo:</span>
+                <span className="text-muted-foreground text-xs">Modelo</span>
                 <SelectValue />
               </div>
             </SelectTrigger>
@@ -456,7 +462,7 @@ export function DataTable({ data, pocMap, urlMap }) {
           >
             <SelectTrigger>
               <div className="flex items-center gap-1">
-                <span className="text-muted-foreground text-xs">Tipo:</span>
+                <span className="text-muted-foreground text-xs">Tipo</span>
                 <SelectValue />
               </div>
             </SelectTrigger>
@@ -487,7 +493,7 @@ export function DataTable({ data, pocMap, urlMap }) {
           >
             <SelectTrigger>
               <div className="flex items-center gap-1">
-                <span className="text-muted-foreground text-xs">Projeto:</span>
+                <span className="text-muted-foreground text-xs">Projeto</span>
                 <SelectValue />
               </div>
             </SelectTrigger>
@@ -518,7 +524,7 @@ export function DataTable({ data, pocMap, urlMap }) {
           >
             <SelectTrigger>
               <div className="flex items-center gap-1">
-                <span className="text-muted-foreground text-xs">Empresa:</span>
+                <span className="text-muted-foreground text-xs">Empresa</span>
                 <SelectValue />
               </div>
             </SelectTrigger>
@@ -550,7 +556,7 @@ export function DataTable({ data, pocMap, urlMap }) {
           >
             <SelectTrigger>
               <div className="flex items-center gap-1">
-                <span className="text-muted-foreground text-xs ">Status:</span>
+                <span className="text-muted-foreground text-xs ">Status</span>
                 <SelectValue />
               </div>
             </SelectTrigger>
