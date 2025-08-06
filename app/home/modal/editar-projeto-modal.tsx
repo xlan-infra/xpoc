@@ -29,10 +29,12 @@ import {
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PenLine } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Utils from "../utils";
+import { Checkbox } from "@/components/ui/checkbox";
+import { createClient } from "@/utils/supabase/client";
 
 const FormSchema = z.object({
   id: z.number(),
@@ -47,6 +49,7 @@ const FormSchema = z.object({
   status: z.string().nonempty("Status é obrigatório"),
   notas: z.string().optional(),
   projeto: z.string().nonempty("projeto é obrigatória"),
+  equipamentos: z.array(z.number()).optional(),
 });
 
 function EditarPocModal({
@@ -66,6 +69,7 @@ function EditarPocModal({
   const { handleUpdate, isOpen, setIsOpen } = Utils();
 
   const [status, setStatus] = useState(itemStatus);
+  const [equipamentos, setEquipamentos] = useState([]);
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -82,8 +86,21 @@ function EditarPocModal({
       status: itemStatus,
       notas: itemNotas,
       projeto: itemProjeto,
+      equipamentos: [],
     },
   });
+
+  useEffect(() => {
+    const fetchEquipamentos = async () => {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("equipamentos")
+        .select("id, model, serial_number")
+        .eq("status", "Estoque");
+      setEquipamentos(data || []);
+    };
+    fetchEquipamentos();
+  }, []);
 
   const onClosed = () => {
     setIsOpen(!isOpen);
@@ -101,6 +118,7 @@ function EditarPocModal({
       status: itemStatus,
       notas: itemNotas,
       projeto: itemProjeto,
+      equipamentos: [],
     });
     form.clearErrors();
   };
@@ -254,6 +272,43 @@ function EditarPocModal({
                         </SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="equipamentos"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Equipamentos</FormLabel>
+                    <FormControl>
+                      <div className="max-h-40 overflow-y-auto border rounded p-2 space-y-1">
+                        {equipamentos.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center space-x-2"
+                          >
+                            <Checkbox
+                              checked={field.value?.includes(item.id)}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  field.onChange([...(field.value || []), item.id]);
+                                } else {
+                                  field.onChange(
+                                    field.value?.filter((id) => id !== item.id) || [],
+                                  );
+                                }
+                              }}
+                            />
+                            <span className="text-sm">
+                              {item.model} - {item.serial_number}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

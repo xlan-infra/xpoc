@@ -151,3 +151,21 @@ export async function getUrlEquipamentos() {
 
   return data;
 }
+
+export async function assignEquipamentosProjeto(
+  equipamentos: number[],
+  projetoId: number,
+) {
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("equipamentos")
+    .update({ projeto_id: projetoId })
+    .in("id", equipamentos);
+
+  if (error) {
+    console.error("Erro ao vincular equipamentos:", error);
+  } else {
+    revalidatePath("/home");
+  }
+}

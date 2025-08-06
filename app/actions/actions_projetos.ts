@@ -31,24 +31,30 @@ export async function addProjeto(data) {
   } = data;
 
   const supabase = createClient();
-  const { error } = await supabase.from("projetos").insert({
-    empresa,
-    responsavel,
-    cidade,
-    estado,
-    telefone,
-    email,
-    notas,
-    projeto,
-    dt_inicio,
-    dt_fim,
-    status,
-  });
+  const { data: inserted, error } = await supabase
+    .from("projetos")
+    .insert({
+      empresa,
+      responsavel,
+      cidade,
+      estado,
+      telefone,
+      email,
+      notas,
+      projeto,
+      dt_inicio,
+      dt_fim,
+      status,
+    })
+    .select("id")
+    .single();
 
   if (error) {
     console.error("Erro ao inserir Projeto:", error);
+    return null;
   } else {
     revalidatePath("/projetos");
+    return inserted.id;
   }
 }
 
